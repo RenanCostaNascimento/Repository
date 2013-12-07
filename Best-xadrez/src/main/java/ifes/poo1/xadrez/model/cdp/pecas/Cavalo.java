@@ -1,11 +1,12 @@
 package ifes.poo1.xadrez.model.cdp.pecas;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
+import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 
 public class Cavalo extends Peca {
 	
 	public Cavalo(Cores cor) {
-		super(cor, "Cavalo", 3);
+		super(cor, NomePecas.cavalo, 3);
 		// TODO Auto-generated constructor stub
 	}
 

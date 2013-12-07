@@ -1,11 +1,12 @@
 package ifes.poo1.xadrez.model.cdp.pecas;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
+import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 
 public class Peao extends Peca {
 	
 	public Peao(Cores cor) {
-		super(cor, "Peao", 1);
+		super(cor, NomePecas.peao, 1);
 	}
 
 	@Override

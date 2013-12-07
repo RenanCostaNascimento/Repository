@@ -1,6 +1,7 @@
 package ifes.poo1.xadrez.model.cdp.pecas;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
+import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 
 public class Rei extends Peca {
 	
@@ -8,7 +9,7 @@ public class Rei extends Peca {
 	
 	public Rei(Cores cor) {
 		
-		super(cor, "Rei", 999);
+		super(cor, NomePecas.rei, 999);
 		// TODO Auto-generated constructor stub
 	}
 	
