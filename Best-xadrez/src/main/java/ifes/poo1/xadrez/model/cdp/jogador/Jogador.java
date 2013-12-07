@@ -1,18 +1,18 @@
-package ifes.poo1.xadrez.model.jogador;
+package ifes.poo1.xadrez.model.cdp.jogador;
 
-import ifes.poo1.xadrez.model.pecas.Pecas;
-
+import ifes.poo1.xadrez.model.cdp.pecas.Pecas;
 import java.util.ArrayList;
+import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 
 public class Jogador {
 	private String nome;
-	private String cor;
+	private Cores cor;
 	private int vitorias;
 	private int derrotas;
 	private ArrayList<Pecas> pecasComidas = new ArrayList<Pecas>();
 	private ArrayList<Pecas> pecas = new ArrayList<Pecas>();
 	
-	public Jogador(String nome, String cor){
+	public Jogador(String nome, Cores cor){
 		this.nome = nome;
 		this.cor = cor;
 		this.vitorias = 0;
@@ -26,10 +26,11 @@ public class Jogador {
 		//somar os valores de cada pe�a da lista "pecasComidas"
 		return soma;
 	}
-	public String getCor() {
-		return cor;
+        
+	public Cores getCor() {
+		return cor; 
 	}
-	public void setCor(String cor) {
+	public void setCor(Cores cor) {
 		this.cor = cor;
 	}
 

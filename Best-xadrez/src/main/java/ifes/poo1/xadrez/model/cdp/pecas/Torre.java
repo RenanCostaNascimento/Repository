@@ -1,8 +1,10 @@
-package ifes.poo1.xadrez.model.pecas;
+package ifes.poo1.xadrez.model.cdp.pecas;
+
+import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 
 public class Torre extends Pecas {
 	private int valor = 5;
-	public Torre(String cor) {
+	public Torre(Cores cor) {
 		super(cor);
 		// TODO Auto-generated constructor stub
 	}

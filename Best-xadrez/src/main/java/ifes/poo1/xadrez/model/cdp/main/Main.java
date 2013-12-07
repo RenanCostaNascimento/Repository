@@ -1,6 +1,6 @@
-package ifes.poo1.xadrez.model.main;
+package ifes.poo1.xadrez.model.cdp.main;
 
-import ifes.poo1.xadrez.control.Control;
+import ifes.poo1.xadrez.model.cgt.Control;
 
 
 public class Main {

@@ -1,8 +1,9 @@
-package ifes.poo1.xadrez.control;
+package ifes.poo1.xadrez.model.cgt;
 
-import ifes.poo1.xadrez.model.jogador.Jogador;
-import ifes.poo1.xadrez.model.jogo.Jogo;
-import ifes.poo1.xadrez.model.tabuleiro.Tabuleiro;
+import ifes.poo1.xadrez.model.cdp.constantes.Cores;
+import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
+import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
+import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 import ifes.poo1.xadrez.view.cci.ControladorTelas;
 
 //EAEAEEAAEAEEAOUGAUSGUOGAHSHUGAHUGWAHUGWHAUGWHPOG
@@ -71,8 +72,9 @@ public class Control {
 	private void iniciarJogo(String[] nomeJogadores)
 	{	
 		
-		Jogador branco = new Jogador(nomeJogadores[0], "branco");
-		Jogador preto = new Jogador(nomeJogadores[1], "preto");
+		Jogador branco = new Jogador(nomeJogadores[0], Cores.branco);
+		Jogador preto = new Jogador(nomeJogadores[1], Cores.preto);
+                
 		Tabuleiro tabuleiro = new Tabuleiro();
 		
 		jogo = new Jogo(tabuleiro, branco, preto);

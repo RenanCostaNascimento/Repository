@@ -1,8 +1,15 @@
-package ifes.poo1.xadrez.model.tabuleiro;
+package ifes.poo1.xadrez.model.cdp.tabuleiro;
 
 
 
-import ifes.poo1.xadrez.model.pecas.*;
+import ifes.poo1.xadrez.model.cdp.constantes.Cores;
+import ifes.poo1.xadrez.model.cdp.pecas.Cavalo;
+import ifes.poo1.xadrez.model.cdp.pecas.Torre;
+import ifes.poo1.xadrez.model.cdp.pecas.Pecas;
+import ifes.poo1.xadrez.model.cdp.pecas.Rei;
+import ifes.poo1.xadrez.model.cdp.pecas.Peao;
+import ifes.poo1.xadrez.model.cdp.pecas.Bispo;
+import ifes.poo1.xadrez.model.cdp.pecas.Dama;
 
 
 public class Tabuleiro {
@@ -17,53 +24,53 @@ public class Tabuleiro {
 		
 		//inserindo os pe�es
 		for (int i = 0; i < 8; i++) {
-			Pecas peao = new Peao("branco");
+			Pecas peao = new Peao(Cores.branco);
 			casas[1][i] = peao;
-			peao = new Peao("preto");
+			peao = new Peao(Cores.preto);
 			casas[6][i] = peao;
 			
 		} 
 		
 		//inserindo as torres
-		Pecas torre = new Torre("branco");
+		Pecas torre = new Torre(Cores.branco);
 		casas[0][0] = torre;
-		torre = new Torre("branco");
+		torre = new Torre(Cores.branco);
 		casas[0][7] = torre;
-		torre = new Torre("preto");
+		torre = new Torre(Cores.preto);
 		casas[7][0] = torre;
-		torre = new Torre("preto");
+		torre = new Torre(Cores.preto);
 		casas[7][7] = torre;
 		
 		//inserindo os cavalos
-		Pecas cavalo = new Cavalo("branco");
+		Pecas cavalo = new Cavalo(Cores.branco);
 		casas[0][1] = cavalo;
-		cavalo = new Cavalo("branco");
+		cavalo = new Cavalo(Cores.branco);
 		casas[0][6] = cavalo;
-		cavalo = new Cavalo("preto");
+		cavalo = new Cavalo(Cores.preto);
 		casas[7][1] = cavalo;
-		cavalo = new Cavalo("preto");
+		cavalo = new Cavalo(Cores.preto);
 		casas[7][6] = cavalo;
 		
 		
 		//inserindo os bispos
-		Pecas bispo = new Bispo("branco");
+		Pecas bispo = new Bispo(Cores.branco);
 		casas[0][2] = bispo;
-		bispo = new Bispo("branco");
+		bispo = new Bispo(Cores.branco);
 		casas[0][5] = bispo;
-		bispo = new Bispo("preto");
+		bispo = new Bispo(Cores.preto);
 		casas[7][2] = bispo;
-		bispo = new Bispo("preto");
+		bispo = new Bispo(Cores.preto);
 		casas[7][5] = bispo;
 		
 		//inserindo rei e dama
-		Pecas rei = new Rei("branco");
+		Pecas rei = new Rei(Cores.branco);
 		casas[0][4] = rei;
-		rei = new Rei("preto");
+		rei = new Rei(Cores.preto);
 		casas[7][4] = rei;
 		
-		Pecas dama = new Dama("branco");
+		Pecas dama = new Dama(Cores.branco);
 		casas[0][3] = dama;
-		dama = new Dama("preto");
+		dama = new Dama(Cores.preto);
 		casas[7][3] = dama;
 		
 	}

@@ -1,9 +1,11 @@
-package ifes.poo1.xadrez.model.pecas;
+package ifes.poo1.xadrez.model.cdp.pecas;
+
+import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 
 public class Dama extends Pecas {
 	private int valor = 9;
 	
-	public Dama(String cor) {
+	public Dama(Cores cor) {
 		super(cor);
 		// TODO Auto-generated constructor stub
 	}

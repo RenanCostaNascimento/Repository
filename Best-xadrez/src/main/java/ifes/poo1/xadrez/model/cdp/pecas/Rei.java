@@ -1,10 +1,12 @@
-package ifes.poo1.xadrez.model.pecas;
+package ifes.poo1.xadrez.model.cdp.pecas;
+
+import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 
 public class Rei extends Pecas {
 	private int valor = 999;
 	private boolean seMovimentou = false;
 	
-	public Rei(String cor) {
+	public Rei(Cores cor) {
 		
 		super(cor);
 		// TODO Auto-generated constructor stub

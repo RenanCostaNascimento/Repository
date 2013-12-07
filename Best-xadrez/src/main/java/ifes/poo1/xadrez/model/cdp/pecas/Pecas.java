@@ -1,7 +1,9 @@
-package ifes.poo1.xadrez.model.pecas;
+package ifes.poo1.xadrez.model.cdp.pecas;
+
+import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 
 public abstract class Pecas {
-	private String cor; 
+	private Cores cor; 
 	private int valor;
 		
 	public abstract boolean mover(int xIn, int yIn, int xFin, int yFin);
@@ -11,15 +13,15 @@ public abstract class Pecas {
 	}
 	
 	
-	public Pecas(String cor){
+	public Pecas(Cores cor){
 		this.setCor(cor);
 	}
 	
-	public void setCor(String cor){
+	public void setCor(Cores cor){
 		this.cor = cor;
 	}
 	
-	public String getCor(){
+	public Cores getCor(){
 		return this.cor;	
 	}
 

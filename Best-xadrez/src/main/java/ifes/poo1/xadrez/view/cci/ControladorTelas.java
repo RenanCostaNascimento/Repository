@@ -1,7 +1,7 @@
 package ifes.poo1.xadrez.view.cci;
 
-import ifes.poo1.xadrez.model.jogador.Jogador;
-import ifes.poo1.xadrez.model.tabuleiro.Tabuleiro;
+import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
+import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 import ifes.poo1.xadrez.view.cih.Tela;
 
 public class ControladorTelas {
