@@ -2,11 +2,11 @@ package ifes.poo1.xadrez.model.cdp.pecas;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 
-public class Bispo extends Pecas{
-	private int valor = 3;
+public class Bispo extends Peca{
 	
 	public Bispo(Cores cor) {
-		super(cor);
+		super(cor, "Bispo", 3);
+		
 		// TODO Auto-generated constructor stub
 	}
 

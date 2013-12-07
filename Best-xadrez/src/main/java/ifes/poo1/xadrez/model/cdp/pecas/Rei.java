@@ -2,16 +2,16 @@ package ifes.poo1.xadrez.model.cdp.pecas;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 
-public class Rei extends Pecas {
-	private int valor = 999;
+public class Rei extends Peca {
+	
 	private boolean seMovimentou = false;
 	
 	public Rei(Cores cor) {
 		
-		super(cor);
+		super(cor, "Rei", 999);
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	@Override
 	public String toString() {
 		return "R";
@@ -27,6 +27,11 @@ public class Rei extends Pecas {
 		
 	}
 
-	
+	public boolean isSeMovimentou() {
+		return seMovimentou;
+	}
 
+	public void setSeMovimentou(boolean seMovimentou) {
+		this.seMovimentou = seMovimentou;
+	}
 }

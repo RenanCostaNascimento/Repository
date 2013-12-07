@@ -1,6 +1,6 @@
 package ifes.poo1.xadrez.model.cdp.jogador;
 
-import ifes.poo1.xadrez.model.cdp.pecas.Pecas;
+import ifes.poo1.xadrez.model.cdp.pecas.Peca;
 import java.util.ArrayList;
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 
@@ -9,8 +9,8 @@ public class Jogador {
 	private Cores cor;
 	private int vitorias;
 	private int derrotas;
-	private ArrayList<Pecas> pecasComidas = new ArrayList<Pecas>();
-	private ArrayList<Pecas> pecas = new ArrayList<Pecas>();
+	private ArrayList<Peca> pecasCapturadas = new ArrayList<Peca>();
+	private ArrayList<Peca> pecas = new ArrayList<Peca>();
 	
 	public Jogador(String nome, Cores cor){
 		this.nome = nome;
@@ -65,22 +65,22 @@ public class Jogador {
 	}
 
 
-	public ArrayList<Pecas> getPecasComidas() {
-		return pecasComidas;
+	public ArrayList<Peca> getPecasCapturadas() {
+		return pecasCapturadas;
 	}
 
 
-	public void setPecasComidas(ArrayList<Pecas> pecasComidas) {
-		this.pecasComidas = pecasComidas;
+	public void setPecasCapturadas(ArrayList<Peca> pecasCapturadas) {
+		this.pecasCapturadas = pecasCapturadas;
 	}
 
 
-	public ArrayList<Pecas> getPecas() {
+	public ArrayList<Peca> getPecas() {
 		return pecas;
 	}
 
 
-	public void setPecas(ArrayList<Pecas> pecas) {
+	public void setPecas(ArrayList<Peca> pecas) {
 		this.pecas = pecas;
 	}
 	

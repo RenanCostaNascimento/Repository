@@ -2,52 +2,229 @@ package ifes.poo1.xadrez.model.cgt;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
+import ifes.poo1.xadrez.model.cdp.jogo.HistoricoJogador;
+import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
+import ifes.poo1.xadrez.model.cdp.jogo.Jogada;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
+import ifes.poo1.xadrez.model.cdp.pecas.Peca;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
+import ifes.poo1.xadrez.util.exception.CaminhoBloqueadoException;
+import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
+import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
+import ifes.poo1.xadrez.util.exception.CasaVaziaException;
+import ifes.poo1.xadrez.util.exception.MovimentoInvalidoException;
+import ifes.poo1.xadrez.util.exception.PecaAlheiaException;
 import ifes.poo1.xadrez.view.cci.ControladorTelas;
 
-//EAEAEEAAEAEEAOUGAUSGUOGAHSHUGAHUGWAHUGWHAUGWHPOG
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 public class Control {
 	
 	private ControladorTelas controladorTela = new ControladorTelas();
 	private Jogo jogo;
-	
-	public void ImprimeTab(){ 
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				if (jogo.getTabuleiro().getCasas(j,i) == null) System.out.print("x");
-				else System.out.print(jogo.getTabuleiro().getCasas(j,i)); 
+	private List<HistoricoPartida> partidas = new ArrayList<>();
+	private List<HistoricoJogador> jogadores = new ArrayList<>();
+		
+	public void controlarComandoRecebido(){
+		Jogada jogada = controladorTela.determinarJogadaUsuario(jogo.getVez());
+		switch(jogada.getTipoJogada()){
+		case MOVIMENTO:
+			try {
+				movimentarPeca(jogada.getComando());
+			} catch (PecaAlheiaException | MovimentoInvalidoException | CaminhoBloqueadoException | CasaVaziaException e) {
+				controladorTela.exibirMensagem(e.getMessage());
+				controlarComandoRecebido();
 			}
-                        
-			System.out.print("\n");
+			break;
+		case CAPTURA:
+			try {
+				capturarPeca(jogada.getComando());
+			} catch (CasaVaziaException | PecaAlheiaException
+					| CaminhoBloqueadoException | MovimentoInvalidoException
+					| CapturaInvalidaPecaInexistenteException
+					| CapturaInvalidaPecaPropriaException e) {
+				controladorTela.exibirMensagem(e.getMessage());
+				controlarComandoRecebido();
+			}
+			break;
+		case EMPATE:
+			empatarPartida();
+			break;
+		case DESISTENCIA:
+			System.out.println("DESISTENCIA");
+			break;
+		case CHEQUE:
+			System.out.println("CHEQUE");
+			break;
+		case CHEQUE_MATE:
+			System.out.println("CHEQUE_MATE");
+			break;
+		case PONTUACAO:
+			System.out.println("PONTUACAO");
+			break;
+		case PROMOCAO:
+			System.out.println("PROMOCAO");
+			break;
+		case ROQUE_MAIOR:
+			System.out.println("ROQUE_MAIOR");
+			break;
+		case ROQUE_MENOR:
+			System.out.println("ROQUE_MENOR");
+			break;
+		case INEXISTENTE:
+			controladorTela.exibirMensagem("Que porra eh essa?!");
+			controlarComandoRecebido();
 		}
 	}
 	
-	private void controlarPeca(String comando){
+	private void empatarPartida() {
+		controladorTela.exibirMensagem("o jogador " + jogo.getVez().getNome() + " deseja empatar a partida.");
+		mudarVezJogador();
+		controladorTela.exibirMensagem("Voce tambem deseja empatar a partida, " + jogo.getVez().getNome() + "?");
+		mudarVezJogador();
+		controlarEmpatePartida(controladorTela.empatarPartida());
 		
-		if (comando.length() > 4){ 
-			System.out.println("Acima de 4 caracteres");
+	}
+	
+	private void controlarEmpatePartida(int opcao){
+		
+		switch (opcao) {
+		case 1:
+			controladorTela.exibirMensagem("O empate foi aceito! A partida estava uma vergonha, mesmo...");
+			jogo.setDataHoraFim(new GregorianCalendar());			
+			
+			adicionarHistoricoJogo();
+			adicionarHistoricoJogador();
+			
+			jogo.setEmAndamento(false);
+			controlarMenuInicial();
+			break;
+		default:
+			controladorTela.exibirMensagem("O empate nao foi aceito, a partida continuara!");
+			controlarComandoRecebido();
+			break;
 		}
-		
-		else{
-			
-			int posXin = Character.getNumericValue(comando.charAt(0));
-			int posYin = Character.getNumericValue(comando.charAt(1));
-			
-			int posXfin = Character.getNumericValue(comando.charAt(2));
-			int posYfin = Character.getNumericValue(comando.charAt(3));
-			
-			//tabuleiro.getCasas(posXin, posYin);
-			
-			if (jogo.getTabuleiro().getCasas(posXin, posYin).mover(posXin, posYin, posXfin, posYfin)){ 
-				//pega a peça que está em posXin e posYin e verifica se ela pode mover para (posXfin,posYfin).
-				jogo.getTabuleiro().moverPeca(posXin, posYin, posXfin, posYfin);
+	}
+	
+	/*verifica se um jogador se encontra na lista, pelo nome*/
+	private boolean estahNaLista(List<HistoricoJogador> listaJogadores, String nome){
+		for(HistoricoJogador jogador : listaJogadores){
+			if(jogador.getNome().equals(nome))
+				return true;
+		}
+		return false;	
+	}
+	
+	/*aumenta a quantidade de empates de um jogador no seu historico, pelo nome*/
+	private void aumentarEmpateJogador(List<HistoricoJogador> listaJogadores, String nome){
+		for(HistoricoJogador jogador : listaJogadores){
+			if(jogador.getNome().equals(nome)){
+				jogador.setEmpates(jogador.getEmpates() + 1);
+				break;
 			}
-			
-			else System.out.println("Não foi possível movimentar");
+		}	
+	}
+	
+	private void adicionarHistoricoJogo(){
+		HistoricoPartida partida = new HistoricoPartida();
+		partida.setDataHoraInicio(jogo.getDataHoraInicio());
+		partida.setDataHoraFim(jogo.getDataHoraFim());
+		partida.setVencedor("Empate");
+		partidas.add(partida);
+	}
+	
+	private void adicionarHistoricoJogador(){
+		/*jogador branco*/
+		if (estahNaLista(jogadores, jogo.getBranco().getNome()))
+			aumentarEmpateJogador(jogadores, jogo.getBranco().getNome());
+		else {
+			HistoricoJogador jogador = new HistoricoJogador(jogo.getBranco().getNome());
+			jogador.setEmpates(jogador.getEmpates() + 1);
+			jogadores.add(jogador);
 		}
 		
+		/*jogador preto*/
+		if (estahNaLista(jogadores, jogo.getPreto().getNome()))
+			aumentarEmpateJogador(jogadores, jogo.getPreto().getNome());
+		else {
+			HistoricoJogador jogador = new HistoricoJogador(jogo.getPreto().getNome());
+			jogador.setEmpates(jogador.getEmpates() + 1);
+			jogadores.add(jogador);
+		}
+	}
+
+	private void movimentarPeca(String comando) throws PecaAlheiaException, MovimentoInvalidoException, CaminhoBloqueadoException, CasaVaziaException{
+		
+		// colunas e linhas sao diminuidas em um para que o jogador possa
+		// escrever comandos entre 1 e 8, e nao entre 0 e 7.
+		int colunaInicial = Character.getNumericValue(comando.charAt(0));
+		colunaInicial -= 1;
+		int linhaInicial = Character.getNumericValue(comando.charAt(1));
+		linhaInicial -= 1;
+
+		int colunaFinal = Character.getNumericValue(comando.charAt(2));
+		colunaFinal -= 1;
+		int linhaFinal = Character.getNumericValue(comando.charAt(3));
+		linhaFinal -= 1;
+
+		Peca peca = jogo.getTabuleiro().getCasas(colunaInicial, linhaInicial);
+		if(peca == null)
+			throw new CasaVaziaException();
+
+		if (!peca.getCor().equals(jogo.getVez().getCor()))
+			throw new PecaAlheiaException();			
+		else {
+			/*verifica se a peca eh capaz de fazer o movimento*/
+			if (peca.mover(colunaInicial, linhaInicial, colunaFinal, linhaFinal)) {
+				/*verifica se a peca possui caminho desobstruido para fazer o movimento*/
+				if(jogo.getTabuleiro().verificaCaminho(colunaInicial, linhaInicial, colunaFinal, linhaFinal))
+					jogo.getTabuleiro().moverPeca(colunaInicial, linhaInicial, colunaFinal, linhaFinal);
+				else
+					throw new CaminhoBloqueadoException();
+			} else
+				throw new MovimentoInvalidoException();
+		}
+	}
+	
+	private void capturarPeca(String comando) throws CasaVaziaException, PecaAlheiaException, CaminhoBloqueadoException, MovimentoInvalidoException, CapturaInvalidaPecaInexistenteException, CapturaInvalidaPecaPropriaException{
+		
+		// colunas e linhas sao diminuidas em um para que o jogador possa
+		// escrever comandos entre 1 e 8, e nao entre 0 e 7.
+		int colunaInicial = Character.getNumericValue(comando.charAt(0));
+		colunaInicial -= 1;
+		int linhaInicial = Character.getNumericValue(comando.charAt(1));
+		linhaInicial -= 1;
+
+		int colunaFinal = Character.getNumericValue(comando.charAt(3));
+		colunaFinal -= 1;
+		int linhaFinal = Character.getNumericValue(comando.charAt(4));
+		linhaFinal -= 1;
+		
+		Peca peca = jogo.getTabuleiro().getCasas(colunaInicial, linhaInicial);
+		if(peca == null)
+			throw new CasaVaziaException();
+		
+		if (!peca.getCor().equals(jogo.getVez().getCor()))
+			throw new PecaAlheiaException();	
+		else {
+			/*verifica se a peca eh capaz de fazer o movimento*/
+			if (peca.mover(colunaInicial, linhaInicial, colunaFinal, linhaFinal)) {
+				/*verifica se a peca possui caminho desobstruido para fazer o movimento*/
+				if(jogo.getTabuleiro().verificaCaminhoCaptura(colunaInicial, linhaInicial, colunaFinal, linhaFinal, jogo)){
+					Peca pecaCapturada = jogo.getTabuleiro().capturarPeca(colunaInicial, linhaInicial, colunaFinal, linhaFinal);
+					jogo.getVez().getPecasCapturadas().add(pecaCapturada);
+					if(jogo.getQuantidadePecasCapturadas() == 0)
+						controladorTela.exibirMensagem("FIRST BLOOD!");
+					controladorTela.exibirMensagem(jogo.getVez().getNome() + " capturou " + pecaCapturada.getNome() + "! Mais " + pecaCapturada.getValor() + " pontos para voce!");
+					jogo.setQuantidadePecasCapturadas(jogo.getQuantidadePecasCapturadas() + 1);
+				}
+				else
+					throw new CaminhoBloqueadoException();
+			} else
+				throw new MovimentoInvalidoException();
+		}
 	}
 	
 	public void controlarMenuInicial()
@@ -61,7 +238,7 @@ public class Control {
 			iniciarJogo(nomeJogadores);
 			break;
 		case 2:
-			controladorTela.controlarDadosPartidas();
+			controladorTela.controlarDadosPartidas(partidas, jogadores);
 			controlarMenuInicial();
 			break;
 		default:
@@ -85,25 +262,18 @@ public class Control {
 	
 	private void controlarJogo()
 	{	
-		controladorTela.mostrarTabuleiro(jogo.getTabuleiro());
-		
-		String comando = controladorTela.pegarComandoUsuario(jogo.getVez());
-		controlarPeca(comando);
-		controladorTela.mostrarTabuleiro(jogo.getTabuleiro());
-		mudarVezJogador(jogo);
-		
-		comando = controladorTela.pegarComandoUsuario(jogo.getVez());
-		controlarPeca(comando);
-		controladorTela.mostrarTabuleiro(jogo.getTabuleiro());
-		mudarVezJogador(jogo);
-		
-		comando = controladorTela.pegarComandoUsuario(jogo.getVez());
-		controlarPeca(comando);
-		controladorTela.mostrarTabuleiro(jogo.getTabuleiro());
-		mudarVezJogador(jogo);
+		while(jogo.isEmAndamento())
+			realizarJogada();
 	}	
 	
-	private void mudarVezJogador(Jogo jogo)
+	private void realizarJogada(){
+		
+		controladorTela.mostrarTabuleiro(jogo.getTabuleiro());
+		controlarComandoRecebido();
+		mudarVezJogador();
+	}
+	
+	private void mudarVezJogador()
 	{
 		if(jogo.getVez().equals(jogo.getBranco()))
 			jogo.setVez(jogo.getPreto());

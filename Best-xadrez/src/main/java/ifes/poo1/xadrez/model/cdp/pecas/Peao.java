@@ -2,13 +2,10 @@ package ifes.poo1.xadrez.model.cdp.pecas;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 
-public class Peao extends Pecas {
-	private int valor = 1;
-	
+public class Peao extends Peca {
 	
 	public Peao(Cores cor) {
-		super(cor);
-		// TODO Auto-generated constructor stub
+		super(cor, "Peao", 1);
 	}
 
 	@Override

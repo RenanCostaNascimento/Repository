@@ -1,8 +1,14 @@
 package ifes.poo1.xadrez.view.cih;
 
 import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
+import ifes.poo1.xadrez.model.cdp.jogo.HistoricoJogador;
+import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class Tela {
@@ -68,10 +74,30 @@ public class Tela {
 		
 	}
 
-	public void mostrarMenuDadosPartidas() {
+	public void mostrarMenuDadosPartidas(List<HistoricoPartida> partidas, List<HistoricoJogador> jogadores) {
 		
-		System.out.println("Dados da partida: Em desenvolvimento!");
-		
+		if(partidas.isEmpty())
+			System.out.println("Ainda não houve nenhuma partida!");
+		else{
+			int quantPartidas = 0;
+			int quantJogadores = 0;
+			SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
+			
+			System.out.println("Partidas realizadas...");
+			System.out.println("N°  -  Inicio  -  Fim  -  Vencedor");
+			for(HistoricoPartida partida : partidas){
+				System.out.println(quantPartidas + "  -  " + formatoData.format(partida.getDataHoraInicio().getTime()) + "  -  " + formatoData.format(partida.getDataHoraFim().getTime()) + "  -  " + partida.getVencedor());
+				quantPartidas++;
+			}
+			
+			System.out.println("... e os seus jogadores...");
+			System.out.println("N°  -  Nome  -  Vitorias  -  Empates  -  Derrotas");
+			for(HistoricoJogador jogador : jogadores){
+				System.out.println(quantJogadores + "  -  " + jogador.getNome() + "  -  " + jogador.getVitorias() + "  -  " + jogador.getEmpates() + "  -  " + jogador.getDerrotas());
+				quantJogadores++;
+			}
+		}
+		System.out.println();
 	}
 	
 	public void exibirMensagem(String mensagem)
@@ -88,6 +114,13 @@ public class Tela {
 	{
 		System.out.println("O que vai fazer agora, " + jogador.getNome() + "?");
 		return scanner.next();
+	}
+	
+	public int empatarPartida(){
+		System.out.println("1. Sim\n"
+				+ "2. Nao");
+		
+		return scanner.nextInt();
 	}
 
 }

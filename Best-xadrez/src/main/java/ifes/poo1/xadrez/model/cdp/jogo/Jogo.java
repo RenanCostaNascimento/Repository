@@ -8,12 +8,14 @@ import java.util.GregorianCalendar;
 
 public class Jogo {
 	
-	Tabuleiro tabuleiro;
-	Jogador branco;
-	Jogador preto;
-	GregorianCalendar dataHoraInicio;
-	Calendar dataHoraFim;
-	Jogador vez;
+	private Tabuleiro tabuleiro;
+	private Jogador branco;
+	private Jogador preto;
+	private GregorianCalendar dataHoraInicio;
+	private GregorianCalendar dataHoraFim;
+	private Jogador vez;
+	private int quantidadePecasCapturadas;
+	private boolean emAndamento;
 	
 	public Jogo(Tabuleiro tabuleiro, Jogador branco, Jogador preto)
 	{
@@ -22,6 +24,8 @@ public class Jogo {
 		this.preto = preto;
 		this.dataHoraInicio = new GregorianCalendar();
 		this.vez = this.branco;
+		this.quantidadePecasCapturadas = 0;
+		this.emAndamento = true;
 	}
 	
 	
@@ -49,11 +53,9 @@ public class Jogo {
 	public void setDataHoraInicio(GregorianCalendar dataHoraInicio) {
 		this.dataHoraInicio = dataHoraInicio;
 	}
-	public Calendar getDataHoraFim() {
+	
+	public GregorianCalendar getDataHoraFim() {
 		return dataHoraFim;
-	}
-	public void setDataHoraFim(Calendar dataHoraFim) {
-		this.dataHoraFim = dataHoraFim;
 	}
 
 
@@ -65,6 +67,31 @@ public class Jogo {
 	public void setVez(Jogador vez) {
 		this.vez = vez;
 	}
+
+	public int getQuantidadePecasCapturadas() {
+		return quantidadePecasCapturadas;
+	}
+
+
+	public void setQuantidadePecasCapturadas(int quantidadePecasCapturadas) {
+		this.quantidadePecasCapturadas = quantidadePecasCapturadas;
+	}
+
+
+	public boolean isEmAndamento() {
+		return emAndamento;
+	}
+
+
+	public void setEmAndamento(boolean emAndamento) {
+		this.emAndamento = emAndamento;
+	}
+
+
+	public void setDataHoraFim(GregorianCalendar dataHoraFim) {
+		this.dataHoraFim = dataHoraFim;
+	}
+
 	
 	//rock, en passaint e outras regras de jogo/neg�cio;
 	
