@@ -1,6 +1,7 @@
 package ifes.poo1.xadrez.model.cgt;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
+import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoJogador;
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
@@ -12,6 +13,7 @@ import ifes.poo1.xadrez.util.exception.CaminhoBloqueadoException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
 import ifes.poo1.xadrez.util.exception.CasaVaziaException;
+import ifes.poo1.xadrez.util.exception.ChequeInvalidoException;
 import ifes.poo1.xadrez.util.exception.MovimentoInvalidoException;
 import ifes.poo1.xadrez.util.exception.PecaAlheiaException;
 import ifes.poo1.xadrez.view.cci.ControladorTelas;
@@ -55,11 +57,19 @@ public class Control {
 		case DESISTENCIA:
 			System.out.println("DESISTENCIA");
 			break;
-		case CHEQUE:
-			System.out.println("CHEQUE");
+		case XEQUE:
+			try {
+				validarXeque(jogada.getComando());
+			} catch (PecaAlheiaException | MovimentoInvalidoException
+					| CaminhoBloqueadoException | CasaVaziaException e) {
+				controladorTela.exibirMensagem(e.getMessage());
+				controlarComandoRecebido();
+			} catch (ChequeInvalidoException e) {
+				controladorTela.exibirMensagem(e.getMessage());
+			}
 			break;
-		case CHEQUE_MATE:
-			System.out.println("CHEQUE_MATE");
+		case XEQUE_MATE:
+			System.out.println("XEQUE_MATE");
 			break;
 		case PONTUACAO:
 			System.out.println("PONTUACAO");
@@ -79,6 +89,34 @@ public class Control {
 		}
 	}
 	
+	private void validarXeque(String comando) throws PecaAlheiaException, MovimentoInvalidoException, CaminhoBloqueadoException, CasaVaziaException, ChequeInvalidoException {
+		
+		String comandoValidacaoCheque;
+		
+		movimentarPeca(comando);
+		
+		comandoValidacaoCheque = montarComandoValidacaoCheque(comando);
+		if(verificarCheque(comandoValidacaoCheque)){
+			mudarVezJogador();
+			controladorTela.exibirMensagem("XEQUE! Quero ver agora, " + jogo.getVez().getNome() + "!");
+			mudarVezJogador();
+		}else
+			throw new ChequeInvalidoException();
+			
+	}
+	
+	private String montarComandoValidacaoCheque(String comando){
+		
+		
+		String comandoValidacaoCheque = comando.substring(2, 4);
+		if(jogo.getVez().getCor().equals(Cores.branco))
+			comandoValidacaoCheque += jogo.getTabuleiro().getPosicaoReiPreto();
+		else
+			comandoValidacaoCheque += jogo.getTabuleiro().getPosicaoReiBranco();
+		
+		return comandoValidacaoCheque;
+	}
+
 	private void empatarPartida() {
 		controladorTela.exibirMensagem("o jogador " + jogo.getVez().getNome() + " deseja empatar a partida.");
 		mudarVezJogador();
@@ -179,13 +217,51 @@ public class Control {
 			/*verifica se a peca eh capaz de fazer o movimento*/
 			if (peca.mover(colunaInicial, linhaInicial, colunaFinal, linhaFinal)) {
 				/*verifica se a peca possui caminho desobstruido para fazer o movimento*/
-				if(jogo.getTabuleiro().verificaCaminho(colunaInicial, linhaInicial, colunaFinal, linhaFinal))
+				if(jogo.getTabuleiro().verificaCaminho(colunaInicial, linhaInicial, colunaFinal, linhaFinal)){
+					/*se a peca movida for um rei, atualiza sua posicao no tabuleiro*/
+					if(peca.getNome().equals(NomePecas.rei)){
+						if(peca.getCor().equals(Cores.branco))
+							jogo.getTabuleiro().setPosicaoReiBranco(String.valueOf(colunaFinal) + String.valueOf(linhaFinal));
+						else
+							jogo.getTabuleiro().setPosicaoReiPreto(String.valueOf(colunaFinal) + String.valueOf(linhaFinal));
+					}
 					jogo.getTabuleiro().moverPeca(colunaInicial, linhaInicial, colunaFinal, linhaFinal);
+				}
 				else
 					throw new CaminhoBloqueadoException();
 			} else
 				throw new MovimentoInvalidoException();
 		}
+	}
+	
+	private boolean verificarCheque(String comando){
+		// colunas e linhas sao diminuidas em um para que o jogador possa
+		// escrever comandos entre 1 e 8, e nao entre 0 e 7.
+		int colunaInicial = Character.getNumericValue(comando.charAt(0));
+		colunaInicial -= 1;
+		int linhaInicial = Character.getNumericValue(comando.charAt(1));
+		linhaInicial -= 1;
+
+		int colunaFinal = Character.getNumericValue(comando.charAt(2));
+		colunaFinal -= 1;
+		int linhaFinal = Character.getNumericValue(comando.charAt(3));
+		linhaFinal -= 1;
+
+		Peca peca = jogo.getTabuleiro().getCasas(colunaInicial, linhaInicial);
+
+		/* verifica se a peca eh capaz de fazer o movimento */
+		if (peca.mover(colunaInicial, linhaInicial, colunaFinal, linhaFinal)) {
+			/*
+			 * verifica se a peca possui caminho desobstruido para fazer o
+			 * movimento
+			 */
+			if (jogo.getTabuleiro().verificaCaminho(colunaInicial,
+					linhaInicial, colunaFinal, linhaFinal)) {
+				return true;
+			} else
+				return false;
+		} else
+			return false;
 	}
 	
 	private void capturarPeca(String comando) throws CasaVaziaException, PecaAlheiaException, CaminhoBloqueadoException, MovimentoInvalidoException, CapturaInvalidaPecaInexistenteException, CapturaInvalidaPecaPropriaException{
@@ -213,6 +289,12 @@ public class Control {
 			if (peca.mover(colunaInicial, linhaInicial, colunaFinal, linhaFinal)) {
 				/*verifica se a peca possui caminho desobstruido para fazer o movimento*/
 				if(jogo.getTabuleiro().verificaCaminhoCaptura(colunaInicial, linhaInicial, colunaFinal, linhaFinal, jogo)){
+					if(peca.getNome().equals(NomePecas.rei)){
+						if(peca.getCor().equals(Cores.branco))
+							jogo.getTabuleiro().setPosicaoReiBranco(String.valueOf(colunaFinal) + String.valueOf(linhaFinal));
+						else
+							jogo.getTabuleiro().setPosicaoReiPreto(String.valueOf(colunaFinal) + String.valueOf(linhaFinal));
+					}
 					Peca pecaCapturada = jogo.getTabuleiro().capturarPeca(colunaInicial, linhaInicial, colunaFinal, linhaFinal);
 					jogo.getVez().getPecasCapturadas().add(pecaCapturada);
 					if(jogo.getQuantidadePecasCapturadas() == 0)

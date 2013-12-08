@@ -5,9 +5,7 @@ import ifes.poo1.xadrez.model.cdp.jogo.HistoricoJogador;
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -79,8 +77,8 @@ public class Tela {
 		if(partidas.isEmpty())
 			System.out.println("Ainda não houve nenhuma partida!");
 		else{
-			int quantPartidas = 0;
-			int quantJogadores = 0;
+			int quantPartidas = 1;
+			int quantJogadores = 1;
 			SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
 			
 			System.out.println("Partidas realizadas...");

@@ -16,11 +16,11 @@ import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
 
 
 public class Tabuleiro {
-	
-	
-	
-	private Peca[][] casas = new Peca[8][8];
 
+	private Peca[][] casas = new Peca[8][8];
+	/*posicaoReiBranco e posicaoReiPreto serao usados para determinar se houve cheque ou cheque-mate*/
+	private String posicaoReiBranco;
+	private String posicaoReiPreto;
 		
 	//o met�do construtor insere as pe�as no tabuleiro	
 	public Tabuleiro(){
@@ -68,8 +68,10 @@ public class Tabuleiro {
 		//inserindo rei e dama
 		Peca rei = new Rei(Cores.branco);
 		casas[0][4] = rei;
+		posicaoReiBranco = "40";
 		rei = new Rei(Cores.preto);
 		casas[7][4] = rei;
+		posicaoReiPreto = "47";
 		
 		Peca dama = new Rainha(Cores.branco);
 		casas[0][3] = dama;
@@ -130,20 +132,37 @@ public class Tabuleiro {
 	}
 	
 	
-	public boolean verificaCaminhoTorre(int linhaInicial, int colunaInicial, int linhaDestino, int colunaDestino){
+	public boolean verificaCaminhoTorre(int colunaInicial, int linhaInicial, int colunaDestino, int linhaDestino){
 		
+		/*movimento horizontal*/
 		if (linhaInicial == linhaDestino){
-			for (int contador=0; contador<colunaDestino -1; contador++){
-				if (this.getCasas(linhaDestino, contador) != null){ //não tiver peça no meio
+			int colunaVariante;
+			/*verifica a posicao de movimentacao*/
+			if(colunaDestino > colunaInicial)
+				/*direita*/
+				colunaVariante = 1;
+			else
+				/*esquerda*/
+				colunaVariante = -1;
+			for(int i = 0; i < Math.abs(colunaDestino-colunaInicial) -1; i++){
+				colunaInicial += colunaVariante;
+				if(this.getCasas(colunaInicial, linhaInicial) != null)
 					return false;
-				}
 			}
-		}
-		if (colunaDestino==colunaInicial){
-			for (int contador=0; contador<colunaDestino -1; contador++){
-				if (this.getCasas(contador, colunaDestino) != null){ //não tiver peça no meio
+		/*movimento horizontal*/
+		}else{
+			int linhaVariante;
+			/*verifica a posicao de movimentacao*/
+			if(linhaDestino > linhaInicial)
+				/*direita*/
+				linhaVariante = 1;
+			else
+				/*esquerda*/
+				linhaVariante = -1;
+			for(int i = 0; i < Math.abs(linhaDestino-linhaInicial) -1; i++){
+				linhaInicial += linhaVariante;
+				if(this.getCasas(colunaInicial, linhaInicial) != null)
 					return false;
-				}
 			}
 		}
 		return true;
@@ -230,4 +249,25 @@ public class Tabuleiro {
 		return true;
 	}
 
+
+	public String getPosicaoReiBranco() {
+		return posicaoReiBranco;
+	}
+
+
+	public void setPosicaoReiBranco(String posicaoReiBranco) {
+		this.posicaoReiBranco = posicaoReiBranco;
+	}
+
+
+	public String getPosicaoReiPreto() {
+		return posicaoReiPreto;
+	}
+
+
+	public void setPosicaoReiPreto(String posicaoReiPreto) {
+		this.posicaoReiPreto = posicaoReiPreto;
+	}
+
+	
 }

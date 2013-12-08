@@ -96,11 +96,11 @@ public class ControladorTelas {
 				return jogada;
 			}
 			if(comando.charAt(4) == '+'){
-				jogada.setTipoJogada(TipoJogada.CHEQUE);		
+				jogada.setTipoJogada(TipoJogada.XEQUE);		
 				return jogada;
 			}
 			if(comando.charAt(4) == '#'){
-				jogada.setTipoJogada(TipoJogada.CHEQUE_MATE);		
+				jogada.setTipoJogada(TipoJogada.XEQUE_MATE);		
 				return jogada;
 			}
 		}
