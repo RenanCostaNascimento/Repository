@@ -9,6 +9,8 @@ public abstract class Peca {
 	protected NomePecas nome;
 		
 	public abstract boolean mover(int xIn, int yIn, int xFin, int yFin);
+	
+	public abstract boolean capturar(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal);
         
         	
 	public Peca(Cores cor, NomePecas nome, int valor){

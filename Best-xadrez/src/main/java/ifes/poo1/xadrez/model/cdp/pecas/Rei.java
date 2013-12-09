@@ -35,4 +35,13 @@ public class Rei extends Peca {
 	public void setSeMovimentou(boolean seMovimentou) {
 		this.seMovimentou = seMovimentou;
 	}
+
+	@Override
+	public boolean capturar(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal) {
+		
+		if((Math.abs(colunaFinal - colunaInicial) <= 1) && (Math.abs(linhaFinal - linhaInicial) <= 1))
+			return true;
+		
+		return false;
+	}
 }

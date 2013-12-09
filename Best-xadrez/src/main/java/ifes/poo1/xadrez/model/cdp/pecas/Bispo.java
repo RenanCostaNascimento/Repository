@@ -31,6 +31,22 @@ public class Bispo extends Peca{
 		
 	}
 
+	@Override
+	public boolean capturar(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal) {
+
+		for (int aux = 0; aux < 8; aux++){
+			if ((colunaInicial+aux == colunaFinal) && (linhaInicial+aux == linhaFinal)) return true;
+			if ((colunaInicial-aux == colunaFinal) && (linhaInicial-aux == linhaFinal)) return true;
+			if ((colunaInicial+aux == colunaFinal) && (linhaInicial-aux == linhaFinal)) return true;
+			if ((colunaInicial-aux == colunaFinal) && (linhaInicial+aux == linhaFinal)) return true;
+		}
+		
+		return false;
+		
+	}
+
+
+
 
 
 }

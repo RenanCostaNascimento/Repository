@@ -10,7 +10,6 @@ public class Jogador {
 	private int vitorias;
 	private int derrotas;
 	private ArrayList<Peca> pecasCapturadas = new ArrayList<Peca>();
-	private ArrayList<Peca> pecas = new ArrayList<Peca>();
 	
 	public Jogador(String nome, Cores cor){
 		this.nome = nome;
@@ -72,19 +71,6 @@ public class Jogador {
 
 	public void setPecasCapturadas(ArrayList<Peca> pecasCapturadas) {
 		this.pecasCapturadas = pecasCapturadas;
-	}
-
-
-	public ArrayList<Peca> getPecas() {
-		return pecas;
-	}
-
-
-	public void setPecas(ArrayList<Peca> pecas) {
-		this.pecas = pecas;
-	}
-	
-	
-	
+	}	
 	
 }

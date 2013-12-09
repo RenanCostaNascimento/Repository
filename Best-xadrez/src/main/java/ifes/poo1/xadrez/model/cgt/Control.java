@@ -286,7 +286,7 @@ public class Control {
 			throw new PecaAlheiaException();	
 		else {
 			/*verifica se a peca eh capaz de fazer o movimento*/
-			if (peca.mover(colunaInicial, linhaInicial, colunaFinal, linhaFinal)) {
+			if (peca.capturar(colunaInicial, linhaInicial, colunaFinal, linhaFinal)) {
 				/*verifica se a peca possui caminho desobstruido para fazer o movimento*/
 				if(jogo.getTabuleiro().verificaCaminhoCaptura(colunaInicial, linhaInicial, colunaFinal, linhaFinal, jogo)){
 					if(peca.getNome().equals(NomePecas.rei)){

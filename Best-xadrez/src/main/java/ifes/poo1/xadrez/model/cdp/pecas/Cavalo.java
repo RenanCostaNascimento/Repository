@@ -16,11 +16,25 @@ public class Cavalo extends Peca {
 	}
 	
 	@Override
-	public boolean mover(int xIn, int yIn, int xFin, int yFin) {
-		if ((xFin>7) || (xFin<0) || (yFin<0) || (yFin>7)) return false;
+	public boolean mover(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal) {
+		if ((colunaFinal>7) || (colunaFinal<0) || (linhaFinal<0) || (linhaFinal>7)) return false;
 		
-		if (((xFin == xIn+2)||(xFin==xIn-2)) && ((yFin == yIn+1)||(yFin == yIn-1))) return true;
-		if ((((yFin == yIn +2) || (yFin == yIn-2))) && (((xFin==xIn+1) || (xFin==xIn-1)))) return true;
+		if (((colunaFinal == colunaInicial+2)||(colunaFinal==colunaInicial-2)) && ((linhaFinal == linhaInicial+1)||(linhaFinal == linhaInicial-1))) return true;
+		if ((((linhaFinal == linhaInicial +2) || (linhaFinal == linhaInicial-2))) && (((colunaFinal==colunaInicial+1) || (colunaFinal==colunaInicial-1)))) return true;
+			
+		
+		return false;
+		
+	}
+
+	@Override
+	public boolean capturar(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal) {
+
+
+		if ((colunaFinal>7) || (colunaFinal<0) || (linhaFinal<0) || (linhaFinal>7)) return false;
+		
+		if (((colunaFinal == colunaInicial+2)||(colunaFinal==colunaInicial-2)) && ((linhaFinal == linhaInicial+1)||(linhaFinal == linhaInicial-1))) return true;
+		if ((((linhaFinal == linhaInicial +2) || (linhaFinal == linhaInicial-2))) && (((colunaFinal==colunaInicial+1) || (colunaFinal==colunaInicial-1)))) return true;
 			
 		
 		return false;

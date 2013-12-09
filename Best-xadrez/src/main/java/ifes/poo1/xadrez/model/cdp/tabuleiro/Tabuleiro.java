@@ -205,7 +205,7 @@ public class Tabuleiro {
 
 
 	private boolean verificaCaminhoRainha(int linhaInicial, int colunaInicial, int linhaDestino, int colunaDestino) {
-		if(Math.abs(colunaDestino - colunaInicial) == Math.abs(linhaDestino) - linhaInicial)
+		if(Math.abs(colunaDestino - colunaInicial) == Math.abs(linhaDestino - linhaInicial))
 			return verificaCaminhoBispo(linhaInicial, colunaInicial, linhaDestino, colunaDestino);
 		else
 			return verificaCaminhoTorre(linhaInicial, colunaInicial, linhaDestino, colunaDestino);

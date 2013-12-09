@@ -18,7 +18,16 @@ public class Rainha extends Peca {
 	@Override
 	public boolean mover(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal) {
 		
-		if((Math.abs(colunaFinal - colunaInicial) == Math.abs(linhaFinal) - linhaInicial) || ((linhaFinal-linhaInicial == 0) || (colunaFinal - colunaInicial == 0)))
+		if((Math.abs(colunaFinal - colunaInicial) == Math.abs(linhaFinal - linhaInicial)) || ((linhaFinal-linhaInicial == 0) || (colunaFinal - colunaInicial == 0)))
+			return true;
+		return false;
+		
+	}
+
+	@Override
+	public boolean capturar(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal) {
+		
+		if((Math.abs(colunaFinal - colunaInicial) == Math.abs(linhaFinal - linhaInicial)) || ((linhaFinal-linhaInicial == 0) || (colunaFinal - colunaInicial == 0)))
 			return true;
 		return false;
 		

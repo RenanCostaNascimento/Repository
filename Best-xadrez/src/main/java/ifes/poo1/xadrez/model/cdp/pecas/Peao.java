@@ -15,10 +15,48 @@ public class Peao extends Peca {
 	}
 	
 	@Override
-	public boolean mover(int xIn, int yIn, int xFin, int yFin) {
+	public boolean mover(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal) {
 		
-		if ((xIn == xFin) && ((yFin == yIn +1)||(yFin == yIn-1))) return true;
-		if (((yIn == 1) || (yIn == 6)) && ((yFin == yIn+2)||yFin == yIn-2)) return true;
+		/*peao preto*/
+		if(this.getCor().equals(Cores.preto)){
+			if(colunaFinal == colunaInicial){
+				/*primeiro movimento*/
+				if((linhaInicial == 6) && (linhaFinal == linhaInicial-2) || (linhaFinal == linhaInicial -1))
+					return true;
+				/*movimento comum*/
+				if(linhaFinal == linhaInicial -1)
+					return true;
+			}
+		/*peao branco*/
+		}else{
+			/*movimento comum*/
+			if(colunaFinal == colunaInicial){
+				/*primeiro movimento*/
+				if((linhaInicial == 1) && (linhaFinal == linhaInicial+2) || (linhaFinal == linhaInicial +1))
+					return true;
+				/*movimento comum*/
+				if(linhaFinal == linhaInicial +1)
+					return true;
+			/*movimento de captura*/
+			}
+		}
+			
+		return false;
+	}
+
+	@Override
+	public boolean capturar(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal) {
+		
+		/*peao preto*/
+		if(this.getCor().equals(Cores.preto)){
+			if((linhaFinal == linhaInicial-1) && ((colunaFinal == colunaInicial+1) || (colunaFinal == colunaInicial-1)))
+				return true;
+		}
+		/*peao branco*/
+		else{
+			if((linhaFinal == linhaInicial+1) && ((colunaFinal == colunaInicial+1) || (colunaFinal == colunaInicial-1)))
+				return true;
+		}
 		
 		return false;
 		
