@@ -2,18 +2,15 @@ package ifes.poo1.xadrez.model.cdp.pecas;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
+import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 
-public abstract class Peca {
+public abstract class PecaAbstrata implements PecaInterface{
 	protected Cores cor; 
 	protected int valor;
 	protected NomePecas nome;
-		
-	public abstract boolean mover(int xIn, int yIn, int xFin, int yFin);
-	
-	public abstract boolean capturar(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal);
-        
+	protected Posicao posicao;        
         	
-	public Peca(Cores cor, NomePecas nome, int valor){
+	public PecaAbstrata(Cores cor, NomePecas nome, int valor){
 		this.cor = cor;
 		this.nome = nome;
 		this.valor = valor;
@@ -41,6 +38,14 @@ public abstract class Peca {
 	
 	public Cores getCor(){
 		return this.cor;	
+	}
+	
+	public Posicao getPosicao() {
+		return posicao;
+	}
+
+	public void setPosicao(Posicao posicao) {
+		this.posicao = posicao;
 	}
 
 }

@@ -2,8 +2,9 @@ package ifes.poo1.xadrez.model.cdp.pecas;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
+import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 
-public class Peao extends Peca {
+public class Peao extends PecaAbstrata {
 	
 	public Peao(Cores cor) {
 		super(cor, NomePecas.peao, 1);
@@ -15,51 +16,59 @@ public class Peao extends Peca {
 	}
 	
 	@Override
-	public boolean mover(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal) {
-		
-		/*peao preto*/
-		if(this.getCor().equals(Cores.preto)){
-			if(colunaFinal == colunaInicial){
-				/*primeiro movimento*/
-				if((linhaInicial == 6) && (linhaFinal == linhaInicial-2) || (linhaFinal == linhaInicial -1))
+	public boolean mover(Posicao posicaoFinal) {
+
+		/* peao preto */
+		if (this.getCor().equals(Cores.preto)) {
+			if (posicaoFinal.getColuna() == getPosicao().getColuna()) {
+				/* primeiro movimento */
+				if ((getPosicao().getLinha() == 6)
+						&& (posicaoFinal.getLinha() == getPosicao().getLinha() - 2)
+						|| (posicaoFinal.getLinha() == getPosicao().getLinha() - 1))
 					return true;
-				/*movimento comum*/
-				if(linhaFinal == linhaInicial -1)
+				/* movimento comum */
+				if (posicaoFinal.getLinha() == getPosicao().getLinha() - 1)
 					return true;
 			}
-		/*peao branco*/
-		}else{
-			/*movimento comum*/
-			if(colunaFinal == colunaInicial){
-				/*primeiro movimento*/
-				if((linhaInicial == 1) && (linhaFinal == linhaInicial+2) || (linhaFinal == linhaInicial +1))
+			/* peao branco */
+		} else {
+			/* movimento comum */
+			if (posicaoFinal.getColuna() == getPosicao().getColuna()) {
+				/* primeiro movimento */
+				if ((getPosicao().getLinha() == 1)
+						&& (posicaoFinal.getLinha() == getPosicao().getLinha() + 2)
+						|| (posicaoFinal.getLinha() == getPosicao().getLinha() + 1))
 					return true;
-				/*movimento comum*/
-				if(linhaFinal == linhaInicial +1)
+				/* movimento comum */
+				if (posicaoFinal.getLinha() == getPosicao().getLinha() + 1)
 					return true;
-			/*movimento de captura*/
+				/* movimento de captura */
 			}
 		}
-			
+
 		return false;
 	}
 
 	@Override
-	public boolean capturar(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal) {
-		
-		/*peao preto*/
-		if(this.getCor().equals(Cores.preto)){
-			if((linhaFinal == linhaInicial-1) && ((colunaFinal == colunaInicial+1) || (colunaFinal == colunaInicial-1)))
+	public boolean capturar(Posicao posicaoFinal) {
+
+		/* peao preto */
+		if (this.getCor().equals(Cores.preto)) {
+			if ((posicaoFinal.getLinha() == getPosicao().getLinha() - 1)
+					&& ((posicaoFinal.getColuna() == getPosicao().getColuna() + 1) || (posicaoFinal
+							.getColuna() == getPosicao().getColuna() - 1)))
 				return true;
 		}
-		/*peao branco*/
-		else{
-			if((linhaFinal == linhaInicial+1) && ((colunaFinal == colunaInicial+1) || (colunaFinal == colunaInicial-1)))
+		/* peao branco */
+		else {
+			if ((posicaoFinal.getLinha() == getPosicao().getLinha() + 1)
+					&& ((posicaoFinal.getColuna() == getPosicao().getColuna() + 1) || (posicaoFinal
+							.getColuna() == getPosicao().getColuna() - 1)))
 				return true;
 		}
-		
+
 		return false;
-		
+
 	}
 
 

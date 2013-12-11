@@ -2,8 +2,9 @@ package ifes.poo1.xadrez.model.cdp.pecas;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
+import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 
-public class Torre extends Peca {
+public class Torre extends PecaAbstrata {
 
 	public Torre(Cores cor) {
 		super(cor, NomePecas.torre, 5);
@@ -13,10 +14,11 @@ public class Torre extends Peca {
 	public String toString() {
 		return "T";
 	}
+	
 	@Override
-	public boolean mover(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal) {
+	public boolean mover(Posicao posicaoFinal) {
 		
-		if((linhaFinal-linhaInicial == 0) || (colunaFinal - colunaInicial == 0))
+		if((posicaoFinal.getLinha()-getPosicao().getLinha() == 0) || (posicaoFinal.getColuna() - getPosicao().getColuna() == 0))
 			return true;
 		
 		return false;
@@ -24,12 +26,13 @@ public class Torre extends Peca {
 	}
 	
 	@Override
-	public boolean capturar(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal) {
+	public boolean capturar(Posicao posicaoFinal) {
 		
-		if((linhaFinal-linhaInicial == 0) || (colunaFinal - colunaInicial == 0))
+		if((posicaoFinal.getLinha()-getPosicao().getLinha() == 0) || (posicaoFinal.getColuna() - getPosicao().getColuna() == 0))
 			return true;
 		
 		return false;
+		
 	}
 
 }

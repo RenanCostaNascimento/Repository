@@ -4,10 +4,11 @@ package ifes.poo1.xadrez.model.cdp.tabuleiro;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
+import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.Bispo;
 import ifes.poo1.xadrez.model.cdp.pecas.Cavalo;
 import ifes.poo1.xadrez.model.cdp.pecas.Peao;
-import ifes.poo1.xadrez.model.cdp.pecas.Peca;
+import ifes.poo1.xadrez.model.cdp.pecas.PecaAbstrata;
 import ifes.poo1.xadrez.model.cdp.pecas.Rainha;
 import ifes.poo1.xadrez.model.cdp.pecas.Rei;
 import ifes.poo1.xadrez.model.cdp.pecas.Torre;
@@ -17,7 +18,7 @@ import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
 
 public class Tabuleiro {
 
-	private Peca[][] casas = new Peca[8][8];
+	private PecaAbstrata[][] casas = new PecaAbstrata[8][8];
 	/*posicaoReiBranco e posicaoReiPreto serao usados para determinar se houve cheque ou cheque-mate*/
 	private String posicaoReiBranco;
 	private String posicaoReiPreto;
@@ -27,79 +28,108 @@ public class Tabuleiro {
 		
 		//inserindo os pe�es
 		for (int i = 0; i < 8; i++) {
-			Peca peao = new Peao(Cores.branco);
+			PecaAbstrata peao = new Peao(Cores.branco);
 			casas[1][i] = peao;
+			peao.setPosicao(new Posicao(i, 1));
+			
 			peao = new Peao(Cores.preto);
 			casas[6][i] = peao;
+			peao.setPosicao(new Posicao(i, 6));
 			
 		} 
 		
 		//inserindo as torres
-		Peca torre = new Torre(Cores.branco);
+		PecaAbstrata torre = new Torre(Cores.branco);
 		casas[0][0] = torre;
+		torre.setPosicao(new Posicao(0, 0));
+		
 		torre = new Torre(Cores.branco);
 		casas[0][7] = torre;
+		torre.setPosicao(new Posicao(7, 0));
+		
 		torre = new Torre(Cores.preto);
 		casas[7][0] = torre;
+		torre.setPosicao(new Posicao(0, 7));
+		
 		torre = new Torre(Cores.preto);
 		casas[7][7] = torre;
+		torre.setPosicao(new Posicao(7, 7));
 		
 		//inserindo os cavalos
-		Peca cavalo = new Cavalo(Cores.branco);
+		PecaAbstrata cavalo = new Cavalo(Cores.branco);
 		casas[0][1] = cavalo;
+		cavalo.setPosicao(new Posicao(1, 0));
+		
 		cavalo = new Cavalo(Cores.branco);
 		casas[0][6] = cavalo;
+		cavalo.setPosicao(new Posicao(6, 0));
+		
 		cavalo = new Cavalo(Cores.preto);
 		casas[7][1] = cavalo;
+		cavalo.setPosicao(new Posicao(1, 7));
+		
 		cavalo = new Cavalo(Cores.preto);
 		casas[7][6] = cavalo;
+		cavalo.setPosicao(new Posicao(6, 7));
 		
 		
 		//inserindo os bispos
-		Peca bispo = new Bispo(Cores.branco);
+		PecaAbstrata bispo = new Bispo(Cores.branco);
 		casas[0][2] = bispo;
+		bispo.setPosicao(new Posicao(2, 0));
+		
 		bispo = new Bispo(Cores.branco);
 		casas[0][5] = bispo;
+		bispo.setPosicao(new Posicao(5, 0));
+		
 		bispo = new Bispo(Cores.preto);
 		casas[7][2] = bispo;
+		bispo.setPosicao(new Posicao(2, 7));
+		
 		bispo = new Bispo(Cores.preto);
 		casas[7][5] = bispo;
+		bispo.setPosicao(new Posicao(5, 7));
 		
 		//inserindo rei e dama
-		Peca rei = new Rei(Cores.branco);
+		PecaAbstrata rei = new Rei(Cores.branco);
 		casas[0][4] = rei;
+		rei.setPosicao(new Posicao(4, 0));
 		posicaoReiBranco = "40";
+		
 		rei = new Rei(Cores.preto);
 		casas[7][4] = rei;
+		rei.setPosicao(new Posicao(4, 7));
 		posicaoReiPreto = "47";
 		
-		Peca dama = new Rainha(Cores.branco);
+		PecaAbstrata dama = new Rainha(Cores.branco);
 		casas[0][3] = dama;
+		dama.setPosicao(new Posicao(3, 0));
+		
 		dama = new Rainha(Cores.preto);
 		casas[7][3] = dama;
+		dama.setPosicao(new Posicao(3, 7));
 		
 	}
-
 	
-	public Peca getCasas(int linha, int coluna) {
-		return casas[coluna][linha];
+	public PecaAbstrata getCasas(int coluna, int linha) {
+		return casas[linha][coluna];
 	}
 
-	public void setCasas(Peca peca, int x, int y) {
-		this.casas[y][x] = peca;
+	public void setCasas(PecaAbstrata peca, int coluna, int linha) {
+		this.casas[linha][coluna] = peca;
 	}
-
+	
 	public void ImprimeTab(){
 		int numLinha = 8;
 		System.out.print("\n");
-		for (int coluna = 7; coluna >= 0; coluna--) {
+		for (int linha = 7; linha >= 0; linha--) {
 			System.out.print(numLinha + "   ");
 			numLinha-= 1;
-			for (int linha = 0; linha < 8; linha++) {
-				if (this.getCasas(linha,coluna) == null) 
+			for (int coluna = 0; coluna < 8; coluna++) {
+				if (this.getCasas(coluna, linha) == null) 
 					System.out.print(" x ");
 				else 
-					System.out.print(" " + this.getCasas(linha,coluna) + " "); 
+					System.out.print(" " + this.getCasas(coluna, linha) + " "); 
 						
 			}
 			System.out.print("\n");
@@ -112,56 +142,61 @@ public class Tabuleiro {
 	}
 	
 	
-	public void moverPeca(int xIn, int yIn, int xFin, int yFin){
+	public void moverPeca(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal){
 		
-		Peca peca = this.getCasas(xIn,yIn);
-		this.setCasas(peca, xFin, yFin);
-		this.setCasas(null, xIn, yIn);
+		PecaAbstrata peca = this.getCasas(colunaInicial,linhaInicial);
+		this.setCasas(peca, colunaFinal, linhaFinal);
+		this.setCasas(null, colunaInicial, linhaInicial);
+		peca.getPosicao().setColuna(colunaFinal);
+		peca.getPosicao().setLinha(linhaFinal);
 		
 	}
 	
-	public Peca capturarPeca(int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal){
+	public PecaAbstrata capturarPeca(Posicao posicaoInicial, Posicao posicaoFinal){
 		
-		Peca peca = this.getCasas(linhaInicial,colunaInicial);
-		Peca pecaCapturada = this.getCasas(linhaFinal, colunaFinal);
-		this.setCasas(peca, linhaFinal, colunaFinal);
-		this.setCasas(null, linhaInicial, colunaInicial);
+		PecaAbstrata peca = this.getCasas(posicaoInicial.getColuna(),posicaoInicial.getLinha());
+		PecaAbstrata pecaCapturada = this.getCasas(posicaoFinal.getColuna(), posicaoFinal.getLinha());
+		this.setCasas(peca, posicaoFinal.getColuna(), posicaoFinal.getLinha());
+		this.setCasas(null, posicaoInicial.getColuna(), posicaoInicial.getLinha());
+		peca.setPosicao(posicaoFinal);
 		
 		return pecaCapturada;
 		
 	}
 	
 	
-	public boolean verificaCaminhoTorre(int colunaInicial, int linhaInicial, int colunaDestino, int linhaDestino){
+	public boolean verificaCaminhoTorre(Posicao posicaoInicial, Posicao posicaoFinal){
 		
 		/*movimento horizontal*/
-		if (linhaInicial == linhaDestino){
+		if (posicaoInicial.getLinha() == posicaoFinal.getLinha()){
 			int colunaVariante;
+			int colunaInicial = posicaoInicial.getColuna();
 			/*verifica a posicao de movimentacao*/
-			if(colunaDestino > colunaInicial)
+			if(posicaoFinal.getColuna() > posicaoInicial.getColuna())
 				/*direita*/
 				colunaVariante = 1;
 			else
 				/*esquerda*/
 				colunaVariante = -1;
-			for(int i = 0; i < Math.abs(colunaDestino-colunaInicial) -1; i++){
+			for(int i = 0; i < Math.abs(posicaoFinal.getColuna()-posicaoInicial.getColuna()) -1; i++){
 				colunaInicial += colunaVariante;
-				if(this.getCasas(colunaInicial, linhaInicial) != null)
+				if(this.getCasas(colunaInicial, posicaoInicial.getLinha()) != null)
 					return false;
 			}
-		/*movimento horizontal*/
+		/*movimento vertical*/
 		}else{
 			int linhaVariante;
+			int linhaInicial = posicaoInicial.getLinha();
 			/*verifica a posicao de movimentacao*/
-			if(linhaDestino > linhaInicial)
-				/*direita*/
+			if(posicaoFinal.getLinha() > posicaoInicial.getLinha())
+				/*cima*/
 				linhaVariante = 1;
 			else
-				/*esquerda*/
+				/*baixo*/
 				linhaVariante = -1;
-			for(int i = 0; i < Math.abs(linhaDestino-linhaInicial) -1; i++){
+			for(int i = 0; i < Math.abs(posicaoFinal.getLinha()-posicaoInicial.getLinha()) -1; i++){
 				linhaInicial += linhaVariante;
-				if(this.getCasas(colunaInicial, linhaInicial) != null)
+				if(this.getCasas(posicaoInicial.getColuna(), linhaInicial) != null)
 					return false;
 			}
 		}
@@ -169,66 +204,66 @@ public class Tabuleiro {
 	}
 	
 	/*verifica se o caminho do bispo está livre para fazer a movimentacao*/
-	public boolean verificaCaminhoBispo(int linhaInicial, int colunaInicial, int linhaDestino, int colunaDestino){
+	public boolean verificaCaminhoBispo(Posicao posicaoInicial, Posicao posicaoFinal){
 		
 		int colunaVariante, linhaVariante;
 		
 		//determina a posicao de movimentacao
-		if (colunaDestino - colunaInicial > 0)
+		if (posicaoFinal.getColuna() - posicaoInicial.getColuna() > 0)
 			colunaVariante = 1;
 		else
 			colunaVariante = -1;
 		
-		if (linhaDestino - linhaInicial > 0)
+		if (posicaoFinal.getLinha() - posicaoInicial.getLinha() > 0)
 			linhaVariante = 1;
 		else
 			linhaVariante = -1;
 		
-		for(int i = 0; i < Math.abs(colunaDestino-colunaInicial) -1; i++){
-			linhaInicial += linhaVariante;
-			colunaInicial += colunaVariante;
-			if(this.getCasas(linhaInicial, colunaInicial) != null)
+		for(int i = 0; i < Math.abs(posicaoFinal.getColuna()-posicaoInicial.getColuna()) -1; i++){
+			posicaoInicial.setLinha(posicaoInicial.getLinha() + linhaVariante);
+			posicaoInicial.setColuna(posicaoInicial.getColuna() + colunaVariante);
+			if(this.getCasas(posicaoInicial.getColuna(), posicaoInicial.getLinha()) != null)
 				return false;
 		}
 		return true;
 	}
 	
-	public boolean verificaCaminho(int linhaInicial, int colunaInicial, int linhaDestino, int colunaDestino){
+	public boolean verificaCaminho(Posicao posicaoInicial, Posicao posicaoFinal){
 		
 		// verifica se tem alguma casa no destino
-		if (getCasas(linhaDestino, colunaDestino) != null) {
+		if (getCasas(posicaoFinal.getColuna(), posicaoFinal.getLinha()) != null) {
 			return false;
 		}
 		
-		return verificaCaminhos(colunaInicial, linhaInicial, colunaDestino, linhaDestino);
+		return verificaCaminhos(posicaoInicial, posicaoFinal);
 	}
 
 
-	private boolean verificaCaminhoRainha(int linhaInicial, int colunaInicial, int linhaDestino, int colunaDestino) {
-		if(Math.abs(colunaDestino - colunaInicial) == Math.abs(linhaDestino - linhaInicial))
-			return verificaCaminhoBispo(linhaInicial, colunaInicial, linhaDestino, colunaDestino);
+	private boolean verificaCaminhoRainha(Posicao posicaoInicial, Posicao posicaoFinal) {
+		if(Math.abs(posicaoFinal.getColuna() - posicaoInicial.getColuna()) == Math.abs(posicaoFinal.getLinha() - posicaoInicial.getLinha()))
+			return verificaCaminhoBispo(posicaoInicial, posicaoFinal);
 		else
-			return verificaCaminhoTorre(linhaInicial, colunaInicial, linhaDestino, colunaDestino);
+			return verificaCaminhoTorre(posicaoInicial,posicaoFinal);
 	}
 
 
-	public boolean verificaCaminhoCaptura(int linhaInicial, int colunaInicial, int linhaFinal, int colunaFinal, Jogo jogo) throws CapturaInvalidaPecaInexistenteException, CapturaInvalidaPecaPropriaException {
+	public boolean verificaCaminhoCaptura(Posicao posicaoInicial, Posicao posicaoFinal, Jogo jogo) throws CapturaInvalidaPecaInexistenteException, CapturaInvalidaPecaPropriaException {
 		
 		// verifica se tem alguma casa no destino
-		if (getCasas(linhaFinal, colunaFinal) == null) {
+		if (getCasas(posicaoFinal.getColuna(), posicaoFinal.getLinha()) == null) {
 			throw new CapturaInvalidaPecaInexistenteException();
 		}
 		// verifica a peca que se deseja capturar eh da mesma cor que o jogador que fez a captura
-		if (getCasas(linhaFinal, colunaFinal).getCor().equals(jogo.getVez().getCor())) {
+		if (getCasas(posicaoFinal.getColuna(), posicaoFinal.getLinha()).getCor().equals(jogo.getVez().getCor())) {
 			throw new CapturaInvalidaPecaPropriaException();
 		}
 
-		return verificaCaminhos(colunaInicial, linhaInicial, colunaFinal, linhaFinal);
+		return verificaCaminhos(posicaoInicial, posicaoFinal);
 	}
 	
-	private boolean verificaCaminhos(int colunaInicial, int linhaInicial, int colunaFinal, int linhaFinal){
+	private boolean verificaCaminhos(Posicao posicaoInicial, Posicao posicaoFinal){
 		
-		Peca peca = getCasas(linhaInicial, colunaInicial);
+		PecaAbstrata peca = getCasas(posicaoInicial.getColuna(), posicaoInicial.getLinha());
 
 		switch (peca.toString()) {
 		// Se for cavalo, passa direto.
@@ -236,15 +271,12 @@ public class Tabuleiro {
 			return true;
 			// verificação da torre.
 		case "T":
-			return verificaCaminhoTorre(linhaInicial, colunaInicial,
-					linhaFinal, colunaFinal);
+			return verificaCaminhoTorre(posicaoInicial, posicaoFinal);
 			// verificação do bispo
 		case "B":
-			return verificaCaminhoBispo(linhaInicial, colunaInicial,
-					linhaFinal, colunaFinal);
+			return verificaCaminhoBispo(posicaoInicial, posicaoFinal);
 		case "D":
-			return verificaCaminhoRainha(linhaInicial, colunaInicial,
-					linhaFinal, colunaFinal);
+			return verificaCaminhoRainha(posicaoInicial, posicaoFinal);
 		}
 		return true;
 	}
