@@ -1,6 +1,7 @@
 package ifes.poo1.xadrez.model.cdp.tabuleiro;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
+import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.Bispo;
@@ -342,5 +343,54 @@ public class Tabuleiro {
 		this.posicaoReiPreto = posicaoReiPreto;
 	}
 
-	
+	public boolean roqueMenor(Cores cor){
+            if (cor == Cores.branco){
+                if (this.getCasas(7, 4).isSeMovimentou() || this.getCasas(7, 4).getNome()== NomePecas.rei || //verifica de é o rei
+                    this.getCasas(7, 7).isSeMovimentou() || this.getCasas(7,7).getNome()== NomePecas.torre || 
+                    this.getCasas(7, 6)==null || this.getCasas(7,5)== null ){ //verificar se tem peças no meio //verifica se é a torre
+             
+                        this.moverPeca(7, 4, 7, 6);
+                        this.moverPeca(7, 7, 7, 5);
+                        return true;
+                }
+            }
+     
+            if (cor == Cores.preto){
+                if (this.getCasas(0, 4).isSeMovimentou() || this.getCasas(0, 4).getNome()== NomePecas.rei || //verifica de é o rei
+                    this.getCasas(0, 7).isSeMovimentou() || this.getCasas(0,7).getNome()== NomePecas.torre || 
+                    this.getCasas(0, 6)==null || this.getCasas(0,5)== null ){ //verificar se tem peças no meio //verifica se é a torre
+             
+                        this.moverPeca(0, 4, 0, 6);
+                        this.moverPeca(0, 7, 0, 5);
+                        return true;
+                    }
+                }
+            
+            return false;
+        }
+        
+        public boolean roqueMaior(Cores cor){
+        if (cor == Cores.branco){
+            if (this.getCasas(7, 4).isSeMovimentou() || this.getCasas(7, 4).getNome()== NomePecas.rei || //verifica de é o rei
+                this.getCasas(7, 0).isSeMovimentou() || this.getCasas(7,0).getNome()== NomePecas.torre || 
+                this.getCasas(7, 3)==null || this.getCasas(7,2)== null || this.getCasas(7,1)== null ){ //verificar se tem peças no meio //verifica se é a torre
+             
+                    this.moverPeca(7, 4, 7, 2);
+                    this.moverPeca(7, 0, 7, 3);
+                    return true;
+                }
+            }
+     
+        if (cor == Cores.preto){
+            if (this.getCasas(0, 4).isSeMovimentou() || this.getCasas(0, 4).getNome()== NomePecas.rei || //verifica de é o rei
+                this.getCasas(0,0).isSeMovimentou() || this.getCasas(0,0).getNome()== NomePecas.torre || 
+                this.getCasas(0, 3)==null || this.getCasas(0,2)== null || this.getCasas(0,1)== null ){ //verificar se tem peças no meio //verifica se é a torre
+             
+                    this.moverPeca(0, 4, 0, 2);
+                    this.moverPeca(0, 0, 0, 3);
+                    return true;
+                }
+            }
+        return false;
+    }
 }

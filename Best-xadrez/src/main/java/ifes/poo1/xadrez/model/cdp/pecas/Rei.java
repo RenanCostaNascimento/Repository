@@ -19,20 +19,15 @@ public class Rei extends PecaAbstrata {
 		return "R";
 	}
 	
-	public boolean isSeMovimentou() {
-		return seMovimentou;
-	}
-
-	public void setSeMovimentou(boolean seMovimentou) {
-		this.seMovimentou = seMovimentou;
-	}
-
 	@Override
 	public boolean mover(Posicao posicaoFinal) {
 
 		if ((Math.abs(posicaoFinal.getColuna() - getPosicao().getColuna()) <= 1)
-				&& (Math.abs(posicaoFinal.getLinha() - getPosicao().getLinha()) <= 1))
-			return true;
+				&& (Math.abs(posicaoFinal.getLinha() - getPosicao().getLinha()) <= 1)){
+                    this.actMovimentou();
+                    return true;
+                }
+			
 
 		return false;
 
@@ -42,8 +37,10 @@ public class Rei extends PecaAbstrata {
 	public boolean capturar(Posicao posicaoFinal) {
 
 		if ((Math.abs(posicaoFinal.getColuna() - getPosicao().getColuna()) <= 1)
-				&& (Math.abs(posicaoFinal.getLinha() - getPosicao().getLinha()) <= 1))
-			return true;
+				&& (Math.abs(posicaoFinal.getLinha() - getPosicao().getLinha()) <= 1)){
+                    this.actMovimentou();
+                    return true;
+                }
 
 		return false;
 
