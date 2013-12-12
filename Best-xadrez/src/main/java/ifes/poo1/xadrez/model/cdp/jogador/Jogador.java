@@ -21,8 +21,8 @@ public class Jogador {
 	
 	public int getPontuacao() {
 		int soma = 0;
-		//todo
-		//somar os valores de cada pe�a da lista "pecasComidas"
+		for(PecaAbstrata peca : this.pecasCapturadas)
+			soma += peca.getValor();
 		return soma;
 	}
         

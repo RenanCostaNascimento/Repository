@@ -1,7 +1,5 @@
 package ifes.poo1.xadrez.model.cdp.pecas;
 
-import java.io.ObjectInputStream.GetField;
-
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;

@@ -14,13 +14,13 @@ import ifes.poo1.xadrez.util.exception.CaminhoBloqueadoException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
 import ifes.poo1.xadrez.util.exception.CasaVaziaException;
-import ifes.poo1.xadrez.util.exception.ChequeInvalidoException;
 import ifes.poo1.xadrez.util.exception.MovimentoInvalidoException;
 import ifes.poo1.xadrez.util.exception.PecaAlheiaException;
 import ifes.poo1.xadrez.view.cci.ControladorTelas;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 public class Control {
@@ -34,23 +34,12 @@ public class Control {
 		Jogada jogada = controladorTela.determinarJogadaUsuario(jogo.getVez());
 		switch(jogada.getTipoJogada()){
 		case MOVIMENTO:
-			try {
-				movimentarPeca(jogada.getPosicaoInicial(), jogada.getPosicaoFinal());
-			} catch (PecaAlheiaException | MovimentoInvalidoException | CaminhoBloqueadoException | CasaVaziaException e) {
-				controladorTela.exibirMensagem(e.getMessage());
-				controlarComandoRecebido();
-			}
+			controlarMovimentoPeca(jogada);
+			controlarXeque();
 			break;
 		case CAPTURA:
-			try {
-				capturarPeca(jogada.getPosicaoInicial(), jogada.getPosicaoFinal());
-			} catch (CasaVaziaException | PecaAlheiaException
-					| CaminhoBloqueadoException | MovimentoInvalidoException
-					| CapturaInvalidaPecaInexistenteException
-					| CapturaInvalidaPecaPropriaException e) {
-				controladorTela.exibirMensagem(e.getMessage());
-				controlarComandoRecebido();
-			}
+			controlarCapturaPeca(jogada);
+			controlarXeque();
 			break;
 		case EMPATE:
 			empatarPartida();
@@ -76,34 +65,190 @@ public class Control {
 		}
 	}
 	
-//	private void validarXeque(String comando) throws PecaAlheiaException, MovimentoInvalidoException, CaminhoBloqueadoException, CasaVaziaException, ChequeInvalidoException {
-//		
-//		String comandoValidacaoCheque;
-//		
-//		movimentarPeca(comando);
-//		
-//		comandoValidacaoCheque = montarComandoValidacaoCheque(comando);
-//		if(verificarCheque(comandoValidacaoCheque)){
-//			mudarVezJogador();
-//			controladorTela.exibirMensagem("XEQUE! Quero ver agora, " + jogo.getVez().getNome() + "!");
-//			mudarVezJogador();
-//		}else
-//			throw new ChequeInvalidoException();
-//			
-//	}
-	
-	private String montarComandoValidacaoCheque(String comando){
-		
-		
-		String comandoValidacaoCheque = comando.substring(2, 4);
-		if(jogo.getVez().getCor().equals(Cores.branco))
-			comandoValidacaoCheque += jogo.getTabuleiro().getPosicaoReiPreto();
-		else
-			comandoValidacaoCheque += jogo.getTabuleiro().getPosicaoReiBranco();
-		
-		return comandoValidacaoCheque;
+	private void controlarMovimentoPeca(Jogada jogada) {
+		try {
+			movimentarPeca(jogada.getPosicaoInicial(), jogada.getPosicaoFinal());
+		} catch (PecaAlheiaException | MovimentoInvalidoException | CaminhoBloqueadoException | CasaVaziaException e) {
+			controladorTela.exibirMensagem(e.getMessage());
+			controlarComandoRecebido();
+		}
 	}
 
+	private void controlarCapturaPeca(Jogada jogada) {
+		try {
+			capturarPeca(jogada.getPosicaoInicial(), jogada.getPosicaoFinal());
+		} catch (CasaVaziaException | PecaAlheiaException
+				| CaminhoBloqueadoException | MovimentoInvalidoException
+				| CapturaInvalidaPecaInexistenteException
+				| CapturaInvalidaPecaPropriaException e) {
+			controladorTela.exibirMensagem(e.getMessage());
+			controlarComandoRecebido();
+		}
+	}
+
+	private void controlarXeque() {
+		/* se for a vez do branco, valida o cheque no rei preto */
+		if (jogo.getVez().equals(jogo.getBranco())) {
+			/* verifica xeque */
+			if (validarXeque(jogo.getTabuleiro().getPosicaoReiPreto(), jogo
+					.getTabuleiro().getPecasBrancas())) {
+				/* verifica xeque-mate */
+				if (validarXequeMate(jogo.getTabuleiro().getPosicaoReiPreto(),
+						jogo.getTabuleiro().getPecasBrancas())) {
+					finalizarJogo(jogo.getBranco(), jogo.getPreto());
+				} else {
+					controladorTela.exibirMensagem("XEQUE do jogador " + jogo.getVez().getNome() + "!");
+				}
+			}
+		/* senao, valida o xeque no rei branco */
+		} else {
+			/* verifica xeque */
+			if (validarXeque(jogo.getTabuleiro().getPosicaoReiBranco(), jogo
+					.getTabuleiro().getPecasPretas())) {
+				/* verifica xeque-mate */
+				if (validarXequeMate(jogo.getTabuleiro().getPosicaoReiBranco(),
+						jogo.getTabuleiro().getPecasPretas())) {
+					finalizarJogo(jogo.getPreto(), jogo.getBranco());
+				} else {
+					controladorTela.exibirMensagem("XEQUE do jogador " + jogo.getVez().getNome() + "!");
+				}
+			}
+		}
+		
+	}
+
+	private void finalizarJogo(Jogador vencedor, Jogador perdedor) {
+		
+		controladorTela.exibirMensagem("XEQUE-MATE do jogador " + vencedor.getNome() + ", parabéns!\n");
+		jogo.setDataHoraFim(new GregorianCalendar());
+		
+		adicionarHistoricoJogo(vencedor.getNome());
+		adicionarHistoricoJogadorVitoria(vencedor.getNome());
+		adicionarHistoricoJogadorDerrota(perdedor.getNome());
+		
+		jogo.setEmAndamento(false);
+		controlarMenuInicial();
+				
+	}
+
+	/** Verifica se o posicionamento das peças no tabuleiro configuram um xeque.
+	 * @param posicaoRei - posição do rei que está sob ameaça de xeque.
+	 * @param pecasAtacantes - lista de peças do jogador que está ameaçando o rei.
+	 * @return true se o rei está em xeque.
+	 */
+	private boolean validarXeque(Posicao posicaoRei, List<PecaAbstrata> pecasAtacantes) {
+		
+		for (PecaAbstrata peca : pecasAtacantes) {
+			/* verifica se a peca consegue capturar o rei */
+			if (peca.capturar(posicaoRei)) {
+				/*
+				 * verifica se a peca tem caminho desobstruido para capturar o
+				 * rei
+				 */
+				if (jogo.getTabuleiro().verificaCaminhoXeque(peca.getPosicao(),
+						posicaoRei, jogo)) {
+					/* esse momento configura XEQUE */
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/** Verifica se o posicionamento das peças configuram um xeque-mate.
+	 * @param posicaoRei - posição do rei que está sob ameaça
+	 * @param pecasAtacantes - lista de peças do jogador que está ameaçando o rei
+	 * @return true se o rei está sob xeque-mate
+	 */
+	private boolean validarXequeMate(Posicao posicaoRei, List<PecaAbstrata> pecasAtacantes) {
+		
+		/*quantidade de posicoes seguras que o rei pode se movimentar*/
+		int posicoesSeguras;
+		/*pega todas as posicoes ao redor do rei*/
+		List<Posicao> posicoesAdjacentesRei = posicoesAdjacentesPeca(posicaoRei);
+		/*verifica de quais posicoes ao redor do rei sao viaveis para realizacao de um movimento*/
+		posicoesAdjacentesRei = movimentosPossiveisRei(posicoesAdjacentesRei);
+		posicoesSeguras = posicoesAdjacentesRei.size();
+		
+		/*para cada posicao possivel, verifica se ela esta sob ameaca*/
+		for (Posicao posicao : posicoesAdjacentesRei) {
+			for (PecaAbstrata peca : pecasAtacantes) {
+				/* verifica se a peca consegue capturar o rei */
+				if(peca.capturar(posicao)){
+					/*
+					 * verifica se a peca tem caminho desobstruido para capturar o
+					 * rei
+					 */
+					if(jogo.getTabuleiro().verificaCaminhoXeque(peca.getPosicao(), posicao, jogo)){
+						/*essa posicao nao eh segura*/
+						posicoesSeguras--;
+						break;
+					}
+				}
+			}
+		}
+		/*se o rei nao tiver posicoes seguras para se movimentar, eh xeque-mate*/
+		if(posicoesSeguras == 0)
+			return true;
+		return false;
+		
+	}
+
+	/** Encontra as posições adjacentes de uma peca/posicao, incluindo a propria posição.
+	 * @param posicao - a posição em que a peça se encontra.
+	 * @return A lista de posições encontradas.
+	 */
+	private List<Posicao> posicoesAdjacentesPeca(Posicao posicao){
+		
+		List<Posicao> posicoesAdjacentes = new ArrayList<>();
+		int coluna;
+		int linha;
+		
+		for(int varianteColuna = -1; varianteColuna < 2; varianteColuna++){
+			for(int varianteLinha = -1; varianteLinha < 2; varianteLinha++){
+				coluna = posicao.getColuna();
+				linha = posicao.getLinha();
+				coluna += varianteColuna;
+				linha += varianteLinha;
+				if(coluna >= 0 && coluna <= 7)
+					if(linha >= 0 && linha <= 7)
+						posicoesAdjacentes.add(new Posicao(coluna, linha));
+			}
+		}
+			
+		return posicoesAdjacentes;
+	}
+	
+	
+	/** Valida para quais posições o rei pode se movimentar/capturar, excluindo a propria posicao. 
+	 * @param posicoesAdjacentes - todas as posições em torno do rei
+	 * @return A lista de posições que o rei pode se movimentar e/ou capturar alguma peça.
+	 */
+	private List<Posicao> movimentosPossiveisRei(List<Posicao> posicoesAdjacentes){
+		
+		Iterator<Posicao> iterator = posicoesAdjacentes.iterator();
+		/*a vez do jogador eh alterada para verificar se as pecas ao redor do rei sao da mesma cor que ele*/
+		mudarVezJogador();
+		
+		while(iterator.hasNext()){
+			Posicao posicao = iterator.next();
+			PecaAbstrata peca = jogo.getTabuleiro().getCasas(posicao.getColuna(), posicao.getLinha());
+			/*se a peca for null, nao eh preciso remover, pois o rei pode se movimentar para la*/
+			if(peca != null){
+				/*se a peca NAO for null, eh preciso verificar se a peca eh da mesma cor que o rei.
+				 * se nao for, significa que o rei pode realizar uma captura naquela posicao, entao nada eh feito*/
+				if(peca.getCor().equals(jogo.getVez().getCor()))
+					/*se for, significa que o rei nao pode se movimentar para aquela posicao*/
+					iterator.remove();
+			}
+		}
+		/*volta a vez para o jogador original*/
+		mudarVezJogador();
+		
+		return posicoesAdjacentes;
+		
+	}
+	
 	private void empatarPartida() {
 		controladorTela.exibirMensagem("o jogador " + jogo.getVez().getNome() + " deseja empatar a partida.");
 		mudarVezJogador();
@@ -120,8 +265,8 @@ public class Control {
 			controladorTela.exibirMensagem("O empate foi aceito! A partida estava uma vergonha, mesmo...");
 			jogo.setDataHoraFim(new GregorianCalendar());			
 			
-			adicionarHistoricoJogo();
-			adicionarHistoricoJogador();
+			adicionarHistoricoJogo("Empate");
+			adicionarHistoricoJogadorEmpate();
 			
 			jogo.setEmAndamento(false);
 			controlarMenuInicial();
@@ -152,15 +297,59 @@ public class Control {
 		}	
 	}
 	
-	private void adicionarHistoricoJogo(){
+	private void adicionarHistoricoJogo(String vencedor){
 		HistoricoPartida partida = new HistoricoPartida();
 		partida.setDataHoraInicio(jogo.getDataHoraInicio());
 		partida.setDataHoraFim(jogo.getDataHoraFim());
-		partida.setVencedor("Empate");
+		partida.setVencedor(vencedor);
 		partidas.add(partida);
 	}
 	
-	private void adicionarHistoricoJogador(){
+	private void adicionarHistoricoJogadorVitoria(String vencedor){
+		
+		if(estahNaLista(jogadores, vencedor))
+			aumentarVitoriaJogador(jogadores, vencedor);
+		else{
+			HistoricoJogador jogador = new HistoricoJogador(vencedor);
+			jogador.setVitorias(jogador.getVitorias() + 1);
+			jogadores.add(jogador);
+		}
+	}
+	
+	private void adicionarHistoricoJogadorDerrota(String perdedor){
+		
+		if(estahNaLista(jogadores, perdedor))
+			aumentarDerrotaJogador(jogadores, perdedor);
+		else{
+			HistoricoJogador jogador = new HistoricoJogador(perdedor);
+			jogador.setDerrotas(jogador.getDerrotas() + 1);
+			jogadores.add(jogador);
+		}
+	}
+	
+	private void aumentarDerrotaJogador(List<HistoricoJogador> listaJogadores, String perdedor) {
+
+		for(HistoricoJogador jogador : listaJogadores){
+			if(jogador.getNome().equals(perdedor)){
+				jogador.setDerrotas(jogador.getDerrotas() + 1);
+				break;
+			}
+		}
+		
+	}
+
+	private void aumentarVitoriaJogador(List<HistoricoJogador> listaJogadores, String vencedor) {
+		
+		for(HistoricoJogador jogador : listaJogadores){
+			if(jogador.getNome().equals(vencedor)){
+				jogador.setVitorias(jogador.getVitorias() + 1);
+				break;
+			}
+		}
+		
+	}
+
+	private void adicionarHistoricoJogadorEmpate(){
 		/*jogador branco*/
 		if (estahNaLista(jogadores, jogo.getBranco().getNome()))
 			aumentarEmpateJogador(jogadores, jogo.getBranco().getNome());
@@ -180,6 +369,14 @@ public class Control {
 		}
 	}
 
+	/** Tenta movimentar uma peça.
+	 * @param posicaoInicial - posição inicial da peça.
+	 * @param posicaoFinal - posição final da peça.
+	 * @throws PecaAlheiaException - se a peça de posicaoInicial não for do jogador da vez.
+	 * @throws MovimentoInvalidoException - se a peça não conseguir fazer o movimento especificado.
+	 * @throws CaminhoBloqueadoException - se a peça conseguir realizar o movimento, mas tiver o caminho obstruído.
+	 * @throws CasaVaziaException - se a posicaoInicial não tiver nenhuma peça.
+	 */
 	private void movimentarPeca(Posicao posicaoInicial, Posicao posicaoFinal) throws PecaAlheiaException, MovimentoInvalidoException, CaminhoBloqueadoException, CasaVaziaException{
 		
 		PecaAbstrata peca = jogo.getTabuleiro().getCasas(posicaoInicial.getColuna(), posicaoInicial.getLinha());
@@ -193,12 +390,12 @@ public class Control {
 			if (peca.mover(posicaoFinal)) {
 				/*verifica se a peca possui caminho desobstruido para fazer o movimento*/
 				if(jogo.getTabuleiro().verificaCaminho(posicaoInicial, posicaoFinal)){
-					/*se a peca movida for um rei, atualiza sua posicao no tabuleiro*/
+					/*se a peca movida for um rei, atualiza sua posicao*/
 					if(peca.getNome().equals(NomePecas.rei)){
 						if(peca.getCor().equals(Cores.branco))
-							jogo.getTabuleiro().setPosicaoReiBranco(String.valueOf(posicaoFinal.getColuna()) + String.valueOf(posicaoFinal.getLinha()));
+							jogo.getTabuleiro().setPosicaoReiBranco(posicaoFinal);
 						else
-							jogo.getTabuleiro().setPosicaoReiPreto(String.valueOf(posicaoFinal.getColuna()) + String.valueOf(posicaoFinal.getLinha()));
+							jogo.getTabuleiro().setPosicaoReiPreto(posicaoFinal);
 					}
 					jogo.getTabuleiro().moverPeca(posicaoInicial.getColuna(), posicaoInicial.getLinha(), posicaoFinal.getColuna(), posicaoFinal.getLinha());
 				}
@@ -208,36 +405,6 @@ public class Control {
 				throw new MovimentoInvalidoException();
 		}
 	}
-	
-//	private boolean verificarCheque(String comando){
-//		// colunas e linhas sao diminuidas em um para que o jogador possa
-//		// escrever comandos entre 1 e 8, e nao entre 0 e 7.
-//		int colunaInicial = Character.getNumericValue(comando.charAt(0));
-//		colunaInicial -= 1;
-//		int linhaInicial = Character.getNumericValue(comando.charAt(1));
-//		linhaInicial -= 1;
-//
-//		int colunaFinal = Character.getNumericValue(comando.charAt(2));
-//		colunaFinal -= 1;
-//		int linhaFinal = Character.getNumericValue(comando.charAt(3));
-//		linhaFinal -= 1;
-//
-//		Peca peca = jogo.getTabuleiro().getCasas(colunaInicial, linhaInicial);
-//
-//		/* verifica se a peca eh capaz de fazer o movimento */
-//		if (peca.mover(colunaInicial, linhaInicial, colunaFinal, linhaFinal)) {
-//			/*
-//			 * verifica se a peca possui caminho desobstruido para fazer o
-//			 * movimento
-//			 */
-//			if (jogo.getTabuleiro().verificaCaminho(colunaInicial,
-//					linhaInicial, colunaFinal, linhaFinal)) {
-//				return true;
-//			} else
-//				return false;
-//		} else
-//			return false;
-//	}
 	
 	private void capturarPeca(Posicao posicaoInicial, Posicao posicaoFinal) throws CasaVaziaException, PecaAlheiaException, CaminhoBloqueadoException, MovimentoInvalidoException, CapturaInvalidaPecaInexistenteException, CapturaInvalidaPecaPropriaException{
 				
@@ -254,9 +421,9 @@ public class Control {
 				if(jogo.getTabuleiro().verificaCaminhoCaptura(posicaoInicial, posicaoFinal, jogo)){
 					if(peca.getNome().equals(NomePecas.rei)){
 						if(peca.getCor().equals(Cores.branco))
-							jogo.getTabuleiro().setPosicaoReiBranco(String.valueOf(posicaoFinal.getColuna()) + String.valueOf(posicaoFinal.getLinha()));
+							jogo.getTabuleiro().setPosicaoReiBranco(posicaoFinal);
 						else
-							jogo.getTabuleiro().setPosicaoReiPreto(String.valueOf(posicaoFinal.getColuna()) + String.valueOf(posicaoFinal.getLinha()));
+							jogo.getTabuleiro().setPosicaoReiPreto(posicaoFinal);
 					}
 					PecaAbstrata pecaCapturada = jogo.getTabuleiro().capturarPeca(posicaoInicial, posicaoFinal);
 					jogo.getVez().getPecasCapturadas().add(pecaCapturada);
@@ -315,9 +482,20 @@ public class Control {
 		
 		controladorTela.mostrarTabuleiro(jogo.getTabuleiro());
 		controlarComandoRecebido();
+		if(jogo.getVez().getPontuacao() >= 999){
+			Jogador vencedor;
+			Jogador perdedor;
+			vencedor = jogo.getVez();
+			mudarVezJogador();
+			perdedor = jogo.getVez();
+			finalizarJogo(vencedor, perdedor);
+		}
 		mudarVezJogador();
 	}
 	
+	/** Muda a vez do jogador atual.
+	 * 
+	 */
 	private void mudarVezJogador()
 	{
 		if(jogo.getVez().equals(jogo.getBranco()))

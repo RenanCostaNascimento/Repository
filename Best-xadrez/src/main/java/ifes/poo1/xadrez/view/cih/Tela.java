@@ -105,7 +105,25 @@ public class Tela {
 	
 	public void mostrarTabuleiro(Tabuleiro tabuleiro)
 	{
-		tabuleiro.ImprimeTab();
+		int numLinha = 8;
+		System.out.print("\n");
+		for (int linha = 7; linha >= 0; linha--) {
+			System.out.print(numLinha + "   ");
+			numLinha -= 1;
+			for (int coluna = 0; coluna < 8; coluna++) {
+				if (tabuleiro.getCasas(coluna, linha) == null)
+					System.out.print(" x ");
+				else
+					System.out.print(" " + tabuleiro.getCasas(coluna, linha) + " ");
+
+			}
+			System.out.print("\n");
+		}
+		System.out.print("\n    ");
+		for (int numColuna = 1; numColuna < 9; numColuna++) {
+			System.out.print(" " + numColuna + " ");
+		}
+		System.out.print("\n\n");
 	}
 	
 	public String pegarComandoUsuario(Jogador jogador)
