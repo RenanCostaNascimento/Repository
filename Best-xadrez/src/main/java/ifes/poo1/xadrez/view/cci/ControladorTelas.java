@@ -80,29 +80,26 @@ public class ControladorTelas {
 	{
 		Jogada jogada = new Jogada();
 		String comando = tela.pegarComandoUsuario(jogador);
-
-		jogada.setComando(comando);
 		
 		if(comando.length() == 4){
+			
+			jogada.getPosicaoInicial().setColuna(Character.getNumericValue(comando.charAt(0)) -1);
+			jogada.getPosicaoInicial().setLinha(Character.getNumericValue(comando.charAt(1)) -1);
+			jogada.getPosicaoFinal().setColuna(Character.getNumericValue(comando.charAt(2)) -1);
+			jogada.getPosicaoFinal().setLinha(Character.getNumericValue(comando.charAt(3)) -1);
 			if(comando.charAt(2) != '=')
 				jogada.setTipoJogada(TipoJogada.MOVIMENTO);
 			else
 				jogada.setTipoJogada(TipoJogada.PROMOCAO);
 			return jogada;
 		}
-		if(comando.length() == 5){
-			if(comando.charAt(2) == 'x'){
-				jogada.setTipoJogada(TipoJogada.CAPTURA);		
-				return jogada;
-			}
-			if(comando.charAt(4) == '+'){
-				jogada.setTipoJogada(TipoJogada.CHEQUE);		
-				return jogada;
-			}
-			if(comando.charAt(4) == '#'){
-				jogada.setTipoJogada(TipoJogada.CHEQUE_MATE);		
-				return jogada;
-			}
+		if (comando.charAt(2) == 'x') {
+			jogada.setTipoJogada(TipoJogada.CAPTURA);
+			jogada.getPosicaoInicial().setColuna(Character.getNumericValue(comando.charAt(0)) -1);
+			jogada.getPosicaoInicial().setLinha(Character.getNumericValue(comando.charAt(1)) -1);
+			jogada.getPosicaoFinal().setColuna(Character.getNumericValue(comando.charAt(3)) -1);
+			jogada.getPosicaoFinal().setLinha(Character.getNumericValue(comando.charAt(4)) -1);
+			return jogada;
 		}
 		if(comando.contentEquals("O-O")){
 			jogada.setTipoJogada(TipoJogada.ROQUE_MENOR);		

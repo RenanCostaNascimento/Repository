@@ -2,8 +2,9 @@ package ifes.poo1.xadrez.model.cdp.pecas;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
+import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 
-public class Cavalo extends Peca {
+public class Cavalo extends PecaAbstrata {
 	
 	public Cavalo(Cores cor) {
 		super(cor, NomePecas.cavalo, 3);
@@ -16,15 +17,47 @@ public class Cavalo extends Peca {
 	}
 	
 	@Override
-	public boolean mover(int xIn, int yIn, int xFin, int yFin) {
-		if ((xFin>7) || (xFin<0) || (yFin<0) || (yFin>7)) return false;
-		
-		if (((xFin == xIn+2)||(xFin==xIn-2)) && ((yFin == yIn+1)||(yFin == yIn-1))) return true;
-		if ((((yFin == yIn +2) || (yFin == yIn-2))) && (((xFin==xIn+1) || (xFin==xIn-1)))) return true;
-			
-		
+	public boolean mover(Posicao posicaoFinal) {
+		if ((posicaoFinal.getColuna() > 7) || (posicaoFinal.getColuna() < 0)
+				|| (posicaoFinal.getLinha() < 0)
+				|| (posicaoFinal.getLinha() > 7))
+			return false;
+
+		if (((posicaoFinal.getColuna() == getPosicao().getColuna() + 2) || (posicaoFinal
+				.getColuna() == getPosicao().getColuna() - 2))
+				&& ((posicaoFinal.getLinha() == getPosicao().getLinha() + 1) || (posicaoFinal
+						.getLinha() == getPosicao().getLinha() - 1)))
+			return true;
+		if ((((posicaoFinal.getLinha() == getPosicao().getLinha() + 2) || (posicaoFinal
+				.getLinha() == getPosicao().getLinha() - 2)))
+				&& (((posicaoFinal.getColuna() == getPosicao().getColuna() + 1) || (posicaoFinal
+						.getColuna() == getPosicao().getColuna() - 1))))
+			return true;
+
 		return false;
-		
+
+	}
+
+	@Override
+	public boolean capturar(Posicao posicaoFinal) {
+		if ((posicaoFinal.getColuna() > 7) || (posicaoFinal.getColuna() < 0)
+				|| (posicaoFinal.getLinha() < 0)
+				|| (posicaoFinal.getLinha() > 7))
+			return false;
+
+		if (((posicaoFinal.getColuna() == getPosicao().getColuna() + 2) || (posicaoFinal
+				.getColuna() == getPosicao().getColuna() - 2))
+				&& ((posicaoFinal.getLinha() == getPosicao().getLinha() + 1) || (posicaoFinal
+						.getLinha() == getPosicao().getLinha() - 1)))
+			return true;
+		if ((((posicaoFinal.getLinha() == getPosicao().getLinha() + 2) || (posicaoFinal
+				.getLinha() == getPosicao().getLinha() - 2)))
+				&& (((posicaoFinal.getColuna() == getPosicao().getColuna() + 1) || (posicaoFinal
+						.getColuna() == getPosicao().getColuna() - 1))))
+			return true;
+
+		return false;
+
 	}
 
 	

@@ -4,14 +4,26 @@ import ifes.poo1.xadrez.model.cdp.constantes.TipoJogada;
 
 public class Jogada {
 	
-	String comando;
-	TipoJogada tipoJogada;
+	private Posicao posicaoInicial;
+	private Posicao posicaoFinal;
+	private TipoJogada tipoJogada;
 	
-	public String getComando() {
-		return comando;
+	public Jogada(){
+		this.posicaoInicial = new Posicao();
+		this.posicaoFinal = new Posicao();
 	}
-	public void setComando(String comando) {
-		this.comando = comando;
+	
+	public Posicao getPosicaoInicial() {
+		return posicaoInicial;
+	}
+	public void setPosicaoInicial(Posicao posicaoInicial) {
+		this.posicaoInicial = posicaoInicial;
+	}
+	public Posicao getPosicaoFinal() {
+		return posicaoFinal;
+	}
+	public void setPosicaoFinal(Posicao posicaoFinal) {
+		this.posicaoFinal = posicaoFinal;
 	}
 	public TipoJogada getTipoJogada() {
 		return tipoJogada;

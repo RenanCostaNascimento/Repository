@@ -3,7 +3,6 @@ package ifes.poo1.xadrez.model.cdp.jogo;
 import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Jogo {

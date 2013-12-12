@@ -1,6 +1,5 @@
 package ifes.poo1.xadrez.model.cdp.jogo;
 
-import java.util.List;
 
 public class HistoricoJogador {
 	
