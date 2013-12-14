@@ -22,11 +22,13 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class Control {
 	
 	private ControladorTelas controladorTela = new ControladorTelas();
 	private Jogo jogo;
+	private Jogada ultimaJogada;
 	private List<HistoricoPartida> partidas = new ArrayList<>();
 	private List<HistoricoJogador> jogadores = new ArrayList<>();
 		
@@ -34,10 +36,12 @@ public class Control {
 		Jogada jogada = controladorTela.determinarJogadaUsuario(jogo.getVez());
 		switch(jogada.getTipoJogada()){
 		case MOVIMENTO:
+			ultimaJogada = jogada;
 			controlarMovimentoPeca(jogada);
 			controlarXeque();
 			break;
 		case CAPTURA:
+			ultimaJogada = jogada;
 			controlarCapturaPeca(jogada);
 			controlarXeque();
 			break;
@@ -65,6 +69,97 @@ public class Control {
 		}
 	}
 	
+	public void controlarComandoZeus(){
+		
+		Random gerador = new Random();
+		List<Posicao> posicoesPossiveis = new ArrayList<>();
+		Posicao posicaoRandomica;
+		PecaAbstrata pecaRandomica = null, pecaDestino;
+		
+		/*enquanto a peca escolhida nao conseguir se mover, escolha outra peca*/
+		while(posicoesPossiveis.size() == 0){
+			/*randomiza uma peca da lista de pecas de zeus*/
+			pecaRandomica = jogo.getTabuleiro().getPecasPretas().get(gerador.nextInt(jogo.getTabuleiro().getPecasPretas().size()));
+			/*pega as posicoes possiveis que a peca consegue se mover*/
+			posicoesPossiveis = jogo.getTabuleiro().posicoesPossiveisPeca(pecaRandomica.getPosicao());
+		}
+
+		/*randomiza uma posicao da lista de posicoes possiveis*/
+		posicaoRandomica = posicoesPossiveis.get(gerador.nextInt(posicoesPossiveis.size()));
+		/*pega a peca na posicao randomica de destino*/
+		pecaDestino = jogo.getTabuleiro().getCasas(posicaoRandomica.getColuna(), posicaoRandomica.getLinha());
+			
+		/* se a peca de destino for null, movimenta a peca */
+		if (pecaDestino == null) {
+			movimentarPecaZeus(pecaRandomica, posicaoRandomica);
+		/* senao, realiza uma captura */
+		} else {
+			capturarPecaZeus(pecaRandomica, posicaoRandomica);
+		}
+	}
+	
+	/** Move uma peça para a posição especificada, e anuncia a jogada.
+	 * @param pecaRandomica - a peça que será movida.
+	 * @param posicaoRandomica - a posição para a qual a pecaRandomica será movida.
+	 */
+	private void movimentarPecaZeus(PecaAbstrata pecaRandomica, Posicao posicaoRandomica) {
+		
+		
+		controladorTela.exibirMensagem("Zeus fez o comando "
+				+ (pecaRandomica.getPosicao().getColuna()+1) + ""
+				+ (pecaRandomica.getPosicao().getLinha()+1) + ""
+				+ (posicaoRandomica.getColuna()+1) + ""
+				+ (posicaoRandomica.getLinha()+1) + ".");
+		
+		/*nao eh necessario fazer verificacoes de movimento, pois a funcao que retorna a lista de posicoes possiveis
+		 * ja cuida disso*/
+		jogo.getTabuleiro().moverPeca(
+				pecaRandomica.getPosicao().getColuna(),
+				pecaRandomica.getPosicao().getLinha(),
+				posicaoRandomica.getColuna(),
+				posicaoRandomica.getLinha());
+
+	}
+
+	/** Captura uma peça e faz as devidas alterações e anúncios.
+	 * @param pecaRandomica - a peça que fara o movimento.
+	 * @param posicaoRandomica - a posição da peça que será capturada.
+	 */
+	private void capturarPecaZeus(PecaAbstrata pecaRandomica, Posicao posicaoRandomica) {
+
+		/* se a peca movida for o rei, atualiza sua posicao */
+		if (pecaRandomica.getNome().equals(NomePecas.rei)) {
+			jogo.getTabuleiro().setPosicaoReiPreto(posicaoRandomica);
+		}
+		/* por fim captura a peca */
+		PecaAbstrata pecaCapturada = jogo.getTabuleiro().capturarPeca(
+				pecaRandomica.getPosicao(), posicaoRandomica);
+		/* remove a peca da lista das brancas */
+		jogo.getTabuleiro().getPecasBrancas().remove(pecaCapturada);
+		/* e adiciona a sua lista de pecas capturadas */
+		jogo.getVez().getPecasCapturadas().add(pecaCapturada);
+		if (jogo.getQuantidadePecasCapturadas() == 0)
+			controladorTela.exibirMensagem("FIRST BLOOD!");
+		controladorTela.exibirMensagem(jogo.getVez().getNome() + " capturou "
+				+ pecaCapturada.getNome() + "! Mais "
+				+ pecaCapturada.getValor() + " pontos para voce!");
+		jogo.setQuantidadePecasCapturadas(jogo.getQuantidadePecasCapturadas() + 1);
+				
+		
+	}
+	private Jogada espelharJogada(Jogada jogada) {
+		
+		Jogada jogadaEspelhada = new Jogada();
+		
+		jogadaEspelhada.getPosicaoInicial().setColuna(Math.abs(jogada.getPosicaoInicial().getColuna() - 7));
+		jogadaEspelhada.getPosicaoInicial().setLinha(Math.abs(jogada.getPosicaoInicial().getLinha() - 7));
+		jogadaEspelhada.getPosicaoFinal().setColuna(Math.abs(jogada.getPosicaoFinal().getColuna() - 7));
+		jogadaEspelhada.getPosicaoFinal().setLinha(Math.abs(jogada.getPosicaoFinal().getLinha() - 7));
+		jogadaEspelhada.setTipoJogada(jogada.getTipoJogada());
+		
+		return jogadaEspelhada;
+	}
+
 	private void controlarMovimentoPeca(Jogada jogada) {
 		try {
 			movimentarPeca(jogada.getPosicaoInicial(), jogada.getPosicaoFinal());
@@ -73,7 +168,7 @@ public class Control {
 			controlarComandoRecebido();
 		}
 	}
-
+	
 	private void controlarCapturaPeca(Jogada jogada) {
 		try {
 			capturarPeca(jogada.getPosicaoInicial(), jogada.getPosicaoFinal());
@@ -389,7 +484,7 @@ public class Control {
 			/*verifica se a peca eh capaz de fazer o movimento*/
 			if (peca.mover(posicaoFinal)) {
 				/*verifica se a peca possui caminho desobstruido para fazer o movimento*/
-				if(jogo.getTabuleiro().verificaCaminho(posicaoInicial, posicaoFinal)){
+				if(jogo.getTabuleiro().verificaCaminhoMovimento(posicaoInicial, posicaoFinal)){
 					/*se a peca movida for um rei, atualiza sua posicao*/
 					if(peca.getNome().equals(NomePecas.rei)){
 						if(peca.getCor().equals(Cores.branco))
@@ -426,6 +521,10 @@ public class Control {
 							jogo.getTabuleiro().setPosicaoReiPreto(posicaoFinal);
 					}
 					PecaAbstrata pecaCapturada = jogo.getTabuleiro().capturarPeca(posicaoInicial, posicaoFinal);
+					if(jogo.getVez().equals(jogo.getBranco()))
+						jogo.getTabuleiro().getPecasBrancas().remove(pecaCapturada);
+					else
+						jogo.getTabuleiro().getPecasPretas().remove(pecaCapturada);
 					jogo.getVez().getPecasCapturadas().add(pecaCapturada);
 					if(jogo.getQuantidadePecasCapturadas() == 0)
 						controladorTela.exibirMensagem("FIRST BLOOD!");
@@ -447,7 +546,10 @@ public class Control {
 		case 1:
 			String nomeJogadores[] = new String[2];
 			nomeJogadores = controladorTela.controlarNovoJogo();
-			iniciarJogo(nomeJogadores);
+			if(nomeJogadores[1] == "ZEUS")
+				iniciarJogoSingleplayer(nomeJogadores);
+			else
+				iniciarJogoMultiplayer(nomeJogadores);
 			break;
 		case 2:
 			controladorTela.controlarDadosPartidas(partidas, jogadores);
@@ -458,7 +560,48 @@ public class Control {
 		}
 	}
 	
-	private void iniciarJogo(String[] nomeJogadores)
+	private void iniciarJogoSingleplayer(String[] nomeJogadores) {
+		
+		Jogador branco = new Jogador(nomeJogadores[0], Cores.branco);
+		Jogador preto = new Jogador(nomeJogadores[1], Cores.preto);
+                
+		Tabuleiro tabuleiro = new Tabuleiro();
+		
+		jogo = new Jogo(tabuleiro, branco, preto);
+		
+		controlarJogoSingleplayer();
+		
+	}
+
+	private void controlarJogoSingleplayer() {
+		
+		while(jogo.isEmAndamento())
+			realizarJogadaSingleplayer();
+		
+	}
+
+	private void realizarJogadaSingleplayer() {
+		
+		controladorTela.mostrarTabuleiro(jogo.getTabuleiro());
+		
+		if(jogo.getVez().equals(jogo.getBranco()))
+			controlarComandoRecebido();
+		else
+			controlarComandoZeus();
+			
+		if(jogo.getVez().getPontuacao() >= 999){
+			Jogador vencedor;
+			Jogador perdedor;
+			vencedor = jogo.getVez();
+			mudarVezJogador();
+			perdedor = jogo.getVez();
+			finalizarJogo(vencedor, perdedor);
+		}
+		mudarVezJogador();
+		
+	}
+
+	private void iniciarJogoMultiplayer(String[] nomeJogadores)
 	{	
 		
 		Jogador branco = new Jogador(nomeJogadores[0], Cores.branco);
@@ -468,17 +611,17 @@ public class Control {
 		
 		jogo = new Jogo(tabuleiro, branco, preto);
 		
-		controlarJogo();
+		controlarJogoMultiplayer();
 	}
 	
 	
-	private void controlarJogo()
+	private void controlarJogoMultiplayer()
 	{	
 		while(jogo.isEmAndamento())
-			realizarJogada();
+			realizarJogadaMultiplayer();
 	}	
 	
-	private void realizarJogada(){
+	private void realizarJogadaMultiplayer(){
 		
 		controladorTela.mostrarTabuleiro(jogo.getTabuleiro());
 		controlarComandoRecebido();

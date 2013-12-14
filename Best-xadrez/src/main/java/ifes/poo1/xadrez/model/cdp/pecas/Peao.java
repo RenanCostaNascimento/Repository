@@ -42,7 +42,6 @@ public class Peao extends PecaAbstrata {
 				/* movimento comum */
 				if (posicaoFinal.getLinha() == getPosicao().getLinha() + 1)
 					return true;
-				/* movimento de captura */
 			}
 		}
 
