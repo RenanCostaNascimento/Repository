@@ -1,6 +1,7 @@
 package ifes.poo1.xadrez.model.cdp.tabuleiro;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
+import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.Bispo;
@@ -271,10 +272,11 @@ public class Tabuleiro {
 		int[] posicoesVariantes = new int[2];
 		int colunaAtual, linhaAtual;
 
-		/*a cada etapa de iteracao serao verificadas uma horizontal e uma vertical.
-		 * o sentido da verificacao depende do sinhal do numero, a saber:
-		 * 1- direita e cima
-		 * 2- esquerda e baixo*/
+		/*
+		 * a cada etapa de iteracao serao verificadas uma horizontal e uma
+		 * vertical. o sentido da verificacao depende do sinhal do numero, a
+		 * saber: 1- direita e cima 2- esquerda e baixo
+		 */
 		posicoesVariantes[0] = 1;
 		posicoesVariantes[1] = -1;
 
@@ -286,8 +288,8 @@ public class Tabuleiro {
 			/* movimento horizontal */
 			colunaAtual += posicoesVariantes[posicaoVariante];
 			/*
-			 * verifica se a posicao esta dentro do tabuleiro.  
-			 * nao eh necessario verificar a linha, pois a mesma nao eh alterada
+			 * verifica se a posicao esta dentro do tabuleiro. nao eh necessario
+			 * verificar a linha, pois a mesma nao eh alterada
 			 */
 			while (colunaAtual >= 0 && colunaAtual <= 7) {
 				PecaAbstrata peca = this.getCasas(colunaAtual, linhaAtual);
@@ -302,21 +304,21 @@ public class Tabuleiro {
 						posicoesPossiveis.add(new Posicao(colunaAtual,
 								linhaAtual));
 					break;
-				} else{
+				} else {
 					/* pode se mover para a posicao */
 					posicoesPossiveis.add(new Posicao(colunaAtual, linhaAtual));
 					colunaAtual += posicoesVariantes[posicaoVariante];
 				}
-					
+
 			}
-			
-			/*movimento vertical*/
-			/*reseta a coluna*/
+
+			/* movimento vertical */
+			/* reseta a coluna */
 			colunaAtual = posicao.getColuna();
 			linhaAtual += posicoesVariantes[posicaoVariante];
 			/*
-			 * verifica se a posicao esta dentro do tabuleiro.  
-			 * nao eh necessario verificar a coluna, pois a mesma nao eh alterada
+			 * verifica se a posicao esta dentro do tabuleiro. nao eh necessario
+			 * verificar a coluna, pois a mesma nao eh alterada
 			 */
 			while (linhaAtual >= 0 && linhaAtual <= 7) {
 				PecaAbstrata peca = this.getCasas(colunaAtual, linhaAtual);
@@ -331,15 +333,15 @@ public class Tabuleiro {
 						posicoesPossiveis.add(new Posicao(colunaAtual,
 								linhaAtual));
 					break;
-				} else{
+				} else {
 					/* pode se mover para a posicao */
 					posicoesPossiveis.add(new Posicao(colunaAtual, linhaAtual));
 					linhaAtual += posicoesVariantes[posicaoVariante];
 				}
 			}
-			/*reseta a linha*/
+			/* reseta a linha */
 			linhaAtual = posicao.getLinha();
-			
+
 		}
 
 		return posicoesPossiveis;
@@ -627,12 +629,14 @@ public class Tabuleiro {
 
 		/* movimento inicial */
 		if (posicao.getLinha() == 6) {
-			if (this.getCasas(posicao.getColuna(), posicao.getLinha() - 1) == null)
+			if (this.getCasas(posicao.getColuna(), posicao.getLinha() - 1) == null) {
 				movimentosPossiveis.add(new Posicao(posicao.getColuna(),
 						posicao.getLinha() - 1));
-			if (this.getCasas(posicao.getColuna(), posicao.getLinha() - 2) == null)
-				movimentosPossiveis.add(new Posicao(posicao.getColuna(),
-						posicao.getLinha() - 2));
+				if (this.getCasas(posicao.getColuna(), posicao.getLinha() - 2) == null)
+					movimentosPossiveis.add(new Posicao(posicao.getColuna(),
+							posicao.getLinha() - 2));
+			}
+				
 			return movimentosPossiveis;
 		}
 
@@ -733,46 +737,131 @@ public class Tabuleiro {
 				posicaoInicial.getLinha());
 
 		switch (peca.toString()) {
-		//verificacao do peao
+		// verificacao do peao
 		case "P":
 			return verificaCaminhoPeao(posicaoInicial, posicaoFinal);
-		// Se for cavalo, passa direto.
+			// Se for cavalo, passa direto.
 		case "C":
 			return true;
-		// verificação da torre.
+			// verificação da torre.
 		case "T":
 			return verificaCaminhoTorre(posicaoInicial, posicaoFinal);
-		// verificação do bispo
+			// verificação do bispo
 		case "B":
 			return verificaCaminhoBispo(posicaoInicial, posicaoFinal);
-		// verificação da rainha
+			// verificação da rainha
 		case "D":
 			return verificaCaminhoRainha(posicaoInicial, posicaoFinal);
 		}
 		return true;
 	}
 
-	/** Esse método verifica se o caminho realizado por um peão em sua primeira jogada, quando este se move duas
-	 * casas, é valido, ou seja, informa se o peão tem o caminho obstruído. Esse método só é chamado na situação
-	 * em que o peão anda duas casas.
-	 * @param posicaoInicial - posição inicial do peão.
-	 * @param posicaoFinal - posição para onde se quer verificar se o peão consegue fazer o movimento.
+	/**
+	 * Esse método verifica se o caminho realizado por um peão em sua primeira
+	 * jogada, quando este se move duas casas, é valido, ou seja, informa se o
+	 * peão tem o caminho obstruído. Esse método só é chamado na situação em que
+	 * o peão anda duas casas.
+	 * 
+	 * @param posicaoInicial
+	 *            - posição inicial do peão.
+	 * @param posicaoFinal
+	 *            - posição para onde se quer verificar se o peão consegue fazer
+	 *            o movimento.
 	 * @return true se o peão não tiver o caminho obstruído.
 	 */
-	private boolean verificaCaminhoPeao(Posicao posicaoInicial, Posicao posicaoFinal) {
-		
-		/*peao preto*/
-		if(posicaoInicial.getLinha() == 6){
-			if (this.getCasas(posicaoInicial.getColuna(), posicaoInicial.getLinha() - 1) != null)
+	private boolean verificaCaminhoPeao(Posicao posicaoInicial,
+			Posicao posicaoFinal) {
+
+		/* peao preto */
+		if (posicaoInicial.getLinha() == 6) {
+			if (this.getCasas(posicaoInicial.getColuna(),
+					posicaoInicial.getLinha() - 1) != null)
 				return false;
-		/*peao branco*/	
-		}else{
-			if (this.getCasas(posicaoInicial.getColuna(), posicaoInicial.getLinha() + 1) != null)
+			/* peao branco */
+		} else {
+			if (this.getCasas(posicaoInicial.getColuna(),
+					posicaoInicial.getLinha() + 1) != null)
 				return false;
 		}
-					
-		
+
 		return true;
+	}
+
+	public boolean roqueMenor(Cores cor) {
+		if (cor == Cores.branco) {
+			if (this.getCasas(7, 4).isSeMovimentou()
+					|| this.getCasas(7, 4).getNome() == NomePecas.rei
+					|| // verifica de é o rei
+					this.getCasas(7, 7).isSeMovimentou()
+					|| this.getCasas(7, 7).getNome() == NomePecas.torre
+					|| this.getCasas(7, 6) == null
+					|| this.getCasas(7, 5) == null) { // verificar se tem peças
+														// no meio //verifica se
+														// é a torre
+
+				this.moverPeca(7, 4, 7, 6);
+				this.moverPeca(7, 7, 7, 5);
+				return true;
+			}
+		}
+
+		if (cor == Cores.preto) {
+			if (this.getCasas(0, 4).isSeMovimentou()
+					|| this.getCasas(0, 4).getNome() == NomePecas.rei
+					|| // verifica de é o rei
+					this.getCasas(0, 7).isSeMovimentou()
+					|| this.getCasas(0, 7).getNome() == NomePecas.torre
+					|| this.getCasas(0, 6) == null
+					|| this.getCasas(0, 5) == null) { // verificar se tem peças
+														// no meio //verifica se
+														// é a torre
+
+				this.moverPeca(0, 4, 0, 6);
+				this.moverPeca(0, 7, 0, 5);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public boolean roqueMaior(Cores cor) {
+		if (cor == Cores.branco) {
+			if (this.getCasas(7, 4).isSeMovimentou()
+					|| this.getCasas(7, 4).getNome() == NomePecas.rei
+					|| // verifica de é o rei
+					this.getCasas(7, 0).isSeMovimentou()
+					|| this.getCasas(7, 0).getNome() == NomePecas.torre
+					|| this.getCasas(7, 3) == null
+					|| this.getCasas(7, 2) == null
+					|| this.getCasas(7, 1) == null) { // verificar se tem peças
+														// no meio //verifica se
+														// é a torre
+
+				this.moverPeca(7, 4, 7, 2);
+				this.moverPeca(7, 0, 7, 3);
+				return true;
+			}
+		}
+
+		if (cor == Cores.preto) {
+			if (this.getCasas(0, 4).isSeMovimentou()
+					|| this.getCasas(0, 4).getNome() == NomePecas.rei
+					|| // verifica de é o rei
+					this.getCasas(0, 0).isSeMovimentou()
+					|| this.getCasas(0, 0).getNome() == NomePecas.torre
+					|| this.getCasas(0, 3) == null
+					|| this.getCasas(0, 2) == null
+					|| this.getCasas(0, 1) == null) { // verificar se tem peças
+														// no meio //verifica se
+														// é a torre
+
+				this.moverPeca(0, 4, 0, 2);
+				this.moverPeca(0, 0, 0, 3);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public PecaAbstrata[][] getCasas() {

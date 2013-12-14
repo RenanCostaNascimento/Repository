@@ -18,8 +18,10 @@ public class Torre extends PecaAbstrata {
 	@Override
 	public boolean mover(Posicao posicaoFinal) {
 		
-		if((posicaoFinal.getLinha()-getPosicao().getLinha() == 0) || (posicaoFinal.getColuna() - getPosicao().getColuna() == 0))
-			return true;
+		if((posicaoFinal.getLinha()-getPosicao().getLinha() == 0) || (posicaoFinal.getColuna() - getPosicao().getColuna() == 0)){
+                    this.actMovimentou();
+                    return true;
+                }
 		
 		return false;
 		
@@ -28,8 +30,10 @@ public class Torre extends PecaAbstrata {
 	@Override
 	public boolean capturar(Posicao posicaoFinal) {
 		
-		if((posicaoFinal.getLinha()-getPosicao().getLinha() == 0) || (posicaoFinal.getColuna() - getPosicao().getColuna() == 0))
-			return true;
+		if((posicaoFinal.getLinha()-getPosicao().getLinha() == 0) || (posicaoFinal.getColuna() - getPosicao().getColuna() == 0)){
+                    this.actMovimentou();
+                    return true;
+                }
 		
 		return false;
 		

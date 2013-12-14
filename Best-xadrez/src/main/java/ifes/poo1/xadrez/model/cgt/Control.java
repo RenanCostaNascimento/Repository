@@ -28,7 +28,6 @@ public class Control {
 	
 	private ControladorTelas controladorTela = new ControladorTelas();
 	private Jogo jogo;
-	private Jogada ultimaJogada;
 	private List<HistoricoPartida> partidas = new ArrayList<>();
 	private List<HistoricoJogador> jogadores = new ArrayList<>();
 		
@@ -36,12 +35,10 @@ public class Control {
 		Jogada jogada = controladorTela.determinarJogadaUsuario(jogo.getVez());
 		switch(jogada.getTipoJogada()){
 		case MOVIMENTO:
-			ultimaJogada = jogada;
 			controlarMovimentoPeca(jogada);
 			controlarXeque();
 			break;
 		case CAPTURA:
-			ultimaJogada = jogada;
 			controlarCapturaPeca(jogada);
 			controlarXeque();
 			break;
@@ -104,13 +101,17 @@ public class Control {
 	 */
 	private void movimentarPecaZeus(PecaAbstrata pecaRandomica, Posicao posicaoRandomica) {
 		
-		
 		controladorTela.exibirMensagem("Zeus fez o comando "
 				+ (pecaRandomica.getPosicao().getColuna()+1) + ""
 				+ (pecaRandomica.getPosicao().getLinha()+1) + ""
 				+ (posicaoRandomica.getColuna()+1) + ""
 				+ (posicaoRandomica.getLinha()+1) + ".");
 		
+		if(pecaRandomica.getNome().equals(NomePecas.rei)){
+			jogo.getTabuleiro().setPosicaoReiPreto(posicaoRandomica);
+			pecaRandomica.actMovimentou();
+		}
+
 		/*nao eh necessario fazer verificacoes de movimento, pois a funcao que retorna a lista de posicoes possiveis
 		 * ja cuida disso*/
 		jogo.getTabuleiro().moverPeca(
@@ -126,10 +127,17 @@ public class Control {
 	 * @param posicaoRandomica - a posição da peça que será capturada.
 	 */
 	private void capturarPecaZeus(PecaAbstrata pecaRandomica, Posicao posicaoRandomica) {
+		
+		controladorTela.exibirMensagem("Zeus fez o comando "
+				+ (pecaRandomica.getPosicao().getColuna()+1) + ""
+				+ (pecaRandomica.getPosicao().getLinha()+1) + "x"
+				+ (posicaoRandomica.getColuna()+1) + ""
+				+ (posicaoRandomica.getLinha()+1) + ".");
 
 		/* se a peca movida for o rei, atualiza sua posicao */
 		if (pecaRandomica.getNome().equals(NomePecas.rei)) {
 			jogo.getTabuleiro().setPosicaoReiPreto(posicaoRandomica);
+			pecaRandomica.actMovimentou();
 		}
 		/* por fim captura a peca */
 		PecaAbstrata pecaCapturada = jogo.getTabuleiro().capturarPeca(
@@ -491,6 +499,7 @@ public class Control {
 							jogo.getTabuleiro().setPosicaoReiBranco(posicaoFinal);
 						else
 							jogo.getTabuleiro().setPosicaoReiPreto(posicaoFinal);
+						peca.actMovimentou();
 					}
 					jogo.getTabuleiro().moverPeca(posicaoInicial.getColuna(), posicaoInicial.getLinha(), posicaoFinal.getColuna(), posicaoFinal.getLinha());
 				}
@@ -519,6 +528,7 @@ public class Control {
 							jogo.getTabuleiro().setPosicaoReiBranco(posicaoFinal);
 						else
 							jogo.getTabuleiro().setPosicaoReiPreto(posicaoFinal);
+						peca.actMovimentou();
 					}
 					PecaAbstrata pecaCapturada = jogo.getTabuleiro().capturarPeca(posicaoInicial, posicaoFinal);
 					if(jogo.getVez().equals(jogo.getBranco()))

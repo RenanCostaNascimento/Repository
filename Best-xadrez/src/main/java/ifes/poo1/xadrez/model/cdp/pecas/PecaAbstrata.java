@@ -5,6 +5,7 @@ import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 
 public abstract class PecaAbstrata implements PecaInterface{
+    protected boolean seMovimentou;
 	protected Cores cor; 
 	protected int valor;
 	protected NomePecas nome;
@@ -46,6 +47,14 @@ public abstract class PecaAbstrata implements PecaInterface{
 
 	public void setPosicao(Posicao posicao) {
 		this.posicao = posicao;
+	}
+        
+	public boolean isSeMovimentou() {
+		return seMovimentou;
+	}
+
+	public void actMovimentou() {
+		this.seMovimentou = true;
 	}
 
 }
