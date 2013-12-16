@@ -230,7 +230,7 @@ public class Control {
 		adicionarHistoricoJogo(vencedor.getNome());
 		adicionarHistoricoJogadorVitoria(vencedor.getNome());
 		adicionarHistoricoJogadorDerrota(perdedor.getNome());
-                highScore.addVencedor(vencedor.getNome());
+                
 		
 		jogo.setEmAndamento(false);
 		controlarMenuInicial();
@@ -397,7 +397,7 @@ public class Control {
 		for(HistoricoJogador jogador : listaJogadores){
 			if(jogador.getNome().equals(nome)){
 				jogador.setEmpates(jogador.getEmpates() + 1);
-                                highScore.addVencedor(nome);
+                                
 				break;
 			}
 		}

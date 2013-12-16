@@ -2,11 +2,15 @@ package ifes.poo1.xadrez.model.cdp.jogo;
 
 import java.util.GregorianCalendar;
 
-public class HistoricoPartida {
+public class HistoricoPartida implements Comparable<HistoricoPartida>{
 	
 	private GregorianCalendar dataHoraInicio;
 	private GregorianCalendar dataHoraFim;
 	private String vencedor;
+        
+        public String toString(){
+            return vencedor+"\nHora de Inicio: "+dataHoraInicio.toString()+"\nHora de Termino: "+dataHoraFim.toString();
+        }
 	public GregorianCalendar getDataHoraInicio() {
 		return dataHoraInicio;
 	}
@@ -25,7 +29,11 @@ public class HistoricoPartida {
 	public void setVencedor(String vencedor) {
 		this.vencedor = vencedor;
 	}
-	
+	public int compareTo(HistoricoPartida partida) {
+            return this.getDataHoraInicio().compareTo(partida.getDataHoraInicio());
+        }
+        
+            
 
 	
 }
