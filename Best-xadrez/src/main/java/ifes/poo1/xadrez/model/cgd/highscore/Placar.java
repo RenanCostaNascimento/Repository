@@ -20,8 +20,13 @@ public class Placar implements Serializable {
     
     protected ArrayList<Colocado> colocados = new ArrayList<Colocado>();
     
-    public Placar(){
+    public String toString(){
+        String aux = new String();
+        for (int i=0; i<colocados.size(); i++){
+            aux=aux+colocados.get(i).getNome()+" "+colocados.get(i).getVitorias()+"\n";
+        } 
         
+        return aux;
     }
     
    /**Método para procurar por um jogador pelo nome no vetor colocados.
@@ -42,7 +47,7 @@ public class Placar implements Serializable {
      * Apos inserir um jogador, a lista é ordenada com base no número de vitórias.
      * @param nome Nome do jogador
      */
-    public void insereVencedor(String nome){
+    public void addVencedor(String nome){
         int posicao = this.procuraPeloNome(nome);
         if (posicao>=0) colocados.get(posicao).addVitoria();
         else colocados.add(new Colocado(nome));
@@ -55,9 +60,9 @@ public class Placar implements Serializable {
      * @param nome1 Nome do jogador
      * @param nome2 Nome do jogador
      */
-    public void insereEmpate(String nome1, String nome2){
-        this.insereVencedor(nome1);
-        this.insereVencedor(nome2);
+    public void addEmpate(String nome1, String nome2){
+        this.addVencedor(nome1);
+        this.addVencedor(nome2);
     }
   
     public void imprime(){

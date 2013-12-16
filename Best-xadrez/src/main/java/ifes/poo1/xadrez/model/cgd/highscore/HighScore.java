@@ -13,6 +13,10 @@ import java.io.Serializable;
 /**
  * Classe para armazenar, carregar e manipular o placar.
  * O metodo construtor verifica se ele já existe. Caso sim carrega ele para memória.
+ * Para utilizar, apenas inicialize a classe HighScore, se existir algum placar, ele vai agregar ao programa.
+ * 
+ * Para salver o high score, chame a função serializar.
+ * 
  * @author Pedro
  */
 public class HighScore {
@@ -30,6 +34,10 @@ public class HighScore {
             //cria um novo placar
             this.placar=new Placar();
         }
+    }
+    
+    public String toString(){
+        return this.placar.toString();
     }
     
     public void setPlacar(Placar placar){
@@ -58,8 +66,8 @@ public class HighScore {
      * Apos inserir um jogador, a lista é ordenada com base no número de vitórias.
      * @param nome Nome do jogador
      */
-    public void insereVencedor(String nome){
-        placar.insereVencedor(nome);
+    public void addVencedor(String nome){
+        placar.addVencedor(nome);
     }
     
     /**Método para inserir um empate.
@@ -67,8 +75,8 @@ public class HighScore {
      * @param nome1 Nome do jogador
      * @param nome2 Nome do jogador
      */
-    public void insereEmpate(String nome1, String nome2){
-        placar.insereEmpate(nome1,nome2);
+    public void addEmpate(String nome1, String nome2){
+        placar.addEmpate(nome1,nome2);
     }
     
     /**Imprime o placar.*/
