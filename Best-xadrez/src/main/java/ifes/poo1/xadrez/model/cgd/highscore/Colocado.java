@@ -9,7 +9,7 @@ package ifes.poo1.xadrez.model.cgd.highscore;
 import java.io.Serializable;
 
 /**
- *
+ * Classe para armazenar os colocados do ranking e fazer a comparação deles.
  * @author Pedro
  */
 public class Colocado implements Serializable, Comparable<Colocado>{

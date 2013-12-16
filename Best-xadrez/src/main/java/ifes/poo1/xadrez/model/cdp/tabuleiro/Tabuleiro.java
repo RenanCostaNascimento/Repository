@@ -25,12 +25,13 @@ public class Tabuleiro {
 	/*
 	 * posicaoReiBranco e posicaoReiPreto serao usados para determinar se houve
 	 * cheque ou cheque-mate
-	 */
-	/*
+	 *
+	*
 	 * foi decidido criar um atributo que explicite a posicao dos reis por uma
 	 * questao de desempenho, ou seja, nao sera necessario buscar a posicao dos
 	 * reis sempre que a verificacao do xeque for realizada
 	 */
+        
 	private Posicao posicaoReiBranco;
 	private Posicao posicaoReiPreto;
 
@@ -146,7 +147,14 @@ public class Tabuleiro {
 	public void setCasas(PecaAbstrata peca, int coluna, int linha) {
 		this.casas[linha][coluna] = peca;
 	}
-
+        
+        /**
+         * Move uma peça de um ponto inicial para um ponto final.
+         * @param colunaInicial
+         * @param linhaInicial
+         * @param colunaFinal
+         * @param linhaFinal 
+         */
 	public void moverPeca(int colunaInicial, int linhaInicial, int colunaFinal,
 			int linhaFinal) {
 
@@ -158,6 +166,12 @@ public class Tabuleiro {
 
 	}
 
+        /**
+         * Captura uma peça na posição final.
+         * @param posicaoInicial
+         * @param posicaoFinal
+         * @return 
+         */
 	public PecaAbstrata capturarPeca(Posicao posicaoInicial,
 			Posicao posicaoFinal) {
 
@@ -173,7 +187,12 @@ public class Tabuleiro {
 		return pecaCapturada;
 
 	}
-
+        /**Verifica se a torre pode fazer tal caminho.
+         * 
+         * @param posicaoInicial
+         * @param posicaoFinal
+         * @return booleano: true (pode) ou false (não pode)
+         */
 	public boolean verificaCaminhoTorre(Posicao posicaoInicial,
 			Posicao posicaoFinal) {
 
@@ -650,7 +669,13 @@ public class Tabuleiro {
 
 	}
 
-	/* verifica se o caminho do bispo está livre para fazer a movimentacao */
+	
+        /**verifica se o caminho do bispo está livre para fazer a movimentacao 
+         * 
+         * @param posicaoInicial
+         * @param posicaoFinal
+         * @return boolean
+         */
 	public boolean verificaCaminhoBispo(Posicao posicaoInicial,
 			Posicao posicaoFinal) {
 
