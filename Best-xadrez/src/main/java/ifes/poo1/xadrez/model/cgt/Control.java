@@ -10,6 +10,7 @@ import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.PecaAbstrata;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
+import ifes.poo1.xadrez.model.cgd.highscore.HighScore;
 import ifes.poo1.xadrez.util.exception.CaminhoBloqueadoException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
@@ -31,7 +32,7 @@ public class Control {
 	private Jogo jogo;
 	private List<HistoricoPartida> partidas = new ArrayList<>();
 	private List<HistoricoJogador> jogadores = new ArrayList<>();
-		
+	private HighScore highScore = new HighScore();
 	public void controlarComandoRecebido(){
 		Jogada jogada = controladorTela.determinarJogadaUsuario(jogo.getVez());
 		switch(jogada.getTipoJogada()){
@@ -229,6 +230,7 @@ public class Control {
 		adicionarHistoricoJogo(vencedor.getNome());
 		adicionarHistoricoJogadorVitoria(vencedor.getNome());
 		adicionarHistoricoJogadorDerrota(perdedor.getNome());
+                highScore.addVencedor(vencedor.getNome());
 		
 		jogo.setEmAndamento(false);
 		controlarMenuInicial();
@@ -359,7 +361,6 @@ public class Control {
 		controladorTela.exibirMensagem("Voce tambem deseja empatar a partida, " + jogo.getVez().getNome() + "?");
 		mudarVezJogador();
 		controlarEmpatePartida(controladorTela.empatarPartida());
-		
 	}
 	
 	private void controlarEmpatePartida(int opcao){
@@ -396,9 +397,11 @@ public class Control {
 		for(HistoricoJogador jogador : listaJogadores){
 			if(jogador.getNome().equals(nome)){
 				jogador.setEmpates(jogador.getEmpates() + 1);
+                                highScore.addVencedor(nome);
 				break;
 			}
-		}	
+		}
+                
 	}
 	
 	private void adicionarHistoricoJogo(String vencedor){
