@@ -4,14 +4,22 @@ import ifes.poo1.xadrez.model.cgd.highscore.Colocado;
 import ifes.poo1.xadrez.model.cdp.pecas.PecaAbstrata;
 import java.util.ArrayList;
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
-
+/**
+ * Classe do jogador, que contem o Nome, Cor, e as peças capturadas em jogo.
+ * @author Pedro
+ */
 public class Jogador {
 	private String nome;
 	private Cores cor;
 	private int vitorias;
 	private int derrotas;
 	private ArrayList<PecaAbstrata> pecasCapturadas = new ArrayList<PecaAbstrata>();
-	
+        
+	/**Classe do jogador, que contem o Nome, Cor, e as peças capturadas em jogo.
+         * 
+         * @param nome - String contendo o nome do jogador
+         * @param cor - variável do tipos Cores contendo a cor do jogador. (Cores.branco ou Cores.preto)
+         */
 	public Jogador(String nome, Cores cor){
 		this.nome = nome;
 		this.cor = cor;
@@ -74,7 +82,10 @@ public class Jogador {
 		return pecasCapturadas;
 	}
 
-
+        /**
+         * Adciona um peça capturada.
+         * @param pecasCapturadas 
+         */
 	public void setPecasCapturadas(ArrayList<PecaAbstrata> pecasCapturadas) {
 		this.pecasCapturadas = pecasCapturadas;
 	}	

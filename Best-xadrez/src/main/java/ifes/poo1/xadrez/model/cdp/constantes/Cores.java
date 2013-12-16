@@ -7,7 +7,7 @@
 package ifes.poo1.xadrez.model.cdp.constantes;
 
 /**
- *
+ *As cores para as peças do jogo.
  * @author pedronakibar
  */
 public enum Cores {

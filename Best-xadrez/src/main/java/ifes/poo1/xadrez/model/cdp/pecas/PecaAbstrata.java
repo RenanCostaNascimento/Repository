@@ -4,6 +4,7 @@ import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 
+/**Camada abstrata da peca, contem funções basicas de get e set e o metódo construtor para inicializar as peças*/
 public abstract class PecaAbstrata implements PecaInterface{
     protected boolean seMovimentou;
 	protected Cores cor; 

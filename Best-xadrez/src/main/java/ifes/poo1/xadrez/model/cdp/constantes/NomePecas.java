@@ -7,7 +7,7 @@
 package ifes.poo1.xadrez.model.cdp.constantes;
 
 /**
- *
+ * Os nomes das peças.
  * @author pedronakibar
  */
 public enum NomePecas {
