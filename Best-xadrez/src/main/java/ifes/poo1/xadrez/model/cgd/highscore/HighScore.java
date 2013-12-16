@@ -11,15 +11,17 @@ import ifes.poo1.xadrez.util.persist.Serializador;
 import java.io.Serializable;
 
 /**
- *
+ * Classe para armazenar, carregar e manipular o placar.
+ * O metodo construtor verifica se ele já existe. Caso sim carrega ele para memória.
  * @author Pedro
  */
 public class HighScore {
     private Placar placar;
     
+    
     public HighScore(){
         Deserializador d = new Deserializador();
-        Placar placar;
+        
         try {
             //verifica se existe o placar
             this.setPlacar((Placar) d.deserializar("placar/"));
@@ -38,7 +40,9 @@ public class HighScore {
         return this.placar;
     }
     
-    //armazenar em memória
+    /**Metódo para armazenar o placar em memória persistente.
+     * O nome do arquivo é placar e está na raiz do programa.
+     */
     public void serializar(){
         Serializador s = new Serializador();
         try {
@@ -49,10 +53,25 @@ public class HighScore {
         }
     }
     
-    public void insere(String nome){
-        placar.insereColocado(nome);
+    /**Método para inserir um vencedor de um jogo.
+     * Caso o jogador já exista ele vai adcionar uma vitória para ele.
+     * Apos inserir um jogador, a lista é ordenada com base no número de vitórias.
+     * @param nome Nome do jogador
+     */
+    public void insereVencedor(String nome){
+        placar.insereVencedor(nome);
     }
     
+    /**Método para inserir um empate.
+     * Insere dois jogadores.
+     * @param nome1 Nome do jogador
+     * @param nome2 Nome do jogador
+     */
+    public void insereEmpate(String nome1, String nome2){
+        placar.insereEmpate(nome1,nome2);
+    }
+    
+    /**Imprime o placar.*/
     public void imprime(){
         placar.imprime();
     }

@@ -23,6 +23,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+/**Classe de controle do modelo. Controla o tabuleiro e as peças.*/
 
 public class Control {
 	
