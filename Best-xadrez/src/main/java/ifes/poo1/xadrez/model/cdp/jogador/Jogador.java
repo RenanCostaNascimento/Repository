@@ -1,5 +1,6 @@
 package ifes.poo1.xadrez.model.cdp.jogador;
 
+import ifes.poo1.xadrez.model.cgd.highscore.Colocado;
 import ifes.poo1.xadrez.model.cdp.pecas.PecaAbstrata;
 import java.util.ArrayList;
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
@@ -18,6 +19,11 @@ public class Jogador {
 		this.derrotas = 0;
 	}
 	
+     
+        public void retornaJaVenci(){
+            
+            System.out.println("");
+        }
 	
 	public int getPontuacao() {
 		int soma = 0;
