@@ -945,14 +945,17 @@ public class Tabuleiro {
                 &&((ultimaMovida.getLinha() == 4 && getCasas(ultimaMovida.getColuna(),ultimaMovida.getLinha()).getCor() == Cores.preto )
                     || (ultimaMovida.getLinha() == 3 && getCasas(ultimaMovida.getColuna(),ultimaMovida.getLinha()).getCor() == Cores.branco ))//verifica se os peões estão na linha a qual andam duas casas.
                     ){
+                
                 capturarPeca(posicaoPeao, ultimaMovida);//come o peão que se moveu por ultimo e assume a posição ao lado
                 
+                //anda uma casa
+                if (this.getCasas(ultimaMovida.getColuna(), ultimaMovida.getLinha()).mover(new Posicao(ultimaMovida.getColuna(), ultimaMovida.getLinha()+1))){
+                        moverPeca(ultimaMovida.getColuna(), ultimaMovida.getLinha(), ultimaMovida.getColuna(), ultimaMovida.getLinha()+1); //anda uma casa para frente
+                }
                 
-                if (this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).mover(new Posicao(ultimaMovida.getColuna(), ultimaMovida.getLinha()+1)))
-                        moverPeca(posicaoPeao.getColuna(), posicaoPeao.getLinha(), posicaoPeao.getColuna(), posicaoPeao.getLinha()+1); //anda uma casa para frente
-                
-                else if (this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).mover(new Posicao(ultimaMovida.getColuna(), ultimaMovida.getLinha()-1)))
-                        moverPeca(posicaoPeao.getColuna(), posicaoPeao.getLinha(), posicaoPeao.getColuna(), posicaoPeao.getLinha()-1); //anda uma casa para frente
+                else if (this.getCasas(ultimaMovida.getColuna(), ultimaMovida.getLinha()).mover(new Posicao(ultimaMovida.getColuna(), ultimaMovida.getLinha()-1))){
+                        moverPeca(ultimaMovida.getColuna(), ultimaMovida.getLinha(), ultimaMovida.getColuna(), ultimaMovida.getLinha()-1); //anda uma casa para frente
+                }
                 
                 
                 return true;
