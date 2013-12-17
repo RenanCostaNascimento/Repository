@@ -5,7 +5,7 @@ import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 
 import java.util.GregorianCalendar;
 
-public class Jogo {
+public class Jogo{
 	
 	private Tabuleiro tabuleiro;
 	private Jogador branco;
@@ -15,6 +15,7 @@ public class Jogo {
 	private Jogador vez;
 	private int quantidadePecasCapturadas;
 	private boolean emAndamento;
+        
 	
 	public Jogo(Tabuleiro tabuleiro, Jogador branco, Jogador preto)
 	{
@@ -26,6 +27,8 @@ public class Jogo {
 		this.quantidadePecasCapturadas = 0;
 		this.emAndamento = true;
 	}
+        
+        
 	
 	
 	public Tabuleiro getTabuleiro() {
@@ -46,6 +49,7 @@ public class Jogo {
 	public void setPreto(Jogador preto) {
 		this.preto = preto;
 	}
+                 
 	public GregorianCalendar getDataHoraInicio() {
 		return dataHoraInicio;
 	}
@@ -93,8 +97,6 @@ public class Jogo {
 
 	
 	//rock, en passaint e outras regras de jogo/neg�cio;
-	
 			
-	
 }
 

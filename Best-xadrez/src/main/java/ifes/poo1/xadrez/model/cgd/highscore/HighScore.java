@@ -1,22 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package ifes.poo1.xadrez.model.cgd.highscore;
 
+import ifes.poo1.xadrez.model.cdp.jogo.HistoricoJogador;
+import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
 import ifes.poo1.xadrez.util.persist.Deserializador;
 import ifes.poo1.xadrez.util.persist.Serializador;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Classe para armazenar, carregar e manipular o placar.
  * O metodo construtor verifica se ele já existe. Caso sim carrega ele para memória.
+ * Para utilizar, apenas inicialize a classe HighScore, se existir algum placar, ele vai agregar ao programa.
+ * 
+ * 
+ * 
  * @author Pedro
  */
 public class HighScore {
-    private Placar placar;
+    private Historico historico;
     
     
     public HighScore(){
@@ -24,56 +25,71 @@ public class HighScore {
         
         try {
             //verifica se existe o placar
-            this.setPlacar((Placar) d.deserializar("placar/"));
+            this.setHistorico((Historico) d.deserializar("placar/"));
         } catch (Exception ex) {
             //System.err.println("Falha ao deserializar! - " + ex.toString());
             //cria um novo placar
-            this.placar=new Placar();
+            this.historico=new Historico();
         }
     }
     
-    public void setPlacar(Placar placar){
-        this.placar=placar;
+    public String toString(){
+        return this.historico.toString();
     }
     
-    public Placar getPlacar(){
-        return this.placar;
+    public void setHistorico(Historico historico){
+        this.historico=historico;
+        
+    }
+    
+    public Historico getHistorico(){
+        return this.historico;
     }
     
     /**Metódo para armazenar o placar em memória persistente.
      * O nome do arquivo é placar e está na raiz do programa.
      */
-    public void serializar(){
+    private void serializar(){
         Serializador s = new Serializador();
         try {
-            s.serializar("placar/", this.getPlacar());
+            s.serializar("placar/", this.getHistorico());
             System.out.println("Serializado!");
         } catch (Exception ex) {
             System.err.println("Falha ao serializar! - " + ex.toString());
         }
     }
     
-    /**Método para inserir um vencedor de um jogo.
-     * Caso o jogador já exista ele vai adcionar uma vitória para ele.
-     * Apos inserir um jogador, a lista é ordenada com base no número de vitórias.
-     * @param nome Nome do jogador
+    
+    /**Método para adcionar partidas para o histórico*/
+    public void addPartida(HistoricoPartida partida){
+        historico.addPartida(partida);
+        this.serializar();
+    }
+    
+    /**Método para adcionar jogadores para o histórico*/
+    public void addJogador(HistoricoJogador jogador){
+        historico.addJogador(jogador);
+        this.serializar();
+    }
+    
+    /**Método para retornar o histórico de jogadores
+     * @return ArrayList<HistoricoJogador>
      */
-    public void insereVencedor(String nome){
-        placar.insereVencedor(nome);
+    public ArrayList<HistoricoJogador> getJogadoresAntigos() {
+        return historico.jogadoresAntigos;
     }
     
-    /**Método para inserir um empate.
-     * Insere dois jogadores.
-     * @param nome1 Nome do jogador
-     * @param nome2 Nome do jogador
+    /**Método para retornar o historico de partidas
+     *@return ArrayList<HistoricoPartida>
      */
-    public void insereEmpate(String nome1, String nome2){
-        placar.insereEmpate(nome1,nome2);
+    public ArrayList<HistoricoPartida> getPartidasAntigos() {
+        return historico.partidasAntigos;
+    }
+    public void setJogadoresAntigos(ArrayList<HistoricoJogador> historicoJogador){
+        historico.setJogadoresAntigos(historicoJogador);
     }
     
-    /**Imprime o placar.*/
-    public void imprime(){
-        placar.imprime();
+    public void setPartidasAntigos(ArrayList<HistoricoPartida> partidasAntigos){
+        historico.setPartidasAntigos(partidasAntigos);
     }
-    
 }

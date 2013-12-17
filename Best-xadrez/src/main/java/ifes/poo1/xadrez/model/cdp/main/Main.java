@@ -1,5 +1,6 @@
 package ifes.poo1.xadrez.model.cdp.main;
 
+import ifes.poo1.xadrez.model.cgd.highscore.HighScore;
 import ifes.poo1.xadrez.model.cgt.Control;
 
 
