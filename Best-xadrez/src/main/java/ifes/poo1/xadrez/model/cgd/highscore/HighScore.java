@@ -91,5 +91,12 @@ public class HighScore {
     public ArrayList<HistoricoPartida> getPartidasAntigos() {
         return historico.partidasAntigos;
     }
+    public void setJogadoresAntigos(ArrayList<HistoricoJogador> historicoJogador){
+        historico.setJogadoresAntigos(historicoJogador);
+    }
     
+    public void setPartidasAntigos(ArrayList<HistoricoPartida> partidasAntigos){
+        historico.setPartidasAntigos(partidasAntigos);
+    }
 }
+

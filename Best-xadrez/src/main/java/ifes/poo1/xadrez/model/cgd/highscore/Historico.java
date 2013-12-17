@@ -32,6 +32,15 @@ public class Historico implements Serializable{
         jogadoresAntigos.add(jogador);
     }
 
+    public void setJogadoresAntigos(ArrayList<HistoricoJogador> jogadoresAntigos) {
+        this.jogadoresAntigos = jogadoresAntigos;
+    }
+
+    public void setPartidasAntigos(ArrayList<HistoricoPartida> partidasAntigos) {
+        this.partidasAntigos = partidasAntigos;
+    }
+    
+    
     public ArrayList<HistoricoJogador> getJogadoresAntigos() {
         return jogadoresAntigos;
     }
