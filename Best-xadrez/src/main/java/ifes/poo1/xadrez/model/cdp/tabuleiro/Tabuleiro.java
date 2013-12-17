@@ -944,7 +944,15 @@ public class Tabuleiro {
                 &&(posicaoPeao.getLinha() == ultimaMovida.getLinha() )//verifica se os dois peões estão na mesma linha
                ){
                 capturarPeca(posicaoPeao, ultimaMovida);//come o peão que se moveu por ultimo e assume a posição ao lado
-                moverPeca(posicaoPeao.getColuna(), posicaoPeao.getLinha(), posicaoPeao.getColuna(), posicaoPeao.getLinha()+1); //anda uma casa para frente
+                
+                
+                if (this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).mover(new Posicao(ultimaMovida.getColuna(), ultimaMovida.getLinha()+1)))
+                        moverPeca(posicaoPeao.getColuna(), posicaoPeao.getLinha(), posicaoPeao.getColuna(), posicaoPeao.getLinha()+1); //anda uma casa para frente
+                
+                else if (this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).mover(new Posicao(ultimaMovida.getColuna(), ultimaMovida.getLinha()-1)))
+                        moverPeca(posicaoPeao.getColuna(), posicaoPeao.getLinha(), posicaoPeao.getColuna(), posicaoPeao.getLinha()-1); //anda uma casa para frente
+                
+                
                 return true;
             }
             return false;
