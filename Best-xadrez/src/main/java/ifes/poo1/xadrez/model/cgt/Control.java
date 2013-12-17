@@ -17,6 +17,10 @@ import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
 import ifes.poo1.xadrez.util.exception.CasaVaziaException;
 import ifes.poo1.xadrez.util.exception.MovimentoInvalidoException;
 import ifes.poo1.xadrez.util.exception.PecaAlheiaException;
+import ifes.poo1.xadrez.util.exception.RoqueInvalidoCaminhoBloqueadoException;
+import ifes.poo1.xadrez.util.exception.RoqueInvalidoReiAmeacadoException;
+import ifes.poo1.xadrez.util.exception.RoqueInvalidoReiMovimentadoException;
+import ifes.poo1.xadrez.util.exception.RoqueInvalidoTorreMovimentadaException;
 import ifes.poo1.xadrez.view.cci.ControladorTelas;
 
 import java.util.ArrayList;
@@ -26,6 +30,10 @@ import java.util.List;
 import java.util.Random;
 /**Classe de controle do modelo. Controla o tabuleiro e as peças.*/
 
+/**
+ * @author Renan
+ *
+ */
 public class Control {
 	
 	private ControladorTelas controladorTela = new ControladorTelas();
@@ -33,6 +41,11 @@ public class Control {
 	private List<HistoricoPartida> partidas = new ArrayList<>();
 	private List<HistoricoJogador> jogadores = new ArrayList<>();
 	private HighScore highScore = new HighScore();
+	
+	
+	/** Controla o comando executado pelos jogadores.
+	 * 
+	 */
 	public void controlarComandoRecebido(){
 		Jogada jogada = controladorTela.determinarJogadaUsuario(jogo.getVez());
 		switch(jogada.getTipoJogada()){
@@ -57,10 +70,10 @@ public class Control {
 			System.out.println("PROMOCAO");
 			break;
 		case ROQUE_MAIOR:
-			System.out.println("ROQUE_MAIOR");
+			controlarRoqueMaior();
 			break;
 		case ROQUE_MENOR:
-			System.out.println("ROQUE_MENOR");
+			controlarRoqueMenor();
 			break;
 		case INEXISTENTE:
 			controladorTela.exibirMensagem("Que porra eh essa?!");
@@ -68,6 +81,9 @@ public class Control {
 		}
 	}
 	
+	/** Controla o comando executado por Zeus.
+	 * 
+	 */
 	public void controlarComandoZeus(){
 		
 		Random gerador = new Random();
@@ -157,19 +173,238 @@ public class Control {
 				
 		
 	}
-	private Jogada espelharJogada(Jogada jogada) {
+	
+	/** Controla a realização de roque menor pelos jogadores, tratando possíveis erros se assim for necessário.
+	 * 
+	 */
+	private void controlarRoqueMenor(){
+		if(jogo.getVez().getCor().equals(Cores.branco)){
+			try {
+				roqueMenorBranco();
+				} catch (RoqueInvalidoReiAmeacadoException | RoqueInvalidoTorreMovimentadaException | RoqueInvalidoCaminhoBloqueadoException
+						| RoqueInvalidoReiMovimentadoException e) {
+				controladorTela.exibirMensagem(e.getMessage());
+				controlarComandoRecebido();
+				}
+		}else{
+			try {
+				roqueMenorPreto();
+				} catch (RoqueInvalidoReiAmeacadoException | RoqueInvalidoTorreMovimentadaException | RoqueInvalidoCaminhoBloqueadoException
+						| RoqueInvalidoReiMovimentadoException e) {
+				controladorTela.exibirMensagem(e.getMessage());
+				controlarComandoRecebido();
+				}
+		}
+	}
+	
+	/** Controla a realização de roque maior pelos jogadores, tratando possíveis erros se assim for necessário.
+	 * 
+	 */
+	private void controlarRoqueMaior(){
+		if(jogo.getVez().getCor().equals(Cores.branco)){
+			try {
+				roqueMaiorBranco();
+				} catch (RoqueInvalidoReiAmeacadoException | RoqueInvalidoTorreMovimentadaException | RoqueInvalidoCaminhoBloqueadoException
+						| RoqueInvalidoReiMovimentadoException e) {
+				controladorTela.exibirMensagem(e.getMessage());
+				controlarComandoRecebido();
+				}
+		}else{
+			try {
+				roqueMaiorPreto();
+				} catch (RoqueInvalidoReiAmeacadoException | RoqueInvalidoTorreMovimentadaException | RoqueInvalidoCaminhoBloqueadoException
+						| RoqueInvalidoReiMovimentadoException e) {
+				controladorTela.exibirMensagem(e.getMessage());
+				controlarComandoRecebido();
+				}
+		}
+	}
+	
+	/** Realiza, se possível, o roque menor do jogador branco.
+	 * @throws RoqueInvalidoReiMovimentadoException - se o rei já tiver se movimentado anteriormente.
+	 * @throws RoqueInvalidoTorreMovimentadaException - se a torre já tiver se movimentado anteriormente.
+	 * @throws RoqueInvalidoCaminhoBloqueadoException - se o caminho do rei estiver bloqueado por outras peças..
+	 * @throws RoqueInvalidoReiAmeacadoException - se alguma das posições pelas quais o rei vai passar estiver ameaçada.
+	 */
+	private void roqueMenorBranco() throws RoqueInvalidoReiMovimentadoException, RoqueInvalidoTorreMovimentadaException, RoqueInvalidoCaminhoBloqueadoException, RoqueInvalidoReiAmeacadoException{
 		
-		Jogada jogadaEspelhada = new Jogada();
+		PecaAbstrata rei = jogo.getTabuleiro().getCasas(4, 0);
+		PecaAbstrata torre = jogo.getTabuleiro().getCasas(7, 0);
 		
-		jogadaEspelhada.getPosicaoInicial().setColuna(Math.abs(jogada.getPosicaoInicial().getColuna() - 7));
-		jogadaEspelhada.getPosicaoInicial().setLinha(Math.abs(jogada.getPosicaoInicial().getLinha() - 7));
-		jogadaEspelhada.getPosicaoFinal().setColuna(Math.abs(jogada.getPosicaoFinal().getColuna() - 7));
-		jogadaEspelhada.getPosicaoFinal().setLinha(Math.abs(jogada.getPosicaoFinal().getLinha() - 7));
-		jogadaEspelhada.setTipoJogada(jogada.getTipoJogada());
+		/*verifica se o rei ja se movimentou*/
+		if(rei != null && rei.getNome().equals(NomePecas.rei) && !rei.isSeMovimentou()){
+			/*verifica se a torre ja se movimentou*/
+			if(torre != null && torre.getNome().equals(NomePecas.torre) && !torre.isSeMovimentou()){
+				/*verifica se as posicoes entre o rei e a torre estao vazias*/
+				if(jogo.getTabuleiro().getCasas(6, 0) == null && jogo.getTabuleiro().getCasas(5, 0) == null){
+					List<Posicao> listaPosicoes = new ArrayList<>();
+					listaPosicoes.add(new Posicao(4, 0));
+					listaPosicoes.add(new Posicao(6, 0));
+					listaPosicoes.add(new Posicao(5, 0));
+					for(PecaAbstrata pecaPreta : jogo.getTabuleiro().getPecasPretas()){
+						for(Posicao posicao : listaPosicoes){
+							/*verifica se as pecas pretas ameaçam as posicoes pelas quais o rei branco vai passar*/
+							if (pecaPreta.capturar(posicao)) {
+								if (jogo.getTabuleiro().verificaCaminhoXeque(pecaPreta.getPosicao(), posicao)) {
+									throw new RoqueInvalidoReiAmeacadoException();
+								}
+							}
+						}
+					}
+					/*ROQUE VALIDO*/
+					jogo.getTabuleiro().moverPeca(4, 0, 6, 0);
+					jogo.getTabuleiro().moverPeca(7, 0, 5, 0);
+				}else{
+					throw new RoqueInvalidoCaminhoBloqueadoException();
+				}
+			}else{
+				throw new RoqueInvalidoTorreMovimentadaException();
+			}
+		}else{
+			throw new RoqueInvalidoReiMovimentadoException();
+		}
+	}
+	
+	/** Realiza, se possível, o roque maior do jogador branco.
+	 * @throws RoqueInvalidoReiMovimentadoException - se o rei já tiver se movimentado anteriormente.
+	 * @throws RoqueInvalidoTorreMovimentadaException - se a torre já tiver se movimentado anteriormente.
+	 * @throws RoqueInvalidoCaminhoBloqueadoException - se o caminho do rei estiver bloqueado por outras peças..
+	 * @throws RoqueInvalidoReiAmeacadoException - se alguma das posições pelas quais o rei vai passar estiver ameaçada.
+	 */
+	private void roqueMaiorBranco() throws RoqueInvalidoReiMovimentadoException, RoqueInvalidoTorreMovimentadaException, RoqueInvalidoCaminhoBloqueadoException, RoqueInvalidoReiAmeacadoException{
 		
-		return jogadaEspelhada;
+		PecaAbstrata rei = jogo.getTabuleiro().getCasas(4, 0);
+		PecaAbstrata torre = jogo.getTabuleiro().getCasas(0, 0);
+		
+		/*verifica se o rei ja se movimentou*/
+		if(rei != null && rei.getNome().equals(NomePecas.rei) && !rei.isSeMovimentou()){
+			/*verifica se a torre ja se movimentou*/
+			if(torre != null && torre.getNome().equals(NomePecas.torre) && !torre.isSeMovimentou()){
+				/*verifica se as posicoes entre o rei e a torre estao vazias*/
+				if(jogo.getTabuleiro().getCasas(1, 0) == null && jogo.getTabuleiro().getCasas(2, 0) == null && jogo.getTabuleiro().getCasas(3, 0) == null){
+					List<Posicao> listaPosicoes = new ArrayList<>();
+					listaPosicoes.add(new Posicao(4, 0));
+					listaPosicoes.add(new Posicao(3, 0));
+					listaPosicoes.add(new Posicao(2, 0));
+					listaPosicoes.add(new Posicao(1, 0));
+					for(PecaAbstrata pecaPreta : jogo.getTabuleiro().getPecasPretas()){
+						for(Posicao posicao : listaPosicoes){
+							/*verifica se as pecas pretas ameaçam as posicoes pelas quais o rei branco vai passar*/
+							if (pecaPreta.capturar(posicao)) {
+								if (jogo.getTabuleiro().verificaCaminhoXeque(pecaPreta.getPosicao(), posicao)) {
+									throw new RoqueInvalidoReiAmeacadoException();
+								}
+							}
+						}
+					}
+					/*ROQUE VALIDO*/
+					jogo.getTabuleiro().moverPeca(4, 0, 2, 0);
+					jogo.getTabuleiro().moverPeca(0, 0, 3, 0);
+				}else{
+					throw new RoqueInvalidoCaminhoBloqueadoException();
+				}
+			}else{
+				throw new RoqueInvalidoTorreMovimentadaException();
+			}
+		}else{
+			throw new RoqueInvalidoReiMovimentadoException();
+		}
+	}
+	
+	/** Realiza, se possível, o roque menor do jogador preto.
+	 * @throws RoqueInvalidoReiMovimentadoException - se o rei já tiver se movimentado anteriormente.
+	 * @throws RoqueInvalidoTorreMovimentadaException - se a torre já tiver se movimentado anteriormente.
+	 * @throws RoqueInvalidoCaminhoBloqueadoException - se o caminho do rei estiver bloqueado por outras peças..
+	 * @throws RoqueInvalidoReiAmeacadoException - se alguma das posições pelas quais o rei vai passar estiver ameaçada.
+	 */
+	private void roqueMenorPreto() throws RoqueInvalidoReiMovimentadoException, RoqueInvalidoTorreMovimentadaException, RoqueInvalidoCaminhoBloqueadoException, RoqueInvalidoReiAmeacadoException{
+		
+		PecaAbstrata rei = jogo.getTabuleiro().getCasas(4, 7);
+		PecaAbstrata torre = jogo.getTabuleiro().getCasas(7, 7);
+		
+		/*verifica se o rei ja se movimentou*/
+		if(rei != null && rei.getNome().equals(NomePecas.rei) && !rei.isSeMovimentou()){
+			/*verifica se a torre ja se movimentou*/
+			if(torre != null && torre.getNome().equals(NomePecas.torre) && !torre.isSeMovimentou()){
+				/*verifica se as posicoes entre o rei e a torre estao vazias*/
+				if(jogo.getTabuleiro().getCasas(5, 7) == null && jogo.getTabuleiro().getCasas(6, 7) == null){
+					List<Posicao> listaPosicoes = new ArrayList<>();
+					listaPosicoes.add(new Posicao(4, 7));
+					listaPosicoes.add(new Posicao(5, 7));
+					listaPosicoes.add(new Posicao(6, 7));
+					for(PecaAbstrata pecaBranca : jogo.getTabuleiro().getPecasBrancas()){
+						for(Posicao posicao : listaPosicoes){
+							/*verifica se as pecas brancas ameaçam as posicoes pelas quais o rei preto vai passar*/
+							if (pecaBranca.capturar(posicao)) {
+								if (jogo.getTabuleiro().verificaCaminhoXeque(pecaBranca.getPosicao(), posicao)) {
+									throw new RoqueInvalidoReiAmeacadoException();
+								}
+							}
+						}
+					}
+					/*ROQUE VALIDO*/
+					jogo.getTabuleiro().moverPeca(4, 7, 6, 7);
+					jogo.getTabuleiro().moverPeca(7, 7, 5, 7);
+				}else{
+					throw new RoqueInvalidoCaminhoBloqueadoException();
+				}
+			}else{
+				throw new RoqueInvalidoTorreMovimentadaException();
+			}
+		}else{
+			throw new RoqueInvalidoReiMovimentadoException();
+		}
+	}
+	
+	/** Realiza, se possível, o roque maior do jogador preto.
+	 * @throws RoqueInvalidoReiMovimentadoException - se o rei já tiver se movimentado anteriormente.
+	 * @throws RoqueInvalidoTorreMovimentadaException - se a torre já tiver se movimentado anteriormente.
+	 * @throws RoqueInvalidoCaminhoBloqueadoException - se o caminho do rei estiver bloqueado por outras peças..
+	 * @throws RoqueInvalidoReiAmeacadoException - se alguma das posições pelas quais o rei vai passar estiver ameaçada.
+	 */
+	private void roqueMaiorPreto() throws RoqueInvalidoReiMovimentadoException, RoqueInvalidoTorreMovimentadaException, RoqueInvalidoCaminhoBloqueadoException, RoqueInvalidoReiAmeacadoException{
+		
+		PecaAbstrata rei = jogo.getTabuleiro().getCasas(4, 7);
+		PecaAbstrata torre = jogo.getTabuleiro().getCasas(0, 7);
+		
+		/*verifica se o rei ja se movimentou*/
+		if(rei != null && rei.getNome().equals(NomePecas.rei) && !rei.isSeMovimentou()){
+			/*verifica se a torre ja se movimentou*/
+			if(torre != null && torre.getNome().equals(NomePecas.torre) && !torre.isSeMovimentou()){
+				/*verifica se as posicoes entre o rei e a torre estao vazias*/
+				if(jogo.getTabuleiro().getCasas(1, 7) == null && jogo.getTabuleiro().getCasas(2, 7) == null && jogo.getTabuleiro().getCasas(3, 7) == null){
+					List<Posicao> listaPosicoes = new ArrayList<>();
+					listaPosicoes.add(new Posicao(4, 7));
+					listaPosicoes.add(new Posicao(3, 7));
+					listaPosicoes.add(new Posicao(2, 7));
+					listaPosicoes.add(new Posicao(1, 7));
+					for(PecaAbstrata pecaBranca : jogo.getTabuleiro().getPecasBrancas()){
+						for(Posicao posicao : listaPosicoes){
+							/*verifica se as pecas brancas ameaçam as posicoes pelas quais o rei preto vai passar*/
+							if (pecaBranca.capturar(posicao)) {
+								if (jogo.getTabuleiro().verificaCaminhoXeque(pecaBranca.getPosicao(), posicao)) {
+									throw new RoqueInvalidoReiAmeacadoException();
+								}
+							}
+						}
+					}
+					/*ROQUE VALIDO*/
+					jogo.getTabuleiro().moverPeca(4, 7, 2, 7);
+					jogo.getTabuleiro().moverPeca(0, 7, 3, 7);
+				}else{
+					throw new RoqueInvalidoCaminhoBloqueadoException();
+				}
+			}else{
+				throw new RoqueInvalidoTorreMovimentadaException();
+			}
+		}else{
+			throw new RoqueInvalidoReiMovimentadoException();
+		}
 	}
 
+	/** Controla o movimento realizado por um jogador, tratando erros, se necessário.
+	 * @param jogada - a jogada realizada pelo jogador.
+	 */
 	private void controlarMovimentoPeca(Jogada jogada) {
 		try {
 			movimentarPeca(jogada.getPosicaoInicial(), jogada.getPosicaoFinal());
@@ -179,6 +414,9 @@ public class Control {
 		}
 	}
 	
+	/** Controla a captura realizada por um jogador, tratando erros, se necessário.
+	 * @param jogada - a jogada realizada pelo jogador.
+	 */
 	private void controlarCapturaPeca(Jogada jogada) {
 		try {
 			capturarPeca(jogada.getPosicaoInicial(), jogada.getPosicaoFinal());
@@ -191,6 +429,9 @@ public class Control {
 		}
 	}
 
+	/** Controla e exibe informações referentes ao xeque.
+	 * 
+	 */
 	private void controlarXeque() {
 		/* se for a vez do branco, valida o cheque no rei preto */
 		if (jogo.getVez().equals(jogo.getBranco())) {
@@ -222,6 +463,10 @@ public class Control {
 		
 	}
 
+	/** Finaliza o jogo, adicionando os dados tanto do jogo quanto dos jogadores ao histórico que será exibido nos Dados das Partidas.
+	 * @param vencedor - o jogador vencedor.
+	 * @param perdedor - o jogador perdedor.
+	 */
 	private void finalizarJogo(Jogador vencedor, Jogador perdedor) {
 		
 		controladorTela.exibirMensagem("XEQUE-MATE do jogador " + vencedor.getNome() + ", parabéns!\n");
@@ -251,8 +496,7 @@ public class Control {
 				 * verifica se a peca tem caminho desobstruido para capturar o
 				 * rei
 				 */
-				if (jogo.getTabuleiro().verificaCaminhoXeque(peca.getPosicao(),
-						posicaoRei, jogo)) {
+				if (jogo.getTabuleiro().verificaCaminhoXeque(peca.getPosicao(), posicaoRei)) {
 					/* esse momento configura XEQUE */
 					return true;
 				}
@@ -285,7 +529,7 @@ public class Control {
 					 * verifica se a peca tem caminho desobstruido para capturar o
 					 * rei
 					 */
-					if(jogo.getTabuleiro().verificaCaminhoXeque(peca.getPosicao(), posicao, jogo)){
+					if(jogo.getTabuleiro().verificaCaminhoXeque(peca.getPosicao(), posicao)){
 						/*essa posicao nao eh segura*/
 						posicoesSeguras--;
 						break;
@@ -355,6 +599,9 @@ public class Control {
 		
 	}
 	
+	/** Avisa aos jogadores que um pedido de empate foi realizado.
+	 * 
+	 */
 	private void empatarPartida() {
 		controladorTela.exibirMensagem("o jogador " + jogo.getVez().getNome() + " deseja empatar a partida.");
 		mudarVezJogador();
@@ -363,6 +610,10 @@ public class Control {
 		controlarEmpatePartida(controladorTela.empatarPartida());
 	}
 	
+	
+	/** Determina o que irá acontecer após o pedido de empate, dependendo da opção que os jogadores decidirem.
+	 * @param opcao - a opção escolhida pelo usuário: aceita ou não aceita o empate
+	 */
 	private void controlarEmpatePartida(int opcao){
 		
 		switch (opcao) {
@@ -383,7 +634,11 @@ public class Control {
 		}
 	}
 	
-	/*verifica se um jogador se encontra na lista, pelo nome*/
+	/** Verifica se um jogador se encontra na lista de jogadores do histórico, pelo nome do jogador.
+	 * @param listaJogadores - a lista de jogadores em que se deseja procurar o jogador.
+	 * @param nome - o nome do jogador procurado.
+	 * @return true se o jogador estiver na lista.
+	 */
 	private boolean estahNaLista(List<HistoricoJogador> listaJogadores, String nome){
 		for(HistoricoJogador jogador : listaJogadores){
 			if(jogador.getNome().equals(nome))
@@ -392,7 +647,10 @@ public class Control {
 		return false;	
 	}
 	
-	/*aumenta a quantidade de empates de um jogador no seu historico, pelo nome*/
+	/** Aumenta a quantidade de empates de um jogador no seu histórico, pelo nome.
+	 * @param listaJogadores - a lista de jogadores.
+	 * @param nome - o nome do jogador que ser quer aumentar a quantidade de empates.
+	 */
 	private void aumentarEmpateJogador(List<HistoricoJogador> listaJogadores, String nome){
 		for(HistoricoJogador jogador : listaJogadores){
 			if(jogador.getNome().equals(nome)){
@@ -404,6 +662,9 @@ public class Control {
                 
 	}
 	
+	/** Adiciona um jogo na lista de histórico de partidas.
+	 * @param vencedor - o vencedor da partida.
+	 */
 	private void adicionarHistoricoJogo(String vencedor){
 		HistoricoPartida partida = new HistoricoPartida();
 		partida.setDataHoraInicio(jogo.getDataHoraInicio());
@@ -412,6 +673,9 @@ public class Control {
 		partidas.add(partida);
 	}
 	
+	/** Adiciona o jogador vencedor na lista de jogadores do histórico.
+	 * @param vencedor - o jogador vencedor.
+	 */
 	private void adicionarHistoricoJogadorVitoria(String vencedor){
 		
 		if(estahNaLista(jogadores, vencedor))
@@ -423,6 +687,9 @@ public class Control {
 		}
 	}
 	
+	/** Adiciona o jogador perdedor na lista de jogadores do histórico.
+	 * @param perdedor - o jogador perdedor.
+	 */
 	private void adicionarHistoricoJogadorDerrota(String perdedor){
 		
 		if(estahNaLista(jogadores, perdedor))
@@ -434,6 +701,10 @@ public class Control {
 		}
 	}
 	
+	/** Aumenta a quantidade de derrotas de um jogador, pelo seu nome.
+	 * @param listaJogadores - a lista de jogadores do histórico.
+	 * @param perdedor - o nome do jogador perdedor.
+	 */
 	private void aumentarDerrotaJogador(List<HistoricoJogador> listaJogadores, String perdedor) {
 
 		for(HistoricoJogador jogador : listaJogadores){
@@ -445,6 +716,10 @@ public class Control {
 		
 	}
 
+	/** Aumenta a quantidade de vitórias de um jogador, pelo seu nome.
+	 * @param listaJogadores - a lista de jogadores do histórico.
+	 * @param vencedor - o nome do jogador vencedor.
+	 */
 	private void aumentarVitoriaJogador(List<HistoricoJogador> listaJogadores, String vencedor) {
 		
 		for(HistoricoJogador jogador : listaJogadores){
@@ -456,6 +731,10 @@ public class Control {
 		
 	}
 
+	/** Controlar o aumento de empates para os jogadores. Se o jogador já estiver na lista de jogadores
+	 * do histórico, apenas aumenta a quantidade de empates. Caso contrário, cria-se um novo jogador para o histórico.
+	 * 
+	 */
 	private void adicionarHistoricoJogadorEmpate(){
 		/*jogador branco*/
 		if (estahNaLista(jogadores, jogo.getBranco().getNome()))
@@ -514,6 +793,16 @@ public class Control {
 		}
 	}
 	
+	/** Tenta capturar uma peça do tabuleiro.
+	 * @param posicaoInicial - a posiçao da peça que quer capturar.
+	 * @param posicaoFinal - a posição da peça que vai ser capturar.
+	 * @throws CasaVaziaException - se não tiver nenhuma peça na posicaoInicial.
+	 * @throws PecaAlheiaException - se a peça que estiver na posicaoInicial não for do jogador da vez.
+	 * @throws CaminhoBloqueadoException - se a peça que estiver na posicaoInicial tiver o caminho bloqueado para fazer a captura. 
+	 * @throws MovimentoInvalidoException - se a peça que estiver na posicaoInicial não souber fazer o movimento pedido.
+	 * @throws CapturaInvalidaPecaInexistenteException - se não tiver nenhuma peça em posicaoFinal.
+	 * @throws CapturaInvalidaPecaPropriaException - se a peça que estiver em posicaoFinal for do próprio jogador da vez.
+	 */
 	private void capturarPeca(Posicao posicaoInicial, Posicao posicaoFinal) throws CasaVaziaException, PecaAlheiaException, CaminhoBloqueadoException, MovimentoInvalidoException, CapturaInvalidaPecaInexistenteException, CapturaInvalidaPecaPropriaException{
 				
 		PecaAbstrata peca = jogo.getTabuleiro().getCasas(posicaoInicial.getColuna(), posicaoInicial.getLinha());
@@ -535,10 +824,12 @@ public class Control {
 						peca.actMovimentou();
 					}
 					PecaAbstrata pecaCapturada = jogo.getTabuleiro().capturarPeca(posicaoInicial, posicaoFinal);
+					/*retira a peca capturada das pecas que o jogador possui*/
 					if(jogo.getVez().equals(jogo.getBranco()))
-						jogo.getTabuleiro().getPecasBrancas().remove(pecaCapturada);
-					else
 						jogo.getTabuleiro().getPecasPretas().remove(pecaCapturada);
+					else
+						jogo.getTabuleiro().getPecasBrancas().remove(pecaCapturada);
+					/*adiciona a peca captura na lista de pecas capturadas do jogador da vez*/
 					jogo.getVez().getPecasCapturadas().add(pecaCapturada);
 					if(jogo.getQuantidadePecasCapturadas() == 0)
 						controladorTela.exibirMensagem("FIRST BLOOD!");
@@ -552,6 +843,10 @@ public class Control {
 		}
 	}
 	
+	
+	/** Controla as opções escolhidas no menu inicial do jogo.
+	 * 
+	 */
 	public void controlarMenuInicial()
 	{
 		int opcao = controladorTela.controlarMenuInicial();
@@ -574,6 +869,9 @@ public class Control {
 		}
 	}
 	
+	/** Inicia um jogo singleplayer.
+	 * @param nomeJogadores - o vetor contendo os dois nomes dos participantes.
+	 */
 	private void iniciarJogoSingleplayer(String[] nomeJogadores) {
 		
 		Jogador branco = new Jogador(nomeJogadores[0], Cores.branco);
@@ -587,6 +885,9 @@ public class Control {
 		
 	}
 
+	/** Controla o andamento de um jogo singleplayer.
+	 * 
+	 */
 	private void controlarJogoSingleplayer() {
 		
 		while(jogo.isEmAndamento())
@@ -594,6 +895,9 @@ public class Control {
 		
 	}
 
+	/** Um típica jogada de um jogo singleplayer.
+	 * 
+	 */
 	private void realizarJogadaSingleplayer() {
 		
 		controladorTela.mostrarTabuleiro(jogo.getTabuleiro());
@@ -615,6 +919,9 @@ public class Control {
 		
 	}
 
+	/** Inicia um jogo multiplayer
+	 * @param nomeJogadores - o vetor contendo o nome dos dois jogadores.
+	 */
 	private void iniciarJogoMultiplayer(String[] nomeJogadores)
 	{	
 		
@@ -629,12 +936,18 @@ public class Control {
 	}
 	
 	
+	/** Controla o andamento de uma partida multiplayer.
+	 * 
+	 */
 	private void controlarJogoMultiplayer()
 	{	
 		while(jogo.isEmAndamento())
 			realizarJogadaMultiplayer();
 	}	
 	
+	/** Uma típica jogada de um jogo multiplayer.
+	 * 
+	 */
 	private void realizarJogadaMultiplayer(){
 		
 		controladorTela.mostrarTabuleiro(jogo.getTabuleiro());
