@@ -942,7 +942,9 @@ public class Tabuleiro {
                 &&(this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).getNome() == NomePecas.peao) //se o que você quer mover é um peão
                 &&(Math.abs(posicaoPeao.getColuna() - ultimaMovida.getColuna()) == 1) //verifica se estão em colunas adjacentes    
                 &&(posicaoPeao.getLinha() == ultimaMovida.getLinha() )//verifica se os dois peões estão na mesma linha
-               ){
+                &&((ultimaMovida.getLinha() == 4 && getCasas(ultimaMovida.getColuna(),ultimaMovida.getLinha()).getCor() == Cores.preto )
+                    || (ultimaMovida.getLinha() == 3 && getCasas(ultimaMovida.getColuna(),ultimaMovida.getLinha()).getCor() == Cores.branco ))//verifica se os peões estão na linha a qual andam duas casas.
+                    ){
                 capturarPeca(posicaoPeao, ultimaMovida);//come o peão que se moveu por ultimo e assume a posição ao lado
                 
                 
