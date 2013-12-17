@@ -7,7 +7,7 @@
 package ifes.poo1.xadrez.model.util.comparators;
 
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoJogador;
-import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
+
 import java.util.Comparator;
 
 /**

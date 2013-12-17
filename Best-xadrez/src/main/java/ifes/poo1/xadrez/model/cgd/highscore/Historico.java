@@ -8,13 +8,9 @@ package ifes.poo1.xadrez.model.cgd.highscore;
 
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoJogador;
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
-import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
-import ifes.poo1.xadrez.model.util.comparators.HistoricoComparatorNome;
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.GregorianCalendar;
 
 /**
  *

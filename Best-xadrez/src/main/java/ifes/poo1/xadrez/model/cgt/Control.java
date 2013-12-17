@@ -38,10 +38,15 @@ public class Control {
 	
 	private ControladorTelas controladorTela = new ControladorTelas();
 	private Jogo jogo;
-	private List<HistoricoPartida> partidas = new ArrayList<>();
-	private List<HistoricoJogador> jogadores = new ArrayList<>();
-	private HighScore highScore = new HighScore();
+	private ArrayList<HistoricoPartida> partidas = new ArrayList<>();
+	private ArrayList<HistoricoJogador> jogadores = new ArrayList<>();
+	private HighScore highScore;
 	
+	public Control(){
+		highScore = new HighScore();
+		partidas = highScore.getPartidasAntigos();
+		jogadores = highScore.getJogadoresAntigos();
+	}
 	
 	/** Controla o comando executado pelos jogadores.
 	 * 
@@ -865,10 +870,23 @@ public class Control {
 			controlarMenuInicial();
 			break;
 		default:
-			controladorTela.controlarSair();
+			controlarMenuSair();
 		}
 	}
 	
+	/** Controla as funcionalidades que ocorrem quando o jogador escolher a opção sair, no menu inicial.
+	 * No caso, os dados das partidas e dos jogadores são salvos em arquivo.
+	 * 
+	 */
+	private void controlarMenuSair() {
+		
+		highScore.setJogadoresAntigos(jogadores);
+		highScore.setPartidasAntigos(partidas);
+		controladorTela.exibirMensagem(highScore.serializar());
+		
+		controladorTela.controlarSair();
+	}
+
 	/** Inicia um jogo singleplayer.
 	 * @param nomeJogadores - o vetor contendo os dois nomes dos participantes.
 	 */
