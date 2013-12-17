@@ -3,7 +3,8 @@ package ifes.poo1.xadrez.model.cdp.jogo;
 import java.io.Serializable;
 
 
-public class HistoricoJogador implements Comparable<HistoricoJogador>, Serializable{
+
+public class HistoricoJogador implements Comparable<HistoricoJogador>,Serializable{
 	
 	private int vitorias;
 	private int derrotas;

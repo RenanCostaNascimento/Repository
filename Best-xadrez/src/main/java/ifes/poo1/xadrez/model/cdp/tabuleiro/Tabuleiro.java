@@ -23,6 +23,7 @@ public class Tabuleiro {
 	private PecaAbstrata[][] casas = new PecaAbstrata[8][8];
 	private List<PecaAbstrata> pecasBrancas = new ArrayList<>();
 	private List<PecaAbstrata> pecasPretas = new ArrayList<>();
+        private Posicao ultimaMovida = null;
 	/*
 	 * posicaoReiBranco e posicaoReiPreto serao usados para determinar se houve
 	 * cheque ou cheque-mate
@@ -146,8 +147,10 @@ public class Tabuleiro {
 	}
 
 	public void setCasas(PecaAbstrata peca, int coluna, int linha) {
-		this.casas[linha][coluna] = peca;
+		this.casas[linha][coluna] = peca;           
 	}
+        
+        
         
         /**
          * Move uma peça de um ponto inicial para um ponto final.
@@ -164,6 +167,9 @@ public class Tabuleiro {
 		this.setCasas(null, colunaInicial, linhaInicial);
 		peca.getPosicao().setColuna(colunaFinal);
 		peca.getPosicao().setLinha(linhaFinal);
+                
+                ultimaMovida.setColuna(colunaFinal);
+                ultimaMovida.setLinha(linhaFinal);
 
 	}
 
@@ -852,5 +858,31 @@ public class Tabuleiro {
 	public void setPosicaoReiPreto(Posicao posicaoReiPreto) {
 		this.posicaoReiPreto = posicaoReiPreto;
 	}
-
+        
+        public boolean enPassaint(Posicao posicaoPeao){
+            
+            
+            if ((this.getCasas(ultimaMovida.getColuna(), ultimaMovida.getLinha()).getNome() == NomePecas.peao)//se a **ULTIMA MOVIDA** é um peão
+                &&(this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).getNome() == NomePecas.peao) //se o que você quer mover é um peão
+                &&(Math.abs(posicaoPeao.getColuna() - ultimaMovida.getColuna()) == 1) //verifica se estão em colunas adjacentes    
+                &&(posicaoPeao.getLinha() == ultimaMovida.getLinha() )//verifica se os dois peões estão na mesma linha
+                &&((ultimaMovida.getLinha() == 4 && getCasas(ultimaMovida.getColuna(),ultimaMovida.getLinha()).getCor() == Cores.preto )
+                    || (ultimaMovida.getLinha() == 3 && getCasas(ultimaMovida.getColuna(),ultimaMovida.getLinha()).getCor() == Cores.branco ))//verifica se os peões estão na linha a qual andam duas casas.
+                    ){
+                capturarPeca(posicaoPeao, ultimaMovida);//come o peão que se moveu por ultimo e assume a posição ao lado
+                
+                
+                if (this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).mover(new Posicao(ultimaMovida.getColuna(), ultimaMovida.getLinha()+1)))
+                        moverPeca(posicaoPeao.getColuna(), posicaoPeao.getLinha(), posicaoPeao.getColuna(), posicaoPeao.getLinha()+1); //anda uma casa para frente
+                
+                else if (this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).mover(new Posicao(ultimaMovida.getColuna(), ultimaMovida.getLinha()-1)))
+                        moverPeca(posicaoPeao.getColuna(), posicaoPeao.getLinha(), posicaoPeao.getColuna(), posicaoPeao.getLinha()-1); //anda uma casa para frente
+                
+                
+                return true;
+            }
+            return false;
+        }
+        
+        
 }
