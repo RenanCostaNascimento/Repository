@@ -10,7 +10,7 @@ import ifes.poo1.xadrez.model.cdp.jogo.HistoricoJogador;
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
 import ifes.poo1.xadrez.util.persist.Deserializador;
 import ifes.poo1.xadrez.util.persist.Serializador;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 
 /**
@@ -33,35 +33,21 @@ public class HighScore {
             //verifica se existe o placar
             this.setHistorico((Historico) d.deserializar("placar/"));
         } catch (Exception ex) {
-            //System.err.println("Falha ao deserializar! - " + ex.toString());
             //cria um novo placar
             this.historico=new Historico();
         }
     }
-    
-    public String toString(){
-        return this.historico.toString();
-    }
-    
-    public void setHistorico(Historico historico){
-        this.historico=historico;
-        
-    }
-    
-    public Historico getHistorico(){
-        return this.historico;
-    }
-    
+       
     /**Metódo para armazenar o placar em memória persistente.
      * O nome do arquivo é placar e está na raiz do programa.
      */
-    private void serializar(){
+    public String serializar(){
         Serializador s = new Serializador();
         try {
             s.serializar("placar/", this.getHistorico());
-            System.out.println("Serializado!");
+            return "Dados das partidas e jogadores salvos!";
         } catch (Exception ex) {
-            System.err.println("Falha ao serializar! - " + ex.toString());
+            return "Falha ao salvar dados! - " + ex.toString();
         }
     }
     
@@ -97,6 +83,14 @@ public class HighScore {
     
     public void setPartidasAntigos(ArrayList<HistoricoPartida> partidasAntigos){
         historico.setPartidasAntigos(partidasAntigos);
+    }
+    public void setHistorico(Historico historico){
+        this.historico=historico;
+        
+    }
+    
+    public Historico getHistorico(){
+        return this.historico;
     }
 }
 
