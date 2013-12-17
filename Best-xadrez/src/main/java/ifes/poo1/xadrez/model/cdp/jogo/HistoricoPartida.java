@@ -1,8 +1,9 @@
 package ifes.poo1.xadrez.model.cdp.jogo;
 
+import java.io.Serializable;
 import java.util.GregorianCalendar;
 
-public class HistoricoPartida implements Comparable<HistoricoPartida>{
+public class HistoricoPartida implements Comparable<HistoricoPartida>,Serializable{
 	
 	private GregorianCalendar dataHoraInicio;
 	private GregorianCalendar dataHoraFim;
