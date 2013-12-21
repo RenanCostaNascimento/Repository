@@ -132,9 +132,16 @@ public class Tela {
 		return scanner.next();
 	}
 	
-	public int empatarPartida(){
+	public int empatarDesistirPartida(){
 		System.out.println("1. Sim\n"
 				+ "2. Nao");
+		
+		return scanner.nextInt();
+	}
+	
+	public int promoverPeca(){
+		System.out.println("1. Cavalo\n"
+				+ "2. Rainha");
 		
 		return scanner.nextInt();
 	}

@@ -8,7 +8,9 @@ import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogada;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
+import ifes.poo1.xadrez.model.cdp.pecas.Cavalo;
 import ifes.poo1.xadrez.model.cdp.pecas.PecaAbstrata;
+import ifes.poo1.xadrez.model.cdp.pecas.Rainha;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 import ifes.poo1.xadrez.model.cgd.highscore.HighScore;
 import ifes.poo1.xadrez.util.exception.CaminhoBloqueadoException;
@@ -24,6 +26,7 @@ import ifes.poo1.xadrez.util.exception.RoqueInvalidoTorreMovimentadaException;
 import ifes.poo1.xadrez.view.cci.ControladorTelas;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -40,6 +43,7 @@ public class Control {
 	private Jogo jogo;
 	private ArrayList<HistoricoPartida> partidas = new ArrayList<>();
 	private ArrayList<HistoricoJogador> jogadores = new ArrayList<>();
+	private PecaAbstrata ultimaJogada;
 	private HighScore highScore;
 	
 	public Control(){
@@ -56,23 +60,23 @@ public class Control {
 		switch(jogada.getTipoJogada()){
 		case MOVIMENTO:
 			controlarMovimentoPeca(jogada);
+			controlarPromocaoPeca();
 			controlarXeque();
 			break;
 		case CAPTURA:
 			controlarCapturaPeca(jogada);
+			controlarPromocaoPeca();
 			controlarXeque();
 			break;
 		case EMPATE:
 			empatarPartida();
 			break;
 		case DESISTENCIA:
-			System.out.println("DESISTENCIA");
+			desistirPartida();
 			break;
 		case PONTUACAO:
-			System.out.println("PONTUACAO");
-			break;
-		case PROMOCAO:
-			System.out.println("PROMOCAO");
+			exibirPontuacaoJogador();
+			controlarComandoRecebido();
 			break;
 		case ROQUE_MAIOR:
 			controlarRoqueMaior();
@@ -86,6 +90,79 @@ public class Control {
 		}
 	}
 	
+	/** Controla se um peão deve ou não ser promovido.
+	 * 
+	 */
+	private void controlarPromocaoPeca() {
+		/*verifica se a ultima peca movida eh um peao*/
+		if(ultimaJogada.getNome().equals(NomePecas.peao)){
+			/*determina a cor a da peca*/
+			if(jogo.getVez().getCor().equals(Cores.branco)){
+				/*verifica se o peao chegou na posicao passivel de promocao*/
+				if(ultimaJogada.getPosicao().getLinha() == 7){
+					/*remove a peca atual da lista de pecas brancas*/
+					jogo.getTabuleiro().getPecasBrancas().remove(ultimaJogada);
+					/*promove a peca*/
+					PecaAbstrata cavalo = promoverPeca();
+					/*adiciona a nova peca na lista de pecas brancas*/
+					jogo.getTabuleiro().getPecasBrancas().add(cavalo);
+				}
+					
+			}else{
+				/*verifica se o peao chegou na posicao passivel de promocao*/
+				if(ultimaJogada.getPosicao().getLinha() == 0){
+					/*remove a peca atual da lista de pecas pretas*/
+					jogo.getTabuleiro().getPecasPretas().remove(ultimaJogada);
+					/*promove a peca*/
+					PecaAbstrata rainha = promoverPeca();
+					/*adiciona a nova peca na lista de pecas brancas*/
+					jogo.getTabuleiro().getPecasPretas().add(rainha);
+				}
+					
+			}
+		}
+		
+	}
+
+	/** Promove um peão, segundo a necessidade do jogador.
+	 * 
+	 */
+	private PecaAbstrata promoverPeca() {
+		controladorTela.exibirMensagem("Em que peca seu peao sera promovido, " + jogo.getVez().getNome() + "?");
+		int opcao = controladorTela.promoverPeca();
+
+		switch(opcao){
+		case 1:
+			PecaAbstrata cavalo = new Cavalo(ultimaJogada.getCor());
+			cavalo.setPosicao(ultimaJogada.getPosicao());
+			jogo.getTabuleiro().setCasas(cavalo, ultimaJogada.getPosicao().getColuna(), ultimaJogada.getPosicao().getLinha());
+			return cavalo;
+		default:
+			PecaAbstrata rainha = new Rainha(ultimaJogada.getCor());
+			rainha.setPosicao(ultimaJogada.getPosicao());
+			jogo.getTabuleiro().setCasas(rainha, ultimaJogada.getPosicao().getColuna(), ultimaJogada.getPosicao().getLinha());
+			return rainha;
+		}
+		
+	}
+
+	/** Exibe a pontuação do jogador, quando ele assim solicita.
+	 * 
+	 */
+	private void exibirPontuacaoJogador() {
+		if(jogo.getVez().getPontuacao() == 0)
+			controladorTela.exibirMensagem("Voce ainda nao fez nenhum ponto, " + jogo.getVez().getNome() + "...");
+		else{
+			Collections.sort(jogo.getVez().getPecasCapturadas());
+			controladorTela.exibirMensagem("Aqui esta sua pontuacao, " + jogo.getVez().getNome() + ":");
+			for(PecaAbstrata pecaCapturada : jogo.getVez().getPecasCapturadas()){
+				controladorTela.exibirMensagem(pecaCapturada.getNome() + " - " + pecaCapturada.getValor());
+			}
+			controladorTela.exibirMensagem("Pontuacao total: " + jogo.getVez().getPontuacao() + "!");
+		}
+				
+	}
+
 	/** Controla o comando executado por Zeus.
 	 * 
 	 */
@@ -142,6 +219,8 @@ public class Control {
 				pecaRandomica.getPosicao().getLinha(),
 				posicaoRandomica.getColuna(),
 				posicaoRandomica.getLinha());
+		
+		ultimaJogada = pecaRandomica;
 
 	}
 
@@ -175,6 +254,8 @@ public class Control {
 				+ pecaCapturada.getNome() + "! Mais "
 				+ pecaCapturada.getValor() + " pontos para voce!");
 		jogo.setQuantidadePecasCapturadas(jogo.getQuantidadePecasCapturadas() + 1);
+		
+		ultimaJogada = pecaRandomica;
 				
 		
 	}
@@ -604,6 +685,41 @@ public class Control {
 		
 	}
 	
+	/** Avisa aos jogadores que um pedido de desistencia foi realizado.
+	 * 
+	 */
+	private void desistirPartida() {
+		controladorTela.exibirMensagem(jogo.getVez().getNome() + ", vai arregar?");
+		controlarDesistenciaPartida(controladorTela.empatarDesistirPartida());
+	}
+	
+	/** Determina o que irá acontecer após o pedido de desistencia, dependendo da opção que os jogadores decidirem.
+	 * @param opcao - a opção escolhida pelo usuário: aceita ou não aceita a desistencia
+	 */
+	private void controlarDesistenciaPartida(int opcao){
+		
+		switch (opcao) {
+		case 1:
+			controladorTela.exibirMensagem("Tsc tsc tsc... Eh neh... choro eh livre... Senta la entao, noob!");
+			jogo.setDataHoraFim(new GregorianCalendar());			
+			
+			Jogador perdedor = jogo.getVez();
+			mudarVezJogador();
+			Jogador vencedor = jogo.getVez();
+			
+			adicionarHistoricoJogo(jogo.getVez().getNome());
+			finalizarJogo(vencedor, perdedor);;
+			
+			jogo.setEmAndamento(false);
+			controlarMenuInicial();
+			break;
+		default:
+			controladorTela.exibirMensagem("Ahhh tomou coragem, ne!!");
+			controlarComandoRecebido();
+			break;
+		}
+	}
+	
 	/** Avisa aos jogadores que um pedido de empate foi realizado.
 	 * 
 	 */
@@ -612,7 +728,7 @@ public class Control {
 		mudarVezJogador();
 		controladorTela.exibirMensagem("Voce tambem deseja empatar a partida, " + jogo.getVez().getNome() + "?");
 		mudarVezJogador();
-		controlarEmpatePartida(controladorTela.empatarPartida());
+		controlarEmpatePartida(controladorTela.empatarDesistirPartida());
 	}
 	
 	
@@ -790,6 +906,7 @@ public class Control {
 						peca.actMovimentou();
 					}
 					jogo.getTabuleiro().moverPeca(posicaoInicial.getColuna(), posicaoInicial.getLinha(), posicaoFinal.getColuna(), posicaoFinal.getLinha());
+					ultimaJogada = peca;
 				}
 				else
 					throw new CaminhoBloqueadoException();
@@ -829,6 +946,7 @@ public class Control {
 						peca.actMovimentou();
 					}
 					PecaAbstrata pecaCapturada = jogo.getTabuleiro().capturarPeca(posicaoInicial, posicaoFinal);
+					ultimaJogada = peca;
 					/*retira a peca capturada das pecas que o jogador possui*/
 					if(jogo.getVez().equals(jogo.getBranco()))
 						jogo.getTabuleiro().getPecasPretas().remove(pecaCapturada);

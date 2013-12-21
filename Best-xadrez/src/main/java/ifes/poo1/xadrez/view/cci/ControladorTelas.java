@@ -58,18 +58,30 @@ public class ControladorTelas {
 		return nomeJogadores;
 	}
 	
+	public int promoverPeca(){
+		
+	int opcao = tela.promoverPeca();
+		
+		while(opcao >2 || opcao <1)
+		{
+			opcao = tela.empatarDesistirPartida();
+		}
+		
+		return opcao;
+	}
+	
 	public void mostrarTabuleiro(Tabuleiro tabuleiro)
 	{
 		tela.mostrarTabuleiro(tabuleiro);
 	}
 	
-	public int empatarPartida(){
+	public int empatarDesistirPartida(){
 		
-		int opcao = tela.empatarPartida();
+		int opcao = tela.empatarDesistirPartida();
 		
 		while(opcao >2 || opcao <1)
 		{
-			opcao = tela.empatarPartida();
+			opcao = tela.empatarDesistirPartida();
 		}
 		
 		return opcao;
@@ -87,10 +99,7 @@ public class ControladorTelas {
 			jogada.getPosicaoInicial().setLinha(Character.getNumericValue(comando.charAt(1)) -1);
 			jogada.getPosicaoFinal().setColuna(Character.getNumericValue(comando.charAt(2)) -1);
 			jogada.getPosicaoFinal().setLinha(Character.getNumericValue(comando.charAt(3)) -1);
-			if(comando.charAt(2) != '=')
-				jogada.setTipoJogada(TipoJogada.MOVIMENTO);
-			else
-				jogada.setTipoJogada(TipoJogada.PROMOCAO);
+			jogada.setTipoJogada(TipoJogada.MOVIMENTO);
 			return jogada;
 		}
 		if (comando.charAt(2) == 'x') {

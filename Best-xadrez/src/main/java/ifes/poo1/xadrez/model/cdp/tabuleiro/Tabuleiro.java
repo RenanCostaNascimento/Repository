@@ -805,9 +805,10 @@ public class Tabuleiro {
 				return false;
 			/* peao branco */
 		} else {
-			if (this.getCasas(posicaoInicial.getColuna(),
-					posicaoInicial.getLinha() + 1) != null)
-				return false;
+			if (posicaoInicial.getLinha() == 1)
+				if (this.getCasas(posicaoInicial.getColuna(),
+						posicaoInicial.getLinha() + 1) != null)
+					return false;
 		}
 
 		return true;
