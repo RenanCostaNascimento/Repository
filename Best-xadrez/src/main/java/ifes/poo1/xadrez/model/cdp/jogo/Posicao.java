@@ -1,6 +1,8 @@
 package ifes.poo1.xadrez.model.cdp.jogo;
 
-public class Posicao {
+import java.io.Serializable;
+
+public class Posicao implements Serializable{
 	
 	private int coluna;
 	private int linha;

@@ -6,12 +6,14 @@
 
 package ifes.poo1.xadrez.model.cgd.highscore;
 
+import ifes.poo1.xadrez.model.cdp.jogo.Checkpoint;
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoJogador;
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
 import ifes.poo1.xadrez.util.persist.Deserializador;
 import ifes.poo1.xadrez.util.persist.Serializador;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Classe para armazenar, carregar e manipular o placar.
@@ -64,11 +66,38 @@ public class HighScore {
         this.serializar();
     }
     
+    /**Método para adcionar jogadores para o histórico*/
+    public void addCheckpoint(Checkpoint checkpoint){
+    	
+    	Iterator iterator = historico.getCheckpoints().iterator();
+    	boolean inserido = true;
+    	
+    	while(iterator.hasNext()){
+    		Checkpoint cp = (Checkpoint) iterator.next();
+    		/*checkpoint ja existe, tem que substituir*/
+    		if(cp.getNome().equals(checkpoint.getNome())){
+    			iterator.remove();
+    			historico.addCheckpoint(checkpoint);
+    			inserido = false;
+    			break;
+    		}
+    	}
+    	/*checkpoint ainda nao existe*/
+    	if(inserido)
+    		historico.addCheckpoint(checkpoint);
+    	
+        this.serializar();
+    }
+    
     /**Método para retornar o histórico de jogadores
      * @return ArrayList<HistoricoJogador>
      */
     public ArrayList<HistoricoJogador> getJogadoresAntigos() {
         return historico.jogadoresAntigos;
+    }
+    
+    public ArrayList<Checkpoint> getChecpoints() {
+        return historico.checkpoints;
     }
     
     /**Método para retornar o historico de partidas
@@ -84,6 +113,9 @@ public class HighScore {
     public void setPartidasAntigos(ArrayList<HistoricoPartida> partidasAntigos){
         historico.setPartidasAntigos(partidasAntigos);
     }
+    public void setCheckpoint(ArrayList<Checkpoint> checkpoints){
+        historico.setCheckpoints(checkpoints);
+    }
     public void setHistorico(Historico historico){
         this.historico=historico;
         
@@ -91,6 +123,17 @@ public class HighScore {
     
     public Historico getHistorico(){
         return this.historico;
+    }
+    
+    public Checkpoint getCheckpointByNome(String nome){
+    	
+    	for(Checkpoint checkpoint : historico.getCheckpoints()){
+    		if(checkpoint.getNome().equals(nome))
+    			return checkpoint;
+    	}
+    	
+    	return null;
+    	
     }
 }
 

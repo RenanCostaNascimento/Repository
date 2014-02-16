@@ -2,12 +2,14 @@ package ifes.poo1.xadrez.view.cci;
 
 import ifes.poo1.xadrez.model.cdp.constantes.TipoJogada;
 import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
+import ifes.poo1.xadrez.model.cdp.jogo.Checkpoint;
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoJogador;
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogada;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 import ifes.poo1.xadrez.view.cih.Tela;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ControladorTelas {
@@ -18,7 +20,7 @@ public class ControladorTelas {
 	{
 		int opcao = 10;
 		
-		while(opcao >3 || opcao <1)
+		while(opcao >4 || opcao <1)
 		{
 			opcao = tela.menuInicial();
 		}
@@ -93,7 +95,7 @@ public class ControladorTelas {
 		Jogada jogada = new Jogada();
 		String comando = tela.pegarComandoUsuario(jogador);
 		
-		if(comando.length() == 4){
+		if(!comando.equals("sair") && comando.length() == 4){
 			
 			jogada.getPosicaoInicial().setColuna(Character.getNumericValue(comando.charAt(0)) -1);
 			jogada.getPosicaoInicial().setLinha(Character.getNumericValue(comando.charAt(1)) -1);
@@ -130,6 +132,14 @@ public class ControladorTelas {
 			jogada.setTipoJogada(TipoJogada.EMPATE);		
 			return jogada;
 		}
+		if(comando.contentEquals("salvar")){
+			jogada.setTipoJogada(TipoJogada.SALVAR);		
+			return jogada;
+		}
+		if(comando.contentEquals("sair")){
+			jogada.setTipoJogada(TipoJogada.SAIR);		
+			return jogada;
+		}
 		if(true){
 			jogada.setTipoJogada(TipoJogada.INEXISTENTE);		
 			return jogada;
@@ -139,6 +149,17 @@ public class ControladorTelas {
 	
 	public void exibirMensagem(String mensagem){
 		tela.exibirMensagem(mensagem);
+	}
+
+	public String controlarSalvarSairPartida() {
+		
+		return tela.controlarSalvarSairPartida();
+	}
+
+	public String  controlarMenuJogosSalvos(ArrayList<Checkpoint> checkpoints) {
+		
+		return tela.controlarMenuJogosSalvos(checkpoints);
+		
 	}
 	
 

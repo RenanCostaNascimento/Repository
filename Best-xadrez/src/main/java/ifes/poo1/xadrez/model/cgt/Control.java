@@ -3,6 +3,7 @@ package ifes.poo1.xadrez.model.cgt;
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
+import ifes.poo1.xadrez.model.cdp.jogo.Checkpoint;
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoJogador;
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogada;
@@ -17,6 +18,7 @@ import ifes.poo1.xadrez.util.exception.CaminhoBloqueadoException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
 import ifes.poo1.xadrez.util.exception.CasaVaziaException;
+import ifes.poo1.xadrez.util.exception.JogoInexistenteExcpetion;
 import ifes.poo1.xadrez.util.exception.MovimentoInvalidoException;
 import ifes.poo1.xadrez.util.exception.PecaAlheiaException;
 import ifes.poo1.xadrez.util.exception.RoqueInvalidoCaminhoBloqueadoException;
@@ -43,6 +45,7 @@ public class Control {
 	private Jogo jogo;
 	private ArrayList<HistoricoPartida> partidas = new ArrayList<>();
 	private ArrayList<HistoricoJogador> jogadores = new ArrayList<>();
+	private ArrayList<Checkpoint> checkpoints = new ArrayList<>();
 	private PecaAbstrata ultimaJogada;
 	private HighScore highScore;
 	
@@ -50,6 +53,7 @@ public class Control {
 		highScore = new HighScore();
 		partidas = highScore.getPartidasAntigos();
 		jogadores = highScore.getJogadoresAntigos();
+		checkpoints = highScore.getChecpoints();
 	}
 	
 	/** Controla o comando executado pelos jogadores.
@@ -84,12 +88,34 @@ public class Control {
 		case ROQUE_MENOR:
 			controlarRoqueMenor();
 			break;
+		case SALVAR:
+			controlarSalvarPartida();
+			controlarComandoRecebido();
+			break;
+		case SAIR:
+			controlarSairPartida();
+			controlarMenuInicial();
+			break;
 		case INEXISTENTE:
 			controladorTela.exibirMensagem("Que porra eh essa?!");
 			controlarComandoRecebido();
 		}
 	}
-	
+
+	private void controlarSalvarPartida() {
+		
+		highScore.addCheckpoint(new Checkpoint(jogo, controladorTela.controlarSalvarSairPartida()));
+		
+	}
+
+	private void controlarSairPartida() {
+		
+		highScore.addCheckpoint(new Checkpoint(jogo, controladorTela.controlarSalvarSairPartida()));
+		jogo = null;
+		ultimaJogada = null;
+		
+	}
+
 	/** Controla se um peão deve ou não ser promovido.
 	 * 
 	 */
@@ -707,7 +733,7 @@ public class Control {
 			mudarVezJogador();
 			Jogador vencedor = jogo.getVez();
 			
-			adicionarHistoricoJogo(jogo.getVez().getNome());
+//			adicionarHistoricoJogo(jogo.getVez().getNome());
 			finalizarJogo(vencedor, perdedor);;
 			
 			jogo.setEmAndamento(false);
@@ -987,11 +1013,38 @@ public class Control {
 			controladorTela.controlarDadosPartidas(partidas, jogadores);
 			controlarMenuInicial();
 			break;
-		default:
+		case 3:
 			controlarMenuSair();
+			break;
+		default:
+			String nomeJogo = controladorTela.controlarMenuJogosSalvos(checkpoints);
+			if(nomeJogo != null)
+				try {
+					carregarJogo(nomeJogo);
+				} catch (JogoInexistenteExcpetion e) {
+					controladorTela.exibirMensagem(e.getMessage());
+					controlarMenuInicial();
+				}
+			else
+				controlarMenuInicial();
 		}
 	}
-	
+
+	private void carregarJogo(String nomeJogo) throws JogoInexistenteExcpetion{
+		
+		Checkpoint checkpoint = highScore.getCheckpointByNome(nomeJogo);
+		if(checkpoint != null){
+			jogo = checkpoint.getJogo();
+			if(jogo.getPreto().getNome().equals("ZEUS")){
+				controlarJogoSingleplayer();
+			}
+			controlarJogoMultiplayer();
+				
+		}else{
+			throw new JogoInexistenteExcpetion();
+		}
+	}
+
 	/** Controla as funcionalidades que ocorrem quando o jogador escolher a opção sair, no menu inicial.
 	 * No caso, os dados das partidas e dos jogadores são salvos em arquivo.
 	 * 
@@ -1000,6 +1053,7 @@ public class Control {
 		
 		highScore.setJogadoresAntigos(jogadores);
 		highScore.setPartidasAntigos(partidas);
+		highScore.setCheckpoint(checkpoints);
 		controladorTela.exibirMensagem(highScore.serializar());
 		
 		controladorTela.controlarSair();

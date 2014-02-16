@@ -1,7 +1,6 @@
 package ifes.poo1.xadrez.model.cdp.tabuleiro;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
-import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.Bispo;
@@ -13,12 +12,12 @@ import ifes.poo1.xadrez.model.cdp.pecas.Rei;
 import ifes.poo1.xadrez.model.cdp.pecas.Torre;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
-import ifes.poo1.xadrez.util.exception.RoqueInvalidoReiMovimentadoException;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tabuleiro {
+public class Tabuleiro implements Serializable{
 
 	private PecaAbstrata[][] casas = new PecaAbstrata[8][8];
 	private List<PecaAbstrata> pecasBrancas = new ArrayList<>();

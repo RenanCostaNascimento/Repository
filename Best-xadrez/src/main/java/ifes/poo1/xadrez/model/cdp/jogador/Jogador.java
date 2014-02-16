@@ -1,14 +1,16 @@
 package ifes.poo1.xadrez.model.cdp.jogador;
 
 
-import ifes.poo1.xadrez.model.cdp.pecas.PecaAbstrata;
-import java.util.ArrayList;
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
+import ifes.poo1.xadrez.model.cdp.pecas.PecaAbstrata;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 /**
  * Classe do jogador, que contem o Nome, Cor, e as peças capturadas em jogo.
  * @author Pedro
  */
-public class Jogador {
+public class Jogador implements Serializable{
 	private String nome;
 	private Cores cor;
 	private int vitorias;

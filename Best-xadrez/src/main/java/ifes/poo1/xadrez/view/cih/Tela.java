@@ -1,11 +1,13 @@
 package ifes.poo1.xadrez.view.cih;
 
 import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
+import ifes.poo1.xadrez.model.cdp.jogo.Checkpoint;
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoJogador;
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,7 +19,8 @@ public class Tela {
 	{
 		System.out.println("1. Iniciar uma nova partida\n"
 				+ "2. Dados das partidas\n"
-				+ "3. Sair");
+				+ "3. Sair\n"
+				+ "4. Jogos salvos");
 		return scanner.nextInt();
 	}
 	
@@ -69,6 +72,7 @@ public class Tela {
 
 	public void mostrarMenuSair() {
 		System.out.println("------- GAME OVER -------");
+		Runtime.getRuntime().exit(0);
 		
 	}
 
@@ -144,6 +148,32 @@ public class Tela {
 				+ "2. Rainha");
 		
 		return scanner.nextInt();
+	}
+
+	public String controlarSalvarSairPartida() {
+		
+		System.out.println("Qual vai ser o nome da partida (nome sem espaços)?");
+		
+		return scanner.next();
+	}
+
+	public String controlarMenuJogosSalvos(ArrayList<Checkpoint> checkpoints) {
+
+		if(checkpoints.isEmpty()){
+			System.out.println("Nenhum jogo salvo!");
+		} else{
+			System.out.println("NOME -- JOGADOR 1 X JOGADOR 2, DATA\n"
+					+ "----------------------------");
+			for(Checkpoint cp : checkpoints){
+				System.out.println(cp.toString());
+			}
+			
+			System.out.println("Qual jogo deseja carregar?");
+			return scanner.next();
+		}
+		
+		return null;
+		
 	}
 
 }
