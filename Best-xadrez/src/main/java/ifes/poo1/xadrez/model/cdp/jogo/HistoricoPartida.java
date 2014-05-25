@@ -1,27 +1,28 @@
 package ifes.poo1.xadrez.model.cdp.jogo;
 
+import ifes.poo1.xadrez.model.reuse.Model;
 import java.io.Serializable;
-import java.util.GregorianCalendar;
+import java.util.Date;
 
-public class HistoricoPartida implements Comparable<HistoricoPartida>, Serializable{
+public class HistoricoPartida extends Model implements Comparable<HistoricoPartida>, Serializable{
 	
-	private GregorianCalendar dataHoraInicio;
-	private GregorianCalendar dataHoraFim;
+	private Date dataHoraInicio;
+	private Date dataHoraFim;
 	private String vencedor;
         
         public String toString(){
             return vencedor+"\nHora de Inicio: "+dataHoraInicio.toString()+"\nHora de Termino: "+dataHoraFim.toString();
         }
-	public GregorianCalendar getDataHoraInicio() {
+	public Date getDataHoraInicio() {
 		return dataHoraInicio;
 	}
-	public void setDataHoraInicio(GregorianCalendar dataHoraInicio) {
+	public void setDataHoraInicio(Date dataHoraInicio) {
 		this.dataHoraInicio = dataHoraInicio;
 	}
-	public GregorianCalendar getDataHoraFim() {
+	public Date getDataHoraFim() {
 		return dataHoraFim;
 	}
-	public void setDataHoraFim(GregorianCalendar dataHoraFim) {
+	public void setDataHoraFim(Date dataHoraFim) {
 		this.dataHoraFim = dataHoraFim;
 	}
 	public String getVencedor() {

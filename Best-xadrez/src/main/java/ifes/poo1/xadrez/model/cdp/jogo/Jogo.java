@@ -4,15 +4,15 @@ import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 
 import java.io.Serializable;
-import java.util.GregorianCalendar;
+import java.util.Date;
 
 public class Jogo implements Serializable{
 	
 	private Tabuleiro tabuleiro;
 	private Jogador branco;
 	private Jogador preto;
-	private GregorianCalendar dataHoraInicio;
-	private GregorianCalendar dataHoraFim;
+	private Date dataHoraInicio;
+	private Date dataHoraFim;
 	private Jogador vez;
 	private int quantidadePecasCapturadas;
 	private boolean emAndamento;
@@ -23,7 +23,7 @@ public class Jogo implements Serializable{
 		this.tabuleiro = tabuleiro;
 		this.branco = branco;
 		this.preto = preto;
-		this.dataHoraInicio = new GregorianCalendar();
+		this.dataHoraInicio = new Date();
 		this.vez = this.branco;
 		this.quantidadePecasCapturadas = 0;
 		this.emAndamento = true;
@@ -51,14 +51,14 @@ public class Jogo implements Serializable{
 		this.preto = preto;
 	}
                  
-	public GregorianCalendar getDataHoraInicio() {
+	public Date getDataHoraInicio() {
 		return dataHoraInicio;
 	}
-	public void setDataHoraInicio(GregorianCalendar dataHoraInicio) {
+	public void setDataHoraInicio(Date dataHoraInicio) {
 		this.dataHoraInicio = dataHoraInicio;
 	}
 	
-	public GregorianCalendar getDataHoraFim() {
+	public Date getDataHoraFim() {
 		return dataHoraFim;
 	}
 
@@ -92,7 +92,7 @@ public class Jogo implements Serializable{
 	}
 
 
-	public void setDataHoraFim(GregorianCalendar dataHoraFim) {
+	public void setDataHoraFim(Date dataHoraFim) {
 		this.dataHoraFim = dataHoraFim;
 	}
 
