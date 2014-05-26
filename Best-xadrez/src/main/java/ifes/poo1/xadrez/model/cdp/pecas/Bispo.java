@@ -9,8 +9,8 @@ import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
  */
 public class Bispo extends PecaAbstrata{
 	
-	public Bispo(Cores cor) {
-		super(cor, NomePecas.bispo, 3);
+	public Bispo() {
+		super(NomePecas.Bispo, 3);
 		
 		// TODO Auto-generated constructor stub
 	}

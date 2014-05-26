@@ -5,15 +5,15 @@ import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 
 /**Camada abstrata da peca, contem funções basicas de get e set e o metódo construtor para inicializar as peças*/
-public abstract class PecaAbstrata implements PecaInterface{
+public abstract class PecaAbstrata implements Peca{
     protected boolean seMovimentou;
 	protected Cores cor; 
 	protected int valor;
 	protected NomePecas nome;
 	protected Posicao posicao;        
-        	
-	public PecaAbstrata(Cores cor, NomePecas nome, int valor){
-		this.cor = cor;
+    
+	
+	public PecaAbstrata(NomePecas nome, int valor){
 		this.nome = nome;
 		this.valor = valor;
 	}
@@ -56,6 +56,18 @@ public abstract class PecaAbstrata implements PecaInterface{
 
 	public void actMovimentou() {
 		this.seMovimentou = true;
+	}
+	
+	public Peca clone(){
+		try {
+		 	// call clone in Object. 
+		 	return (Peca) super.clone(); 
+		}
+		catch (CloneNotSupportedException e) { 
+			System.out.println (" Cloning not allowed. " );
+			return this;
+		}
+
 	}
 
 }

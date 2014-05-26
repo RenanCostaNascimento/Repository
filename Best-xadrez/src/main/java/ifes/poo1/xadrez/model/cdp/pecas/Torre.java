@@ -9,8 +9,8 @@ import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
  */
 public class Torre extends PecaAbstrata {
 
-	public Torre(Cores cor) {
-		super(cor, NomePecas.torre, 5);
+	public Torre() {
+		super(NomePecas.Torre, 5);
 		// TODO Auto-generated constructor stub
 	}
 	@Override

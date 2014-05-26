@@ -1,8 +1,11 @@
 package ifes.poo1.xadrez.model.cdp.jogador;
 
 
-import ifes.poo1.xadrez.model.cdp.pecas.PecaAbstrata;
+import ifes.poo1.xadrez.model.cdp.pecas.Peca;
+
+
 import java.util.ArrayList;
+
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 /**
  * Classe do jogador, que contem o Nome, Cor, e as peças capturadas em jogo.
@@ -13,7 +16,7 @@ public class Jogador {
 	private Cores cor;
 	private int vitorias;
 	private int derrotas;
-	private ArrayList<PecaAbstrata> pecasCapturadas = new ArrayList<PecaAbstrata>();
+	private ArrayList<Peca> pecasCapturadas = new ArrayList<Peca>();
         
 	/**Classe do jogador, que contem o Nome, Cor, e as peças capturadas em jogo.
          * 
@@ -35,7 +38,7 @@ public class Jogador {
 	
 	public int getPontuacao() {
 		int soma = 0;
-		for(PecaAbstrata peca : this.pecasCapturadas)
+		for(Peca peca : this.pecasCapturadas)
 			soma += peca.getValor();
 		return soma;
 	}
@@ -78,7 +81,7 @@ public class Jogador {
 	}
 
 
-	public ArrayList<PecaAbstrata> getPecasCapturadas() {
+	public ArrayList<Peca> getPecasCapturadas() {
 		return pecasCapturadas;
 	}
 
@@ -86,7 +89,7 @@ public class Jogador {
          * Adciona um peça capturada.
          * @param pecasCapturadas 
          */
-	public void setPecasCapturadas(ArrayList<PecaAbstrata> pecasCapturadas) {
+	public void setPecasCapturadas(ArrayList<Peca> pecasCapturadas) {
 		this.pecasCapturadas = pecasCapturadas;
 	}	
 	

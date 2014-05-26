@@ -8,7 +8,8 @@ import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogada;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
-import ifes.poo1.xadrez.model.cdp.pecas.PecaAbstrata;
+import ifes.poo1.xadrez.model.cdp.pecas.Peca;
+import ifes.poo1.xadrez.model.cdp.pecas.Peca;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 import ifes.poo1.xadrez.model.cgd.highscore.HighScore;
 import ifes.poo1.xadrez.util.exception.CaminhoBloqueadoException;
@@ -94,7 +95,8 @@ public class Control {
 		Random gerador = new Random();
 		List<Posicao> posicoesPossiveis = new ArrayList<>();
 		Posicao posicaoRandomica;
-		PecaAbstrata pecaRandomica = null, pecaDestino;
+		Peca pecaRandomica = null;
+		Peca pecaDestino;
 		
 		/*enquanto a peca escolhida nao conseguir se mover, escolha outra peca*/
 		while(posicoesPossiveis.size() == 0){
@@ -122,7 +124,7 @@ public class Control {
 	 * @param pecaRandomica - a peça que será movida.
 	 * @param posicaoRandomica - a posição para a qual a pecaRandomica será movida.
 	 */
-	private void movimentarPecaZeus(PecaAbstrata pecaRandomica, Posicao posicaoRandomica) {
+	private void movimentarPecaZeus(Peca pecaRandomica, Posicao posicaoRandomica) {
 		
 		controladorTela.exibirMensagem("Zeus fez o comando "
 				+ (pecaRandomica.getPosicao().getColuna()+1) + ""
@@ -130,7 +132,7 @@ public class Control {
 				+ (posicaoRandomica.getColuna()+1) + ""
 				+ (posicaoRandomica.getLinha()+1) + ".");
 		
-		if(pecaRandomica.getNome().equals(NomePecas.rei)){
+		if(pecaRandomica.getNome().equals(NomePecas.Rei)){
 			jogo.getTabuleiro().setPosicaoReiPreto(posicaoRandomica);
 			pecaRandomica.actMovimentou();
 		}
@@ -149,7 +151,7 @@ public class Control {
 	 * @param pecaRandomica - a peça que fara o movimento.
 	 * @param posicaoRandomica - a posição da peça que será capturada.
 	 */
-	private void capturarPecaZeus(PecaAbstrata pecaRandomica, Posicao posicaoRandomica) {
+	private void capturarPecaZeus(Peca pecaRandomica, Posicao posicaoRandomica) {
 		
 		controladorTela.exibirMensagem("Zeus fez o comando "
 				+ (pecaRandomica.getPosicao().getColuna()+1) + ""
@@ -158,12 +160,12 @@ public class Control {
 				+ (posicaoRandomica.getLinha()+1) + ".");
 
 		/* se a peca movida for o rei, atualiza sua posicao */
-		if (pecaRandomica.getNome().equals(NomePecas.rei)) {
+		if (pecaRandomica.getNome().equals(NomePecas.Rei)) {
 			jogo.getTabuleiro().setPosicaoReiPreto(posicaoRandomica);
 			pecaRandomica.actMovimentou();
 		}
 		/* por fim captura a peca */
-		PecaAbstrata pecaCapturada = jogo.getTabuleiro().capturarPeca(
+		Peca pecaCapturada = jogo.getTabuleiro().capturarPeca(
 				pecaRandomica.getPosicao(), posicaoRandomica);
 		/* remove a peca da lista das brancas */
 		jogo.getTabuleiro().getPecasBrancas().remove(pecaCapturada);
@@ -233,20 +235,20 @@ public class Control {
 	 */
 	private void roqueMenorBranco() throws RoqueInvalidoReiMovimentadoException, RoqueInvalidoTorreMovimentadaException, RoqueInvalidoCaminhoBloqueadoException, RoqueInvalidoReiAmeacadoException{
 		
-		PecaAbstrata rei = jogo.getTabuleiro().getCasas(4, 0);
-		PecaAbstrata torre = jogo.getTabuleiro().getCasas(7, 0);
+		Peca rei = jogo.getTabuleiro().getCasas(4, 0);
+		Peca torre = jogo.getTabuleiro().getCasas(7, 0);
 		
 		/*verifica se o rei ja se movimentou*/
-		if(rei != null && rei.getNome().equals(NomePecas.rei) && !rei.isSeMovimentou()){
+		if(rei != null && rei.getNome().equals(NomePecas.Rei) && !rei.isSeMovimentou()){
 			/*verifica se a torre ja se movimentou*/
-			if(torre != null && torre.getNome().equals(NomePecas.torre) && !torre.isSeMovimentou()){
+			if(torre != null && torre.getNome().equals(NomePecas.Torre) && !torre.isSeMovimentou()){
 				/*verifica se as posicoes entre o rei e a torre estao vazias*/
 				if(jogo.getTabuleiro().getCasas(6, 0) == null && jogo.getTabuleiro().getCasas(5, 0) == null){
 					List<Posicao> listaPosicoes = new ArrayList<>();
 					listaPosicoes.add(new Posicao(4, 0));
 					listaPosicoes.add(new Posicao(6, 0));
 					listaPosicoes.add(new Posicao(5, 0));
-					for(PecaAbstrata pecaPreta : jogo.getTabuleiro().getPecasPretas()){
+					for(Peca pecaPreta : jogo.getTabuleiro().getPecasPretas()){
 						for(Posicao posicao : listaPosicoes){
 							/*verifica se as pecas pretas ameaçam as posicoes pelas quais o rei branco vai passar*/
 							if (pecaPreta.capturar(posicao)) {
@@ -278,13 +280,13 @@ public class Control {
 	 */
 	private void roqueMaiorBranco() throws RoqueInvalidoReiMovimentadoException, RoqueInvalidoTorreMovimentadaException, RoqueInvalidoCaminhoBloqueadoException, RoqueInvalidoReiAmeacadoException{
 		
-		PecaAbstrata rei = jogo.getTabuleiro().getCasas(4, 0);
-		PecaAbstrata torre = jogo.getTabuleiro().getCasas(0, 0);
+		Peca rei = jogo.getTabuleiro().getCasas(4, 0);
+		Peca torre = jogo.getTabuleiro().getCasas(0, 0);
 		
 		/*verifica se o rei ja se movimentou*/
-		if(rei != null && rei.getNome().equals(NomePecas.rei) && !rei.isSeMovimentou()){
+		if(rei != null && rei.getNome().equals(NomePecas.Rei) && !rei.isSeMovimentou()){
 			/*verifica se a torre ja se movimentou*/
-			if(torre != null && torre.getNome().equals(NomePecas.torre) && !torre.isSeMovimentou()){
+			if(torre != null && torre.getNome().equals(NomePecas.Torre) && !torre.isSeMovimentou()){
 				/*verifica se as posicoes entre o rei e a torre estao vazias*/
 				if(jogo.getTabuleiro().getCasas(1, 0) == null && jogo.getTabuleiro().getCasas(2, 0) == null && jogo.getTabuleiro().getCasas(3, 0) == null){
 					List<Posicao> listaPosicoes = new ArrayList<>();
@@ -292,7 +294,7 @@ public class Control {
 					listaPosicoes.add(new Posicao(3, 0));
 					listaPosicoes.add(new Posicao(2, 0));
 					listaPosicoes.add(new Posicao(1, 0));
-					for(PecaAbstrata pecaPreta : jogo.getTabuleiro().getPecasPretas()){
+					for(Peca pecaPreta : jogo.getTabuleiro().getPecasPretas()){
 						for(Posicao posicao : listaPosicoes){
 							/*verifica se as pecas pretas ameaçam as posicoes pelas quais o rei branco vai passar*/
 							if (pecaPreta.capturar(posicao)) {
@@ -324,20 +326,20 @@ public class Control {
 	 */
 	private void roqueMenorPreto() throws RoqueInvalidoReiMovimentadoException, RoqueInvalidoTorreMovimentadaException, RoqueInvalidoCaminhoBloqueadoException, RoqueInvalidoReiAmeacadoException{
 		
-		PecaAbstrata rei = jogo.getTabuleiro().getCasas(4, 7);
-		PecaAbstrata torre = jogo.getTabuleiro().getCasas(7, 7);
+		Peca rei = jogo.getTabuleiro().getCasas(4, 7);
+		Peca torre = jogo.getTabuleiro().getCasas(7, 7);
 		
 		/*verifica se o rei ja se movimentou*/
-		if(rei != null && rei.getNome().equals(NomePecas.rei) && !rei.isSeMovimentou()){
+		if(rei != null && rei.getNome().equals(NomePecas.Rei) && !rei.isSeMovimentou()){
 			/*verifica se a torre ja se movimentou*/
-			if(torre != null && torre.getNome().equals(NomePecas.torre) && !torre.isSeMovimentou()){
+			if(torre != null && torre.getNome().equals(NomePecas.Torre) && !torre.isSeMovimentou()){
 				/*verifica se as posicoes entre o rei e a torre estao vazias*/
 				if(jogo.getTabuleiro().getCasas(5, 7) == null && jogo.getTabuleiro().getCasas(6, 7) == null){
 					List<Posicao> listaPosicoes = new ArrayList<>();
 					listaPosicoes.add(new Posicao(4, 7));
 					listaPosicoes.add(new Posicao(5, 7));
 					listaPosicoes.add(new Posicao(6, 7));
-					for(PecaAbstrata pecaBranca : jogo.getTabuleiro().getPecasBrancas()){
+					for(Peca pecaBranca : jogo.getTabuleiro().getPecasBrancas()){
 						for(Posicao posicao : listaPosicoes){
 							/*verifica se as pecas brancas ameaçam as posicoes pelas quais o rei preto vai passar*/
 							if (pecaBranca.capturar(posicao)) {
@@ -369,13 +371,13 @@ public class Control {
 	 */
 	private void roqueMaiorPreto() throws RoqueInvalidoReiMovimentadoException, RoqueInvalidoTorreMovimentadaException, RoqueInvalidoCaminhoBloqueadoException, RoqueInvalidoReiAmeacadoException{
 		
-		PecaAbstrata rei = jogo.getTabuleiro().getCasas(4, 7);
-		PecaAbstrata torre = jogo.getTabuleiro().getCasas(0, 7);
+		Peca rei = jogo.getTabuleiro().getCasas(4, 7);
+		Peca torre = jogo.getTabuleiro().getCasas(0, 7);
 		
 		/*verifica se o rei ja se movimentou*/
-		if(rei != null && rei.getNome().equals(NomePecas.rei) && !rei.isSeMovimentou()){
+		if(rei != null && rei.getNome().equals(NomePecas.Rei) && !rei.isSeMovimentou()){
 			/*verifica se a torre ja se movimentou*/
-			if(torre != null && torre.getNome().equals(NomePecas.torre) && !torre.isSeMovimentou()){
+			if(torre != null && torre.getNome().equals(NomePecas.Torre) && !torre.isSeMovimentou()){
 				/*verifica se as posicoes entre o rei e a torre estao vazias*/
 				if(jogo.getTabuleiro().getCasas(1, 7) == null && jogo.getTabuleiro().getCasas(2, 7) == null && jogo.getTabuleiro().getCasas(3, 7) == null){
 					List<Posicao> listaPosicoes = new ArrayList<>();
@@ -383,7 +385,7 @@ public class Control {
 					listaPosicoes.add(new Posicao(3, 7));
 					listaPosicoes.add(new Posicao(2, 7));
 					listaPosicoes.add(new Posicao(1, 7));
-					for(PecaAbstrata pecaBranca : jogo.getTabuleiro().getPecasBrancas()){
+					for(Peca pecaBranca : jogo.getTabuleiro().getPecasBrancas()){
 						for(Posicao posicao : listaPosicoes){
 							/*verifica se as pecas brancas ameaçam as posicoes pelas quais o rei preto vai passar*/
 							if (pecaBranca.capturar(posicao)) {
@@ -492,9 +494,9 @@ public class Control {
 	 * @param pecasAtacantes - lista de peças do jogador que está ameaçando o rei.
 	 * @return true se o rei está em xeque.
 	 */
-	private boolean validarXeque(Posicao posicaoRei, List<PecaAbstrata> pecasAtacantes) {
+	private boolean validarXeque(Posicao posicaoRei, List<Peca> pecasAtacantes) {
 		
-		for (PecaAbstrata peca : pecasAtacantes) {
+		for (Peca peca : pecasAtacantes) {
 			/* verifica se a peca consegue capturar o rei */
 			if (peca.capturar(posicaoRei)) {
 				/*
@@ -515,7 +517,7 @@ public class Control {
 	 * @param pecasAtacantes - lista de peças do jogador que está ameaçando o rei
 	 * @return true se o rei está sob xeque-mate
 	 */
-	private boolean validarXequeMate(Posicao posicaoRei, List<PecaAbstrata> pecasAtacantes) {
+	private boolean validarXequeMate(Posicao posicaoRei, List<Peca> pecasAtacantes) {
 		
 		/*quantidade de posicoes seguras que o rei pode se movimentar*/
 		int posicoesSeguras;
@@ -527,7 +529,7 @@ public class Control {
 		
 		/*para cada posicao possivel, verifica se ela esta sob ameaca*/
 		for (Posicao posicao : posicoesAdjacentesRei) {
-			for (PecaAbstrata peca : pecasAtacantes) {
+			for (Peca peca : pecasAtacantes) {
 				/* verifica se a peca consegue capturar o rei */
 				if(peca.capturar(posicao)){
 					/*
@@ -587,7 +589,7 @@ public class Control {
 		
 		while(iterator.hasNext()){
 			Posicao posicao = iterator.next();
-			PecaAbstrata peca = jogo.getTabuleiro().getCasas(posicao.getColuna(), posicao.getLinha());
+			Peca peca = jogo.getTabuleiro().getCasas(posicao.getColuna(), posicao.getLinha());
 			/*se a peca for null, nao eh preciso remover, pois o rei pode se movimentar para la*/
 			if(peca != null){
 				/*se a peca NAO for null, eh preciso verificar se a peca eh da mesma cor que o rei.
@@ -770,7 +772,7 @@ public class Control {
 	 */
 	private void movimentarPeca(Posicao posicaoInicial, Posicao posicaoFinal) throws PecaAlheiaException, MovimentoInvalidoException, CaminhoBloqueadoException, CasaVaziaException{
 		
-		PecaAbstrata peca = jogo.getTabuleiro().getCasas(posicaoInicial.getColuna(), posicaoInicial.getLinha());
+		Peca peca = jogo.getTabuleiro().getCasas(posicaoInicial.getColuna(), posicaoInicial.getLinha());
 		if(peca == null)
 			throw new CasaVaziaException();
 
@@ -782,7 +784,7 @@ public class Control {
 				/*verifica se a peca possui caminho desobstruido para fazer o movimento*/
 				if(jogo.getTabuleiro().verificaCaminhoMovimento(posicaoInicial, posicaoFinal)){
 					/*se a peca movida for um rei, atualiza sua posicao*/
-					if(peca.getNome().equals(NomePecas.rei)){
+					if(peca.getNome().equals(NomePecas.Rei)){
 						if(peca.getCor().equals(Cores.branco))
 							jogo.getTabuleiro().setPosicaoReiBranco(posicaoFinal);
 						else
@@ -810,7 +812,7 @@ public class Control {
 	 */
 	private void capturarPeca(Posicao posicaoInicial, Posicao posicaoFinal) throws CasaVaziaException, PecaAlheiaException, CaminhoBloqueadoException, MovimentoInvalidoException, CapturaInvalidaPecaInexistenteException, CapturaInvalidaPecaPropriaException{
 				
-		PecaAbstrata peca = jogo.getTabuleiro().getCasas(posicaoInicial.getColuna(), posicaoInicial.getLinha());
+		Peca peca = jogo.getTabuleiro().getCasas(posicaoInicial.getColuna(), posicaoInicial.getLinha());
 		if(peca == null)
 			throw new CasaVaziaException();
 		
@@ -821,14 +823,14 @@ public class Control {
 			if (peca.capturar(posicaoFinal)) {
 				/*verifica se a peca possui caminho desobstruido para fazer o movimento*/
 				if(jogo.getTabuleiro().verificaCaminhoCaptura(posicaoInicial, posicaoFinal, jogo)){
-					if(peca.getNome().equals(NomePecas.rei)){
+					if(peca.getNome().equals(NomePecas.Rei)){
 						if(peca.getCor().equals(Cores.branco))
 							jogo.getTabuleiro().setPosicaoReiBranco(posicaoFinal);
 						else
 							jogo.getTabuleiro().setPosicaoReiPreto(posicaoFinal);
 						peca.actMovimentou();
 					}
-					PecaAbstrata pecaCapturada = jogo.getTabuleiro().capturarPeca(posicaoInicial, posicaoFinal);
+					Peca pecaCapturada = jogo.getTabuleiro().capturarPeca(posicaoInicial, posicaoFinal);
 					/*retira a peca capturada das pecas que o jogador possui*/
 					if(jogo.getVez().equals(jogo.getBranco()))
 						jogo.getTabuleiro().getPecasPretas().remove(pecaCapturada);

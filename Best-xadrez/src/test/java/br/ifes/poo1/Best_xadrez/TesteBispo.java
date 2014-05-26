@@ -1,33 +1,31 @@
 package br.ifes.poo1.Best_xadrez;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
+import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
-import ifes.poo1.xadrez.model.cdp.pecas.Bispo;
-import ifes.poo1.xadrez.model.cdp.pecas.PecaAbstrata;
+import ifes.poo1.xadrez.model.cdp.pecas.Peca;
+import ifes.poo1.xadrez.model.cdp.pecas.factory.PecasPool;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
 
-public class BispoTeste {
-
+public class TesteBispo {
+	PecasPool pp = PecasPool.getInstanceOf();
 	Tabuleiro tabuleiro;
 	List<Posicao> posicoesPossiveis;
 	
 	
 	@Test
-	public void testaMoverCapturar(){
+	public void testaBispo(){
 		
 		tabuleiro = new Tabuleiro();
-		
 		posicoesPossiveis = new ArrayList<>();
 		
-		PecaAbstrata bispo = new Bispo(Cores.preto);
+		Peca bispo = pp.getPeca(NomePecas.Bispo, Cores.branco);
 		bispo.setPosicao(new Posicao(4, 3));
 		tabuleiro.setCasas(bispo, 4, 3);
 		posicoesPossiveis = tabuleiro.posicoesPossiveisPeca(bispo.getPosicao());

@@ -16,7 +16,6 @@ public class ReiTeste {
 
 	Tabuleiro tabuleiro;
 	List<Posicao> posicoesPossiveis;
-
 	@Test
 	public void testaMoverCapturar(){
 		
@@ -34,5 +33,6 @@ public class ReiTeste {
 		}
 	
 	}
+	
 
 }

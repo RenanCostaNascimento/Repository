@@ -4,26 +4,22 @@ import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
-import ifes.poo1.xadrez.model.cdp.pecas.Bispo;
-import ifes.poo1.xadrez.model.cdp.pecas.Cavalo;
-import ifes.poo1.xadrez.model.cdp.pecas.Peao;
-import ifes.poo1.xadrez.model.cdp.pecas.PecaAbstrata;
-import ifes.poo1.xadrez.model.cdp.pecas.Rainha;
-import ifes.poo1.xadrez.model.cdp.pecas.Rei;
-import ifes.poo1.xadrez.model.cdp.pecas.Torre;
+import ifes.poo1.xadrez.model.cdp.pecas.Peca;
+import ifes.poo1.xadrez.model.cdp.tabuleiro.builder.TabuleiroAssembler;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
-import ifes.poo1.xadrez.util.exception.RoqueInvalidoReiMovimentadoException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Tabuleiro {
-
-	private PecaAbstrata[][] casas = new PecaAbstrata[8][8];
-	private List<PecaAbstrata> pecasBrancas = new ArrayList<>();
-	private List<PecaAbstrata> pecasPretas = new ArrayList<>();
-        private Posicao ultimaMovida = null;
+	private TabuleiroAssembler tabAsm = TabuleiroAssembler.getInstanceOf();
+	private Peca[][] casas = tabAsm.getCasas();
+	private List<Peca> pecasBrancas = tabAsm.getPecasBrancas();
+	private List<Peca> pecasPretas = tabAsm.getPecasBrancas();
+    private Posicao ultimaMovida = null;
+	private Posicao posicaoReiBranco = new Posicao(4, 0);
+	private Posicao posicaoReiPreto = new Posicao(4, 7);
 	/*
 	 * posicaoReiBranco e posicaoReiPreto serao usados para determinar se houve
 	 * cheque ou cheque-mate
@@ -34,119 +30,12 @@ public class Tabuleiro {
 	 * reis sempre que a verificacao do xeque for realizada
 	 */
         
-	private Posicao posicaoReiBranco;
-	private Posicao posicaoReiPreto;
 
-	// o met�do construtor insere as pe�as no tabuleiro
-	public Tabuleiro() {
-
-		// inserindo os pe�es
-		for (int i = 0; i < 8; i++) {
-			PecaAbstrata peao = new Peao(Cores.branco);
-			casas[1][i] = peao;
-			pecasBrancas.add(peao);
-			peao.setPosicao(new Posicao(i, 1));
-
-			peao = new Peao(Cores.preto);
-			casas[6][i] = peao;
-			pecasPretas.add(peao);
-			peao.setPosicao(new Posicao(i, 6));
-
-		}
-
-		// inserindo as torres
-		PecaAbstrata torre = new Torre(Cores.branco);
-		casas[0][0] = torre;
-		pecasBrancas.add(torre);
-		torre.setPosicao(new Posicao(0, 0));
-
-		torre = new Torre(Cores.branco);
-		casas[0][7] = torre;
-		pecasBrancas.add(torre);
-		torre.setPosicao(new Posicao(7, 0));
-
-		torre = new Torre(Cores.preto);
-		casas[7][0] = torre;
-		pecasPretas.add(torre);
-		torre.setPosicao(new Posicao(0, 7));
-
-		torre = new Torre(Cores.preto);
-		casas[7][7] = torre;
-		pecasPretas.add(torre);
-		torre.setPosicao(new Posicao(7, 7));
-
-		// inserindo os cavalos
-		PecaAbstrata cavalo = new Cavalo(Cores.branco);
-		casas[0][1] = cavalo;
-		pecasBrancas.add(cavalo);
-		cavalo.setPosicao(new Posicao(1, 0));
-
-		cavalo = new Cavalo(Cores.branco);
-		casas[0][6] = cavalo;
-		pecasBrancas.add(cavalo);
-		cavalo.setPosicao(new Posicao(6, 0));
-
-		cavalo = new Cavalo(Cores.preto);
-		casas[7][1] = cavalo;
-		pecasPretas.add(cavalo);
-		cavalo.setPosicao(new Posicao(1, 7));
-
-		cavalo = new Cavalo(Cores.preto);
-		casas[7][6] = cavalo;
-		pecasPretas.add(cavalo);
-		cavalo.setPosicao(new Posicao(6, 7));
-
-		// inserindo os bispos
-		PecaAbstrata bispo = new Bispo(Cores.branco);
-		casas[0][2] = bispo;
-		pecasBrancas.add(bispo);
-		bispo.setPosicao(new Posicao(2, 0));
-
-		bispo = new Bispo(Cores.branco);
-		casas[0][5] = bispo;
-		pecasBrancas.add(bispo);
-		bispo.setPosicao(new Posicao(5, 0));
-
-		bispo = new Bispo(Cores.preto);
-		casas[7][2] = bispo;
-		pecasPretas.add(bispo);
-		bispo.setPosicao(new Posicao(2, 7));
-
-		bispo = new Bispo(Cores.preto);
-		casas[7][5] = bispo;
-		pecasPretas.add(bispo);
-		bispo.setPosicao(new Posicao(5, 7));
-
-		// inserindo rei e dama
-		PecaAbstrata rei = new Rei(Cores.branco);
-		casas[0][4] = rei;
-		pecasBrancas.add(rei);
-		rei.setPosicao(new Posicao(4, 0));
-		posicaoReiBranco = new Posicao(4, 0);
-
-		rei = new Rei(Cores.preto);
-		casas[7][4] = rei;
-		pecasPretas.add(rei);
-		rei.setPosicao(new Posicao(4, 7));
-		posicaoReiPreto = new Posicao(4, 7);
-
-		PecaAbstrata dama = new Rainha(Cores.branco);
-		casas[0][3] = dama;
-		pecasBrancas.add(dama);
-		dama.setPosicao(new Posicao(3, 0));
-
-		dama = new Rainha(Cores.preto);
-		casas[7][3] = dama;
-		pecasPretas.add(dama);
-		dama.setPosicao(new Posicao(3, 7));
-
-	}
-
-	public PecaAbstrata getCasas(int coluna, int linha) {
+	public Peca getCasas(int coluna, int linha) {
 		return casas[linha][coluna];
 	}
 
-	public void setCasas(PecaAbstrata peca, int coluna, int linha) {
+	public void setCasas(Peca peca, int coluna, int linha) {
 		this.casas[linha][coluna] = peca;           
 	}
         
@@ -162,7 +51,7 @@ public class Tabuleiro {
 	public void moverPeca(int colunaInicial, int linhaInicial, int colunaFinal,
 			int linhaFinal) {
 
-		PecaAbstrata peca = this.getCasas(colunaInicial, linhaInicial);
+		Peca peca = this.getCasas(colunaInicial, linhaInicial);
 		this.setCasas(peca, colunaFinal, linhaFinal);
 		this.setCasas(null, colunaInicial, linhaInicial);
 		peca.getPosicao().setColuna(colunaFinal);
@@ -179,12 +68,12 @@ public class Tabuleiro {
          * @param posicaoFinal
          * @return 
          */
-	public PecaAbstrata capturarPeca(Posicao posicaoInicial,
+	public Peca capturarPeca(Posicao posicaoInicial,
 			Posicao posicaoFinal) {
 
-		PecaAbstrata peca = this.getCasas(posicaoInicial.getColuna(),
+		Peca peca = this.getCasas(posicaoInicial.getColuna(),
 				posicaoInicial.getLinha());
-		PecaAbstrata pecaCapturada = this.getCasas(posicaoFinal.getColuna(),
+		Peca pecaCapturada = this.getCasas(posicaoFinal.getColuna(),
 				posicaoFinal.getLinha());
 		this.setCasas(peca, posicaoFinal.getColuna(), posicaoFinal.getLinha());
 		this.setCasas(null, posicaoInicial.getColuna(),
@@ -252,7 +141,7 @@ public class Tabuleiro {
 	public List<Posicao> posicoesPossiveisPeca(Posicao posicao) {
 
 		List<Posicao> posicoesPossiveis = new ArrayList<>();
-		PecaAbstrata peca = this.getCasas(posicao.getColuna(),
+		Peca peca = this.getCasas(posicao.getColuna(),
 				posicao.getLinha());
 
 		switch (peca.toString()) {
@@ -318,7 +207,7 @@ public class Tabuleiro {
 			 * verificar a linha, pois a mesma nao eh alterada
 			 */
 			while (colunaAtual >= 0 && colunaAtual <= 7) {
-				PecaAbstrata peca = this.getCasas(colunaAtual, linhaAtual);
+				Peca peca = this.getCasas(colunaAtual, linhaAtual);
 				/* verifica se tem alguma coisa na posicao */
 				if (peca != null) {
 					/*
@@ -347,7 +236,7 @@ public class Tabuleiro {
 			 * verificar a coluna, pois a mesma nao eh alterada
 			 */
 			while (linhaAtual >= 0 && linhaAtual <= 7) {
-				PecaAbstrata peca = this.getCasas(colunaAtual, linhaAtual);
+				Peca peca = this.getCasas(colunaAtual, linhaAtual);
 				/* verifica se tem alguma coisa na posicao */
 				if (peca != null) {
 					/*
@@ -407,7 +296,7 @@ public class Tabuleiro {
 				/* verifica se a posicao esta dentro do tabuleiro */
 				while (colunaAtual >= 0 && colunaAtual <= 7 && linhaAtual >= 0
 						&& linhaAtual <= 7) {
-					PecaAbstrata peca = this.getCasas(colunaAtual, linhaAtual);
+					Peca peca = this.getCasas(colunaAtual, linhaAtual);
 					/* verifica se tem alguma coisa na posicao */
 					if (peca != null) {
 						/*
@@ -464,7 +353,7 @@ public class Tabuleiro {
 	private List<Posicao> posicoesPossiveisRei(Posicao posicao) {
 
 		List<Posicao> posicoesPossiveis = new ArrayList<>();
-		PecaAbstrata peca;
+		Peca peca;
 		int coluna;
 		int linha;
 
@@ -534,7 +423,7 @@ public class Tabuleiro {
 				/* verifica se a posicao esta dentro do tabuleiro */
 				if (colunaAtual >= 0 && colunaAtual <= 7) {
 					if (linhaAtual >= 0 && linhaAtual <= 7) {
-						PecaAbstrata peca = this.getCasas(colunaAtual,
+						Peca peca = this.getCasas(colunaAtual,
 								linhaAtual);
 						/* verifica se tem alguma coisa na posicao */
 						if (peca != null) {
@@ -558,7 +447,7 @@ public class Tabuleiro {
 				/* verifica se a posicao esta dentro do tabuleiro */
 				if (colunaAtual >= 0 && colunaAtual <= 7) {
 					if (linhaAtual >= 0 && linhaAtual <= 7) {
-						PecaAbstrata peca = this.getCasas(colunaAtual,
+						Peca peca = this.getCasas(colunaAtual,
 								linhaAtual);
 						/* verifica se tem alguma coisa na posicao */
 						if (peca != null) {
@@ -608,7 +497,7 @@ public class Tabuleiro {
 	private List<Posicao> capturasPossiveisPeaoPreto(Posicao posicao) {
 
 		List<Posicao> capturasPossiveis = new ArrayList<>();
-		PecaAbstrata peca;
+		Peca peca;
 
 		/* verifica se nao esta na primeira linha */
 		if (posicao.getLinha() - 1 >= 0) {
@@ -749,8 +638,7 @@ public class Tabuleiro {
 		}
 		// verifica a peca que se deseja capturar eh da mesma cor que o jogador
 		// que fez a captura
-		if (getCasas(posicaoFinal.getColuna(), posicaoFinal.getLinha())
-				.getCor().equals(jogo.getVez().getCor())) {
+		if (getCasas(posicaoFinal.getColuna(), posicaoFinal.getLinha()).getCor().equals(jogo.getVez().getCor())) {
 			throw new CapturaInvalidaPecaPropriaException();
 		}
 
@@ -765,7 +653,7 @@ public class Tabuleiro {
 
 	public boolean verificaCaminhos(Posicao posicaoInicial, Posicao posicaoFinal) {
 
-		PecaAbstrata peca = getCasas(posicaoInicial.getColuna(),
+		Peca peca = getCasas(posicaoInicial.getColuna(),
 				posicaoInicial.getLinha());
 
 		switch (peca.toString()) {
@@ -819,27 +707,27 @@ public class Tabuleiro {
 		return true;
 	}
 
-	public PecaAbstrata[][] getCasas() {
+	public Peca[][] getCasas() {
 		return casas;
 	}
 
-	public void setCasas(PecaAbstrata[][] casas) {
+	public void setCasas(Peca[][] casas) {
 		this.casas = casas;
 	}
 
-	public List<PecaAbstrata> getPecasBrancas() {
+	public List<Peca> getPecasBrancas() {
 		return pecasBrancas;
 	}
 
-	public void setPecasBrancas(List<PecaAbstrata> pecasBrancas) {
+	public void setPecasBrancas(List<Peca> pecasBrancas) {
 		this.pecasBrancas = pecasBrancas;
 	}
 
-	public List<PecaAbstrata> getPecasPretas() {
+	public List<Peca> getPecasPretas() {
 		return pecasPretas;
 	}
 
-	public void setPecasPretas(List<PecaAbstrata> pecasPretas) {
+	public void setPecasPretas(List<Peca> pecasPretas) {
 		this.pecasPretas = pecasPretas;
 	}
 
@@ -862,8 +750,8 @@ public class Tabuleiro {
         public boolean enPassaint(Posicao posicaoPeao){
             
             
-            if ((this.getCasas(ultimaMovida.getColuna(), ultimaMovida.getLinha()).getNome() == NomePecas.peao)//se a **ULTIMA MOVIDA** é um peão
-                &&(this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).getNome() == NomePecas.peao) //se o que você quer mover é um peão
+            if ((this.getCasas(ultimaMovida.getColuna(), ultimaMovida.getLinha()).getNome() == NomePecas.Peao)//se a **ULTIMA MOVIDA** é um peão
+                &&(this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).getNome() == NomePecas.Peao) //se o que você quer mover é um peão
                 &&(Math.abs(posicaoPeao.getColuna() - ultimaMovida.getColuna()) == 1) //verifica se estão em colunas adjacentes    
                 &&(posicaoPeao.getLinha() == ultimaMovida.getLinha() )//verifica se os dois peões estão na mesma linha
                 &&((ultimaMovida.getLinha() == 4 && getCasas(ultimaMovida.getColuna(),ultimaMovida.getLinha()).getCor() == Cores.preto )
