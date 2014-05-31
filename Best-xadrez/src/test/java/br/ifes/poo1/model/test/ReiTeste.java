@@ -19,18 +19,18 @@ public class ReiTeste {
 	@Test
 	public void testaMoverCapturar(){
 		
-//		tabuleiro = new Tabuleiro();
-//		
-//		posicoesPossiveis = new ArrayList<>();
-//		
-//		PecaAbstrata rei = new Rei(Cores.preto);
-//		rei.setPosicao(new Posicao(4, 3));
-//		tabuleiro.setCasas(rei, 4, 3);
-//		posicoesPossiveis = tabuleiro.posicoesPossiveisPeca(rei.getPosicao());
-//		
-//		for(Posicao posicao : posicoesPossiveis){
-//			assertTrue(tabuleiro.getCasas(4, 3).mover(posicao));
-//		}
+            tabuleiro = new Tabuleiro();
+
+            posicoesPossiveis = new ArrayList<>();
+
+            PecaAbstrata rei = new Rei();
+            rei.setPosicao(new Posicao(4, 3));
+            tabuleiro.setCasas(rei, 4, 3);
+            posicoesPossiveis = tabuleiro.posicoesPossiveisPeca(rei.getPosicao());
+
+            for (Posicao posicao : posicoesPossiveis) {
+                assertTrue(tabuleiro.getCasas(4, 3).mover(posicao));
+            }
 	
 	}
 	

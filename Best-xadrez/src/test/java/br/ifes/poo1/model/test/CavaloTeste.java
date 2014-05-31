@@ -1,7 +1,6 @@
 package br.ifes.poo1.model.test;
 
 import static org.junit.Assert.assertTrue;
-import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.Cavalo;
 import ifes.poo1.xadrez.model.cdp.pecas.PecaAbstrata;
@@ -20,18 +19,18 @@ public class CavaloTeste {
 	@Test
 	public void testaMoverCapturar(){
 		
-//		tabuleiro = new Tabuleiro();
-//		
-//		posicoesPossiveis = new ArrayList<>();
-//		
-//		PecaAbstrata cavalo = new Cavalo(Cores.preto);
-//		cavalo.setPosicao(new Posicao(4, 3));
-//		tabuleiro.setCasas(cavalo, 4, 3);
-//		posicoesPossiveis = tabuleiro.posicoesPossiveisPeca(cavalo.getPosicao());
-//		
-//		for(Posicao posicao : posicoesPossiveis){
-//			assertTrue(tabuleiro.getCasas(4, 3).mover(posicao));
-//		}
+            tabuleiro = new Tabuleiro();
+
+            posicoesPossiveis = new ArrayList<>();
+
+            PecaAbstrata cavalo = new Cavalo();
+            cavalo.setPosicao(new Posicao(4, 3));
+            tabuleiro.setCasas(cavalo, 4, 3);
+            posicoesPossiveis = tabuleiro.posicoesPossiveisPeca(cavalo.getPosicao());
+
+            for (Posicao posicao : posicoesPossiveis) {
+                assertTrue(tabuleiro.getCasas(4, 3).mover(posicao));
+            }
 	
 	}
 	

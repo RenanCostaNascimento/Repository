@@ -3,52 +3,55 @@ package ifes.poo1.xadrez.model.cdp.pecas;
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
+
 /**
  * Classe da Peça Rei.
+ *
  * @param Cores.branco ou Cores.preto - cor da peça.
  */
 public class Rei extends PecaAbstrata {
-	
-	private boolean seMovimentou = false;
-	
-	
-	
-	public Rei(Cores cor) {
-		
-		super(NomePecas.Rei, 999, cor);
-		// TODO Auto-generated constructor stub
-	}
-	
-	@Override
-	public String toString() {
-		return "R";
-	}
-	
-	@Override
-	public boolean mover(Posicao posicaoFinal) {
 
-		if ((Math.abs(posicaoFinal.getColuna() - getPosicao().getColuna()) <= 1)
-				&& (Math.abs(posicaoFinal.getLinha() - getPosicao().getLinha()) <= 1)){
-                    this.actMovimentou();
-                    return true;
-                }
-			
+    private boolean seMovimentou = false;
 
-		return false;
+    public Rei() {
 
-	}
+        super(NomePecas.Rei, 999, null);
+    }
 
-	@Override
-	public boolean capturar(Posicao posicaoFinal) {
+    public Rei(Cores cor) {
 
-		if ((Math.abs(posicaoFinal.getColuna() - getPosicao().getColuna()) <= 1)
-				&& (Math.abs(posicaoFinal.getLinha() - getPosicao().getLinha()) <= 1)){
-                    this.actMovimentou();
-                    return true;
-                }
+        super(NomePecas.Rei, 999, cor);
+    }
 
-		return false;
+    @Override
+    public String toString() {
+        return "R";
+    }
 
-	}
+    @Override
+    public boolean mover(Posicao posicaoFinal) {
+
+        if ((Math.abs(posicaoFinal.getColuna() - getPosicao().getColuna()) <= 1)
+                && (Math.abs(posicaoFinal.getLinha() - getPosicao().getLinha()) <= 1)) {
+            this.actMovimentou();
+            return true;
+        }
+
+        return false;
+
+    }
+
+    @Override
+    public boolean capturar(Posicao posicaoFinal) {
+
+        if ((Math.abs(posicaoFinal.getColuna() - getPosicao().getColuna()) <= 1)
+                && (Math.abs(posicaoFinal.getLinha() - getPosicao().getLinha()) <= 1)) {
+            this.actMovimentou();
+            return true;
+        }
+
+        return false;
+
+    }
 
 }

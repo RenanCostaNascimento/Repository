@@ -3,54 +3,69 @@ package ifes.poo1.xadrez.model.cdp.pecas;
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
+
 /**
  * Classe da Peça Bispo.
+ *
  * @param Cores.branco ou Cores.preto - cor da peça.
  */
-public class Bispo extends PecaAbstrata{
-	
-	public Bispo(Cores cor) {
-		super(NomePecas.Bispo, 3, cor);
-		
-		// TODO Auto-generated constructor stub
-	}
+public class Bispo extends PecaAbstrata {
 
-	@Override
-	public String toString() {
-		return "B";
-	}
+    public Bispo() {
+        super(NomePecas.Bispo, 3, null);
+    }
 
-	@Override
-	public boolean mover(Posicao posicaoFinal) {
+    public Bispo(Cores cor) {
+        super(NomePecas.Bispo, 3, cor);
+    }
 
-		
-		for (int aux = 0; aux < 8; aux++){
-			if ((getPosicao().getColuna()+aux == posicaoFinal.getColuna()) && (getPosicao().getLinha()+aux == posicaoFinal.getLinha())) return true;
-			if ((getPosicao().getColuna()-aux == posicaoFinal.getColuna()) && (getPosicao().getLinha()-aux == posicaoFinal.getLinha())) return true;
-			if ((getPosicao().getColuna()+aux == posicaoFinal.getColuna()) && (getPosicao().getLinha()-aux == posicaoFinal.getLinha())) return true;
-			if ((getPosicao().getColuna()-aux == posicaoFinal.getColuna()) && (getPosicao().getLinha()+aux == posicaoFinal.getLinha())) return true;
-		}
-		
-		return false;
-		
-	}
+    @Override
+    public String toString() {
+        return "B";
+    }
 
-	@Override
-	public boolean capturar(Posicao posicaoFinal ) {
+    @Override
+    public boolean mover(Posicao posicaoFinal) {
 
-		for (int aux = 0; aux < 8; aux++){
-			if ((getPosicao().getColuna()+aux == posicaoFinal.getColuna()) && (getPosicao().getLinha()+aux == posicaoFinal.getLinha())) return true;
-			if ((getPosicao().getColuna()-aux == posicaoFinal.getColuna()) && (getPosicao().getLinha()-aux == posicaoFinal.getLinha())) return true;
-			if ((getPosicao().getColuna()+aux == posicaoFinal.getColuna()) && (getPosicao().getLinha()-aux == posicaoFinal.getLinha())) return true;
-			if ((getPosicao().getColuna()-aux == posicaoFinal.getColuna()) && (getPosicao().getLinha()+aux == posicaoFinal.getLinha())) return true;
-		}
-		
-		return false;
-		
-	}
+        for (int aux = 0; aux < 8; aux++) {
+            if ((getPosicao().getColuna() + aux == posicaoFinal.getColuna()) && (getPosicao().getLinha() + aux == posicaoFinal.getLinha())) {
+                return true;
+            }
+            if ((getPosicao().getColuna() - aux == posicaoFinal.getColuna()) && (getPosicao().getLinha() - aux == posicaoFinal.getLinha())) {
+                return true;
+            }
+            if ((getPosicao().getColuna() + aux == posicaoFinal.getColuna()) && (getPosicao().getLinha() - aux == posicaoFinal.getLinha())) {
+                return true;
+            }
+            if ((getPosicao().getColuna() - aux == posicaoFinal.getColuna()) && (getPosicao().getLinha() + aux == posicaoFinal.getLinha())) {
+                return true;
+            }
+        }
 
+        return false;
 
+    }
 
+    @Override
+    public boolean capturar(Posicao posicaoFinal) {
 
+        for (int aux = 0; aux < 8; aux++) {
+            if ((getPosicao().getColuna() + aux == posicaoFinal.getColuna()) && (getPosicao().getLinha() + aux == posicaoFinal.getLinha())) {
+                return true;
+            }
+            if ((getPosicao().getColuna() - aux == posicaoFinal.getColuna()) && (getPosicao().getLinha() - aux == posicaoFinal.getLinha())) {
+                return true;
+            }
+            if ((getPosicao().getColuna() + aux == posicaoFinal.getColuna()) && (getPosicao().getLinha() - aux == posicaoFinal.getLinha())) {
+                return true;
+            }
+            if ((getPosicao().getColuna() - aux == posicaoFinal.getColuna()) && (getPosicao().getLinha() + aux == posicaoFinal.getLinha())) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
 
 }

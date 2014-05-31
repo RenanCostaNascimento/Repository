@@ -22,17 +22,17 @@ public class TesteBispo {
 	@Test
 	public void testaBispo(){
 		
-//		tabuleiro = new Tabuleiro();
-//		posicoesPossiveis = new ArrayList<>();
-//		
-//		Peca bispo = pp.getPeca(NomePecas.Bispo, Cores.branco);
-//		bispo.setPosicao(new Posicao(4, 3));
-//		tabuleiro.setCasas(bispo, 4, 3);
-//		posicoesPossiveis = tabuleiro.posicoesPossiveisPeca(bispo.getPosicao());
-//		
-//		for(Posicao posicao : posicoesPossiveis){
-//			assertTrue(tabuleiro.getCasas(4, 3).mover(posicao));
-//		}
+            tabuleiro = new Tabuleiro();
+            posicoesPossiveis = new ArrayList<>();
+
+            Peca bispo = pp.getPeca(NomePecas.Bispo, Cores.branco);
+            bispo.setPosicao(new Posicao(4, 3));
+            tabuleiro.setCasas(bispo, 4, 3);
+            posicoesPossiveis = tabuleiro.posicoesPossiveisPeca(bispo.getPosicao());
+
+            for (Posicao posicao : posicoesPossiveis) {
+                assertTrue(tabuleiro.getCasas(4, 3).mover(posicao));
+            }
 	
 	}
 	
