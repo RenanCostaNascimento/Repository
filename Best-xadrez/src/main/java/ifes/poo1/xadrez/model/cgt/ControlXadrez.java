@@ -35,15 +35,17 @@ import java.util.Random;
  * @author Renan
  *
  */
-public class Control {
+public class ControlXadrez {
 	
 	private ControladorTelas controladorTela = new ControladorTelas();
 	private Jogo jogo;
 	private ArrayList<HistoricoPartida> partidas = new ArrayList<>();
 	private ArrayList<HistoricoJogador> jogadores = new ArrayList<>();
 	private HighScore highScore;
+          
+                        
 	
-	public Control(){
+	public ControlXadrez(){
 		highScore = new HighScore();
 		partidas = highScore.getPartidasAntigos();
 		jogadores = highScore.getJogadoresAntigos();
@@ -892,7 +894,7 @@ public class Control {
 	/** Inicia um jogo singleplayer.
 	 * @param nomeJogadores - o vetor contendo os dois nomes dos participantes.
 	 */
-	private void iniciarJogoSingleplayer(String[] nomeJogadores) {
+	public void iniciarJogoSingleplayer(String[] nomeJogadores) {
 		
 		Jogador branco = new Jogador(nomeJogadores[0], Cores.branco);
 		Jogador preto = new Jogador(nomeJogadores[1], Cores.preto);

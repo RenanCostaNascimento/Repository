@@ -9,24 +9,29 @@ import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.Peca;
 import ifes.poo1.xadrez.model.cdp.pecas.factory.PecasPool;
 
+public class TabuleiroAssembler implements Cloneable {
 
-public class TabuleiroAssembler implements Cloneable{
-	
-	private Peca[][] casas = new Peca[8][8];
-	private ArrayList<Peca> pecasBrancas = new ArrayList<>();
-	private ArrayList<Peca> pecasPretas = new ArrayList<>();
-	private PecasPool pecasPool = PecasPool.getInstanceOf();
+	private final Peca[][] casas = new Peca[8][8];
+	private final ArrayList<Peca> pecasBrancas = new ArrayList<>();
+	private final ArrayList<Peca> pecasPretas = new ArrayList<>();
+	private final PecasPool pecasPool = PecasPool.getInstanceOf();
 	private static TabuleiroAssembler tabAsm = null;
-	
-	public static TabuleiroAssembler getInstanceOf(){
-		if (tabAsm == null) tabAsm = new TabuleiroAssembler();
+
+	public static TabuleiroAssembler getInstanceOf() {
+		if (tabAsm == null) {
+			tabAsm = new TabuleiroAssembler();
+		}
+		tabAsm.createTabuleiro();
 		return tabAsm;
 	}
-	
-	
+
 	private TabuleiroAssembler() {
+		this.createTabuleiro();
+	}
+
+	public void createTabuleiro() {
 		Peca peca;
-		
+
 		// inserindo os pe�es
 		for (int i = 0; i < 8; i++) {
 			peca = pecasPool.getPeca(NomePecas.Peao, Cores.branco);
@@ -109,13 +114,11 @@ public class TabuleiroAssembler implements Cloneable{
 		casas[0][4] = peca;
 		pecasBrancas.add(peca);
 		peca.setPosicao(new Posicao(4, 0));
-		
 
 		peca = pecasPool.getPeca(NomePecas.Rei, Cores.preto);
 		casas[7][4] = peca;
 		pecasPretas.add(peca);
 		peca.setPosicao(new Posicao(4, 7));
-		
 
 		peca = pecasPool.getPeca(NomePecas.Rainha, Cores.branco);
 		casas[0][3] = peca;
@@ -129,23 +132,27 @@ public class TabuleiroAssembler implements Cloneable{
 
 	}
 
-	public Peca[][] getCasas(){
-		return casas.clone();
+	public Peca[][] getCasas() {
+		Peca[][] cloneDasCasas = new Peca[8][8];
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				cloneDasCasas[i][j] = casas[i][j].clone();
+			}
+		}
+
+		return cloneDasCasas;
 	}
-	
-	
 
 	public ArrayList<Peca> getPecasBrancas() {
 		@SuppressWarnings("unchecked")
 		ArrayList<Peca> clone = (ArrayList<Peca>) pecasBrancas.clone();
 		return clone;
 	}
-	
-	public List<Peca> getPecasPretas(){
+
+	public List<Peca> getPecasPretas() {
 		@SuppressWarnings("unchecked")
 		ArrayList<Peca> clone = (ArrayList<Peca>) pecasPretas.clone();
 		return clone;
 	}
-	
-	
+
 }

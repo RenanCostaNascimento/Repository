@@ -5,6 +5,7 @@ import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.Peca;
+import ifes.poo1.xadrez.model.cdp.pecas.factory.PecasPool;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.builder.TabuleiroAssembler;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
@@ -13,172 +14,271 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tabuleiro {
-	private TabuleiroAssembler tabAsm = TabuleiroAssembler.getInstanceOf();
-	private Peca[][] casas = tabAsm.getCasas();
-	private List<Peca> pecasBrancas = tabAsm.getPecasBrancas();
-	private List<Peca> pecasPretas = tabAsm.getPecasBrancas();
-    private Posicao ultimaMovida = null;
+	private Peca[][] casas = new Peca[8][8];
+	private List<Peca> pecasBrancas = new ArrayList<>();
+	private List<Peca> pecasPretas = new ArrayList<>();
+	private Posicao ultimaMovida = null;
 	private Posicao posicaoReiBranco = new Posicao(4, 0);
 	private Posicao posicaoReiPreto = new Posicao(4, 7);
 	/*
 	 * posicaoReiBranco e posicaoReiPreto serao usados para determinar se houve
 	 * cheque ou cheque-mate
 	 *
-	*
+	 *
 	 * foi decidido criar um atributo que explicite a posicao dos reis por uma
 	 * questao de desempenho, ou seja, nao sera necessario buscar a posicao dos
 	 * reis sempre que a verificacao do xeque for realizada
 	 */
-        
+	public Tabuleiro(){
+		Peca peca;
+		PecasPool pecasPool = PecasPool.getInstanceOf();
+		// inserindo os pe�es
+		for (int i = 0; i < 8; i++) {
+			peca = pecasPool.getPeca(NomePecas.Peao, Cores.branco);
+			casas[1][i] = peca;
+			pecasBrancas.add(peca);
+			peca.setPosicao(new Posicao(i, 1));
+
+			peca = pecasPool.getPeca(NomePecas.Peao, Cores.preto);
+			casas[6][i] = peca;
+			pecasPretas.add(peca);
+			peca.setPosicao(new Posicao(i, 6));
+
+		}
+
+		// inserindo as torres
+		peca = pecasPool.getPeca(NomePecas.Torre, Cores.branco);
+		casas[0][0] = peca;
+		pecasBrancas.add(peca);
+		peca.setPosicao(new Posicao(0, 0));
+
+		peca = pecasPool.getPeca(NomePecas.Torre, Cores.branco);
+		casas[0][7] = peca;
+		pecasBrancas.add(peca);
+		peca.setPosicao(new Posicao(7, 0));
+
+		peca = pecasPool.getPeca(NomePecas.Torre, Cores.preto);
+		casas[7][0] = peca;
+		pecasPretas.add(peca);
+		peca.setPosicao(new Posicao(0, 7));
+
+		peca = pecasPool.getPeca(NomePecas.Torre, Cores.preto);
+		casas[7][7] = peca;
+		pecasPretas.add(peca);
+		peca.setPosicao(new Posicao(7, 7));
+
+		// inserindo os cavalos
+		peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.branco);
+		casas[0][1] = peca;
+		pecasBrancas.add(peca);
+		peca.setPosicao(new Posicao(1, 0));
+
+		peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.branco);
+		casas[0][6] = peca;
+		pecasBrancas.add(peca);
+		peca.setPosicao(new Posicao(6, 0));
+
+		peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.preto);
+		casas[7][1] = peca;
+		pecasPretas.add(peca);
+		peca.setPosicao(new Posicao(1, 7));
+
+		peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.preto);
+		casas[7][6] = peca;
+		pecasPretas.add(peca);
+		peca.setPosicao(new Posicao(6, 7));
+
+		// inserindo os bispos
+		peca = pecasPool.getPeca(NomePecas.Bispo, Cores.branco);
+		casas[0][2] = peca;
+		pecasBrancas.add(peca);
+		peca.setPosicao(new Posicao(2, 0));
+
+		peca = pecasPool.getPeca(NomePecas.Bispo, Cores.branco);
+		casas[0][5] = peca;
+		pecasBrancas.add(peca);
+		peca.setPosicao(new Posicao(5, 0));
+
+		peca = pecasPool.getPeca(NomePecas.Bispo, Cores.preto);
+		casas[7][2] = peca;
+		pecasPretas.add(peca);
+		peca.setPosicao(new Posicao(2, 7));
+
+		peca = pecasPool.getPeca(NomePecas.Bispo, Cores.preto);
+		casas[7][5] = peca;
+		pecasPretas.add(peca);
+		peca.setPosicao(new Posicao(5, 7));
+
+		// inserindo rei e dama
+		peca = pecasPool.getPeca(NomePecas.Rei, Cores.branco);
+		casas[0][4] = peca;
+		pecasBrancas.add(peca);
+		peca.setPosicao(new Posicao(4, 0));
+
+		peca = pecasPool.getPeca(NomePecas.Rei, Cores.preto);
+		casas[7][4] = peca;
+		pecasPretas.add(peca);
+		peca.setPosicao(new Posicao(4, 7));
+
+		peca = pecasPool.getPeca(NomePecas.Rainha, Cores.branco);
+		casas[0][3] = peca;
+		pecasBrancas.add(peca);
+		peca.setPosicao(new Posicao(3, 0));
+
+		peca = pecasPool.getPeca(NomePecas.Rainha, Cores.preto);
+		casas[7][3] = peca;
+		pecasPretas.add(peca);
+		peca.setPosicao(new Posicao(3, 7));
+	}
 
 	public Peca getCasas(int coluna, int linha) {
 		return casas[linha][coluna];
 	}
 
 	public void setCasas(Peca peca, int coluna, int linha) {
-		this.casas[linha][coluna] = peca;           
+		this.casas[linha][coluna] = peca;
 	}
-        
-        
-        
-        /**
-         * Move uma peça de um ponto inicial para um ponto final.
-         * @param colunaInicial
-         * @param linhaInicial
-         * @param colunaFinal
-         * @param linhaFinal 
-         */
+
+	/**
+	 * Move uma peça de um ponto inicial para um ponto final.
+	 *
+	 * @param colunaInicial
+	 * @param linhaInicial
+	 * @param colunaFinal
+	 * @param linhaFinal
+	 */
 	public void moverPeca(int colunaInicial, int linhaInicial, int colunaFinal,
-			int linhaFinal) {
+		int linhaFinal) {
 
 		Peca peca = this.getCasas(colunaInicial, linhaInicial);
 		this.setCasas(peca, colunaFinal, linhaFinal);
 		this.setCasas(null, colunaInicial, linhaInicial);
 		peca.getPosicao().setColuna(colunaFinal);
 		peca.getPosicao().setLinha(linhaFinal);
-                
-                ultimaMovida.setColuna(colunaFinal);
-                ultimaMovida.setLinha(linhaFinal);
+
+		ultimaMovida.setColuna(colunaFinal);
+		ultimaMovida.setLinha(linhaFinal);
 
 	}
 
-        /**
-         * Captura uma peça na posição final.
-         * @param posicaoInicial
-         * @param posicaoFinal
-         * @return 
-         */
+	/**
+	 * Captura uma peça na posição final.
+	 *
+	 * @param posicaoInicial
+	 * @param posicaoFinal
+	 * @return
+	 */
 	public Peca capturarPeca(Posicao posicaoInicial,
-			Posicao posicaoFinal) {
+		Posicao posicaoFinal) {
 
 		Peca peca = this.getCasas(posicaoInicial.getColuna(),
-				posicaoInicial.getLinha());
+			posicaoInicial.getLinha());
 		Peca pecaCapturada = this.getCasas(posicaoFinal.getColuna(),
-				posicaoFinal.getLinha());
+			posicaoFinal.getLinha());
 		this.setCasas(peca, posicaoFinal.getColuna(), posicaoFinal.getLinha());
 		this.setCasas(null, posicaoInicial.getColuna(),
-				posicaoInicial.getLinha());
+			posicaoInicial.getLinha());
 		peca.setPosicao(posicaoFinal);
 
 		return pecaCapturada;
 
 	}
-        /**Verifica se a torre pode fazer tal caminho.
-         * 
-         * @param posicaoInicial
-         * @param posicaoFinal
-         * @return booleano: true (pode) ou false (não pode)
-         */
+
+	/**
+	 * Verifica se a torre pode fazer tal caminho.
+	 *
+	 * @param posicaoInicial
+	 * @param posicaoFinal
+	 * @return booleano: true (pode) ou false (não pode)
+	 */
 	public boolean verificaCaminhoTorre(Posicao posicaoInicial,
-			Posicao posicaoFinal) {
+		Posicao posicaoFinal) {
 
 		/* movimento horizontal */
 		if (posicaoInicial.getLinha() == posicaoFinal.getLinha()) {
 			int colunaVariante;
 			int colunaInicial = posicaoInicial.getColuna();
 			/* verifica a posicao de movimentacao */
-			if (posicaoFinal.getColuna() > posicaoInicial.getColuna())
-				/* direita */
+			if (posicaoFinal.getColuna() > posicaoInicial.getColuna()) /* direita */ {
 				colunaVariante = 1;
-			else
-				/* esquerda */
+			} else /* esquerda */ {
 				colunaVariante = -1;
+			}
 			for (int i = 0; i < Math.abs(posicaoFinal.getColuna()
-					- posicaoInicial.getColuna()) - 1; i++) {
+				- posicaoInicial.getColuna()) - 1; i++) {
 				colunaInicial += colunaVariante;
-				if (this.getCasas(colunaInicial, posicaoInicial.getLinha()) != null)
+				if (this.getCasas(colunaInicial, posicaoInicial.getLinha()) != null) {
 					return false;
+				}
 			}
 			/* movimento vertical */
 		} else {
 			int linhaVariante;
 			int linhaInicial = posicaoInicial.getLinha();
 			/* verifica a posicao de movimentacao */
-			if (posicaoFinal.getLinha() > posicaoInicial.getLinha())
-				/* cima */
+			if (posicaoFinal.getLinha() > posicaoInicial.getLinha()) /* cima */ {
 				linhaVariante = 1;
-			else
-				/* baixo */
+			} else /* baixo */ {
 				linhaVariante = -1;
+			}
 			for (int i = 0; i < Math.abs(posicaoFinal.getLinha()
-					- posicaoInicial.getLinha()) - 1; i++) {
+				- posicaoInicial.getLinha()) - 1; i++) {
 				linhaInicial += linhaVariante;
-				if (this.getCasas(posicaoInicial.getColuna(), linhaInicial) != null)
+				if (this.getCasas(posicaoInicial.getColuna(), linhaInicial) != null) {
 					return false;
+				}
 			}
 		}
 		return true;
 	}
 
 	/**
-	 * Dada uma peça, retorna uma lista de possíveis movimentos e/ou capturas
-	 * que ela pode realizar.
-	 * 
-	 * @param posicao
-	 *            - a posição da peça.
+	 * Dada uma peça, retorna uma lista de possíveis movimentos e/ou
+	 * capturas que ela pode realizar.
+	 *
+	 * @param posicao - a posição da peça.
 	 * @return A lista de possíveis movimentos.
 	 */
 	public List<Posicao> posicoesPossiveisPeca(Posicao posicao) {
 
 		List<Posicao> posicoesPossiveis = new ArrayList<>();
 		Peca peca = this.getCasas(posicao.getColuna(),
-				posicao.getLinha());
+			posicao.getLinha());
 
 		switch (peca.toString()) {
-		// verificacao do peao
-		case "P":
-			posicoesPossiveis = posicoesPossiveisPeaoPreto(posicao);
-			break;
-		// verificacao do cavalo
-		case "C":
-			posicoesPossiveis = posicoesPossiveisCavalo(posicao);
-			break;
-		// verificacao da torre
-		case "T":
-			posicoesPossiveis = posicoesPossiveisTorre(posicao);
-			break;
-		// verificacao do bispo
-		case "B":
-			posicoesPossiveis = posicoesPossiveisBispo(posicao);
-			break;
-		// verificacao da rainha
-		case "D":
-			posicoesPossiveis = posicoesPossiveisRainha(posicao);
-			break;
-		// verificacao do rei
-		case "R":
-			posicoesPossiveis = posicoesPossiveisRei(posicao);
+			// verificacao do peao
+			case "P":
+				posicoesPossiveis = posicoesPossiveisPeaoPreto(posicao);
+				break;
+			// verificacao do cavalo
+			case "C":
+				posicoesPossiveis = posicoesPossiveisCavalo(posicao);
+				break;
+			// verificacao da torre
+			case "T":
+				posicoesPossiveis = posicoesPossiveisTorre(posicao);
+				break;
+			// verificacao do bispo
+			case "B":
+				posicoesPossiveis = posicoesPossiveisBispo(posicao);
+				break;
+			// verificacao da rainha
+			case "D":
+				posicoesPossiveis = posicoesPossiveisRainha(posicao);
+				break;
+			// verificacao do rei
+			case "R":
+				posicoesPossiveis = posicoesPossiveisRei(posicao);
 		}
 
 		return posicoesPossiveis;
 	}
 
 	/**
-	 * Retorna uma lista de posições possíveis que uma torre pode se movimentar
-	 * ou capturar.
-	 * 
-	 * @param posicao
-	 *            - a posição da torre.
+	 * Retorna uma lista de posições possíveis que uma torre pode se
+	 * movimentar ou capturar.
+	 *
+	 * @param posicao - a posição da torre.
 	 * @return A lista com as posições possíveis.
 	 */
 	private List<Posicao> posicoesPossiveisTorre(Posicao posicao) {
@@ -215,9 +315,10 @@ public class Tabuleiro {
 					 * nao eh necessario continuar verificando a reta apos
 					 * encontrar o primeiro obstaculo
 					 */
-					if (peca.getCor().equals(Cores.branco))
+					if (peca.getCor().equals(Cores.branco)) {
 						posicoesPossiveis.add(new Posicao(colunaAtual,
-								linhaAtual));
+							linhaAtual));
+					}
 					break;
 				} else {
 					/* pode se mover para a posicao */
@@ -244,9 +345,10 @@ public class Tabuleiro {
 					 * nao eh necessario continuar verificando a reta apos
 					 * encontrar o primeiro obstaculo
 					 */
-					if (peca.getCor().equals(Cores.branco))
+					if (peca.getCor().equals(Cores.branco)) {
 						posicoesPossiveis.add(new Posicao(colunaAtual,
-								linhaAtual));
+							linhaAtual));
+					}
 					break;
 				} else {
 					/* pode se mover para a posicao */
@@ -263,11 +365,10 @@ public class Tabuleiro {
 	}
 
 	/**
-	 * Retorna uma lista de posições possíveis que um bispo pode se movimentar
-	 * ou capturar.
-	 * 
-	 * @param posicao
-	 *            - a posição do bispo.
+	 * Retorna uma lista de posições possíveis que um bispo pode se
+	 * movimentar ou capturar.
+	 *
+	 * @param posicao - a posição do bispo.
 	 * @return A lista com as posições possíveis.
 	 */
 	private List<Posicao> posicoesPossiveisBispo(Posicao posicao) {
@@ -295,7 +396,7 @@ public class Tabuleiro {
 				linhaAtual += posicoesVariantes[linhaVariante];
 				/* verifica se a posicao esta dentro do tabuleiro */
 				while (colunaAtual >= 0 && colunaAtual <= 7 && linhaAtual >= 0
-						&& linhaAtual <= 7) {
+					&& linhaAtual <= 7) {
 					Peca peca = this.getCasas(colunaAtual, linhaAtual);
 					/* verifica se tem alguma coisa na posicao */
 					if (peca != null) {
@@ -304,14 +405,15 @@ public class Tabuleiro {
 						 * disso, nao eh necessario continuar verificando a
 						 * diagonal apos encontrar o primeiro obstaculo
 						 */
-						if (peca.getCor().equals(Cores.branco))
+						if (peca.getCor().equals(Cores.branco)) {
 							posicoesPossiveis.add(new Posicao(colunaAtual,
-									linhaAtual));
+								linhaAtual));
+						}
 						break;
 					} else {
 						/* pode se mover para a posicao */
 						posicoesPossiveis.add(new Posicao(colunaAtual,
-								linhaAtual));
+							linhaAtual));
 						colunaAtual += posicoesVariantes[colunaVariante];
 						linhaAtual += posicoesVariantes[linhaVariante];
 					}
@@ -324,11 +426,10 @@ public class Tabuleiro {
 	}
 
 	/**
-	 * Retorna uma lista de posições possíveis que uma rainha pode se movimentar
-	 * ou capturar.
-	 * 
-	 * @param posicao
-	 *            - a posição da rainha.
+	 * Retorna uma lista de posições possíveis que uma rainha pode se
+	 * movimentar ou capturar.
+	 *
+	 * @param posicao - a posição da rainha.
 	 * @return A lista com as posições possíveis.
 	 */
 	private List<Posicao> posicoesPossiveisRainha(Posicao posicao) {
@@ -343,11 +444,10 @@ public class Tabuleiro {
 	}
 
 	/**
-	 * Retorna uma lista de posições possíveis que um rei pode se movimentar ou
-	 * capturar.
-	 * 
-	 * @param posicao
-	 *            - a posição da rei.
+	 * Retorna uma lista de posições possíveis que um rei pode se movimentar
+	 * ou capturar.
+	 *
+	 * @param posicao - a posição da rei.
 	 * @return A lista com as posições possíveis.
 	 */
 	private List<Posicao> posicoesPossiveisRei(Posicao posicao) {
@@ -363,19 +463,21 @@ public class Tabuleiro {
 				linha = posicao.getLinha();
 				coluna += varianteColuna;
 				linha += varianteLinha;
-				if (coluna >= 0 && coluna <= 7)
+				if (coluna >= 0 && coluna <= 7) {
 					if (linha >= 0 && linha <= 7) {
 						peca = this.getCasas(coluna, linha);
 						/* verifica se tem alguma coisa na posicao */
 						if (peca != null) {
 							/* se tiver e a cor for branca, pode capturar */
-							if (peca.getCor().equals(Cores.branco))
+							if (peca.getCor().equals(Cores.branco)) {
 								posicoesPossiveis
-										.add(new Posicao(coluna, linha));
-						} else
-							/* pode se mover para a posicao */
+									.add(new Posicao(coluna, linha));
+							}
+						} else /* pode se mover para a posicao */ {
 							posicoesPossiveis.add(new Posicao(coluna, linha));
+						}
 					}
+				}
 			}
 		}
 
@@ -383,11 +485,10 @@ public class Tabuleiro {
 	}
 
 	/**
-	 * Retorna uma lista de posições possíveis que um cavalo pode se movimentar
-	 * ou capturar.
-	 * 
-	 * @param posicao
-	 *            - a posição da cavalo.
+	 * Retorna uma lista de posições possíveis que um cavalo pode se
+	 * movimentar ou capturar.
+	 *
+	 * @param posicao - a posição da cavalo.
 	 * @return A lista com as posições possíveis.
 	 */
 	private List<Posicao> posicoesPossiveisCavalo(Posicao posicao) {
@@ -424,17 +525,18 @@ public class Tabuleiro {
 				if (colunaAtual >= 0 && colunaAtual <= 7) {
 					if (linhaAtual >= 0 && linhaAtual <= 7) {
 						Peca peca = this.getCasas(colunaAtual,
-								linhaAtual);
+							linhaAtual);
 						/* verifica se tem alguma coisa na posicao */
 						if (peca != null) {
 							/* se tiver e a cor for branca, pode capturar */
-							if (peca.getCor().equals(Cores.branco))
+							if (peca.getCor().equals(Cores.branco)) {
 								posicoesPossiveis.add(new Posicao(colunaAtual,
-										linhaAtual));
-						} else
-							/* pode se mover para a posicao */
-							posicoesPossiveis.add(new Posicao(colunaAtual,
 									linhaAtual));
+							}
+						} else /* pode se mover para a posicao */ {
+							posicoesPossiveis.add(new Posicao(colunaAtual,
+								linhaAtual));
+						}
 					}
 				}
 
@@ -448,17 +550,18 @@ public class Tabuleiro {
 				if (colunaAtual >= 0 && colunaAtual <= 7) {
 					if (linhaAtual >= 0 && linhaAtual <= 7) {
 						Peca peca = this.getCasas(colunaAtual,
-								linhaAtual);
+							linhaAtual);
 						/* verifica se tem alguma coisa na posicao */
 						if (peca != null) {
 							/* se tiver e a cor for branca, pode capturar */
-							if (peca.getCor().equals(Cores.branco))
+							if (peca.getCor().equals(Cores.branco)) {
 								posicoesPossiveis.add(new Posicao(colunaAtual,
-										linhaAtual));
-						} else
-							/* pode se mover para a posicao */
-							posicoesPossiveis.add(new Posicao(colunaAtual,
 									linhaAtual));
+							}
+						} else /* pode se mover para a posicao */ {
+							posicoesPossiveis.add(new Posicao(colunaAtual,
+								linhaAtual));
+						}
 					}
 				}
 			}
@@ -470,9 +573,8 @@ public class Tabuleiro {
 	/**
 	 * Retorna uma lista com todas as posições de movimento e captura que um
 	 * peão consegue realizar.
-	 * 
-	 * @param posicao
-	 *            - a posição na qual o peão se encontra;
+	 *
+	 * @param posicao - a posição na qual o peão se encontra;
 	 * @return A lista com as posições possíveis.
 	 */
 	private List<Posicao> posicoesPossiveisPeaoPreto(Posicao posicao) {
@@ -489,9 +591,8 @@ public class Tabuleiro {
 	/**
 	 * Retorna a lista de posições possiveis que um peão consegue capturar
 	 * alguma peça.
-	 * 
-	 * @param posicao
-	 *            - a posição em que o peão se encontra.
+	 *
+	 * @param posicao - a posição em que o peão se encontra.
 	 * @return - a lista de posições possíveis.
 	 */
 	private List<Posicao> capturasPossiveisPeaoPreto(Posicao posicao) {
@@ -504,24 +605,26 @@ public class Tabuleiro {
 			/* verifica se nao esta na primeira coluna */
 			if (posicao.getColuna() - 1 >= 0) {
 				peca = this.getCasas(posicao.getColuna() - 1,
-						posicao.getLinha() - 1);
-				if (peca != null)
-					/* se a peca de destino for branca, pode capturar */
-					if (peca.getCor().equals(Cores.branco))
+					posicao.getLinha() - 1);
+				if (peca != null) /* se a peca de destino for branca, pode capturar */ {
+					if (peca.getCor().equals(Cores.branco)) {
 						capturasPossiveis
-								.add(new Posicao(posicao.getColuna() - 1,
-										posicao.getLinha() - 1));
+							.add(new Posicao(posicao.getColuna() - 1,
+									posicao.getLinha() - 1));
+					}
+				}
 			}
 			/* verifica se nao esta na ultima coluna */
 			if (posicao.getColuna() + 1 <= 7) {
 				peca = this.getCasas(posicao.getColuna() + 1,
-						posicao.getLinha() - 1);
-				if (peca != null)
-					/* se a peca de destino for branca, pode capturar */
-					if (peca.getCor().equals(Cores.branco))
+					posicao.getLinha() - 1);
+				if (peca != null) /* se a peca de destino for branca, pode capturar */ {
+					if (peca.getCor().equals(Cores.branco)) {
 						capturasPossiveis
-								.add(new Posicao(posicao.getColuna() + 1,
-										posicao.getLinha() - 1));
+							.add(new Posicao(posicao.getColuna() + 1,
+									posicao.getLinha() - 1));
+					}
+				}
 			}
 		}
 
@@ -530,12 +633,11 @@ public class Tabuleiro {
 	}
 
 	/**
-	 * Retorna uma lista com todas as posições possíveis que um peão consegue se
-	 * movimentar.
-	 * 
-	 * @param posicao
-	 *            - a posição do peão do qual deseja-se saber as posições
-	 *            possíveis.
+	 * Retorna uma lista com todas as posições possíveis que um peão
+	 * consegue se movimentar.
+	 *
+	 * @param posicao - a posição do peão do qual deseja-se saber as
+	 * posições possíveis.
 	 * @return A lista com todas as posições possíveis de movimento do peão.
 	 */
 	private List<Posicao> movimentosPossiveisPeaoPreto(Posicao posicao) {
@@ -546,69 +648,75 @@ public class Tabuleiro {
 		if (posicao.getLinha() == 6) {
 			if (this.getCasas(posicao.getColuna(), posicao.getLinha() - 1) == null) {
 				movimentosPossiveis.add(new Posicao(posicao.getColuna(),
-						posicao.getLinha() - 1));
-				if (this.getCasas(posicao.getColuna(), posicao.getLinha() - 2) == null)
+					posicao.getLinha() - 1));
+				if (this.getCasas(posicao.getColuna(), posicao.getLinha() - 2) == null) {
 					movimentosPossiveis.add(new Posicao(posicao.getColuna(),
-							posicao.getLinha() - 2));
+						posicao.getLinha() - 2));
+				}
 			}
-				
+
 			return movimentosPossiveis;
 		}
 
 		/* movimento comum */
-		if (posicao.getLinha() - 1 >= 0)
-			if (this.getCasas(posicao.getColuna(), posicao.getLinha() - 1) == null)
+		if (posicao.getLinha() - 1 >= 0) {
+			if (this.getCasas(posicao.getColuna(), posicao.getLinha() - 1) == null) {
 				movimentosPossiveis.add(new Posicao(posicao.getColuna(),
-						posicao.getLinha() - 1));
+					posicao.getLinha() - 1));
+			}
+		}
 
 		return movimentosPossiveis;
 
 	}
 
-	
-        /**verifica se o caminho do bispo está livre para fazer a movimentacao 
-         * 
-         * @param posicaoInicial
-         * @param posicaoFinal
-         * @return boolean
-         */
+	/**
+	 * verifica se o caminho do bispo está livre para fazer a movimentacao
+	 *
+	 * @param posicaoInicial
+	 * @param posicaoFinal
+	 * @return boolean
+	 */
 	public boolean verificaCaminhoBispo(Posicao posicaoInicial,
-			Posicao posicaoFinal) {
+		Posicao posicaoFinal) {
 
 		int colunaVariante, linhaVariante;
 		int colunaInicial = posicaoInicial.getColuna();
 		int linhaInicial = posicaoInicial.getLinha();
 
 		// determina a posicao de movimentacao
-		if (posicaoFinal.getColuna() - posicaoInicial.getColuna() > 0)
+		if (posicaoFinal.getColuna() - posicaoInicial.getColuna() > 0) {
 			colunaVariante = 1;
-		else
+		} else {
 			colunaVariante = -1;
+		}
 
-		if (posicaoFinal.getLinha() - posicaoInicial.getLinha() > 0)
+		if (posicaoFinal.getLinha() - posicaoInicial.getLinha() > 0) {
 			linhaVariante = 1;
-		else
+		} else {
 			linhaVariante = -1;
+		}
 
 		for (int i = 0; i < Math.abs(posicaoFinal.getColuna()
-				- posicaoInicial.getColuna()) - 1; i++) {
+			- posicaoInicial.getColuna()) - 1; i++) {
 			colunaInicial += colunaVariante;
 			linhaInicial += linhaVariante;
-			if (this.getCasas(colunaInicial, linhaInicial) != null)
+			if (this.getCasas(colunaInicial, linhaInicial) != null) {
 				return false;
+			}
 		}
 		return true;
 	}
 
 	/**
 	 * Verifica se a peça possuia caminho livre para fazer o movimento.
-	 * 
+	 *
 	 * @param posicaoInicial
 	 * @param posicaoFinal
 	 * @return true se possuir caminho livre.
 	 */
 	public boolean verificaCaminhoMovimento(Posicao posicaoInicial,
-			Posicao posicaoFinal) {
+		Posicao posicaoFinal) {
 
 		// verifica se tem alguma casa no destino
 		if (getCasas(posicaoFinal.getColuna(), posicaoFinal.getLinha()) != null) {
@@ -619,18 +727,19 @@ public class Tabuleiro {
 	}
 
 	private boolean verificaCaminhoRainha(Posicao posicaoInicial,
-			Posicao posicaoFinal) {
+		Posicao posicaoFinal) {
 		if (Math.abs(posicaoFinal.getColuna() - posicaoInicial.getColuna()) == Math
-				.abs(posicaoFinal.getLinha() - posicaoInicial.getLinha()))
+			.abs(posicaoFinal.getLinha() - posicaoInicial.getLinha())) {
 			return verificaCaminhoBispo(posicaoInicial, posicaoFinal);
-		else
+		} else {
 			return verificaCaminhoTorre(posicaoInicial, posicaoFinal);
+		}
 	}
 
 	public boolean verificaCaminhoCaptura(Posicao posicaoInicial,
-			Posicao posicaoFinal, Jogo jogo)
-			throws CapturaInvalidaPecaInexistenteException,
-			CapturaInvalidaPecaPropriaException {
+		Posicao posicaoFinal, Jogo jogo)
+		throws CapturaInvalidaPecaInexistenteException,
+		CapturaInvalidaPecaPropriaException {
 
 		// verifica se tem alguma casa no destino
 		if (getCasas(posicaoFinal.getColuna(), posicaoFinal.getLinha()) == null) {
@@ -646,7 +755,7 @@ public class Tabuleiro {
 	}
 
 	public boolean verificaCaminhoXeque(Posicao posicaoInicial,
-			Posicao posicaoFinal) {
+		Posicao posicaoFinal) {
 
 		return verificaCaminhos(posicaoInicial, posicaoFinal);
 	}
@@ -654,54 +763,54 @@ public class Tabuleiro {
 	public boolean verificaCaminhos(Posicao posicaoInicial, Posicao posicaoFinal) {
 
 		Peca peca = getCasas(posicaoInicial.getColuna(),
-				posicaoInicial.getLinha());
+			posicaoInicial.getLinha());
 
 		switch (peca.toString()) {
-		// verificacao do peao
-		case "P":
-			return verificaCaminhoPeao(posicaoInicial, posicaoFinal);
+			// verificacao do peao
+			case "P":
+				return verificaCaminhoPeao(posicaoInicial, posicaoFinal);
 			// Se for cavalo, passa direto.
-		case "C":
-			return true;
+			case "C":
+				return true;
 			// verificação da torre.
-		case "T":
-			return verificaCaminhoTorre(posicaoInicial, posicaoFinal);
+			case "T":
+				return verificaCaminhoTorre(posicaoInicial, posicaoFinal);
 			// verificação do bispo
-		case "B":
-			return verificaCaminhoBispo(posicaoInicial, posicaoFinal);
+			case "B":
+				return verificaCaminhoBispo(posicaoInicial, posicaoFinal);
 			// verificação da rainha
-		case "D":
-			return verificaCaminhoRainha(posicaoInicial, posicaoFinal);
+			case "D":
+				return verificaCaminhoRainha(posicaoInicial, posicaoFinal);
 		}
 		return true;
 	}
 
 	/**
-	 * Esse método verifica se o caminho realizado por um peão em sua primeira
-	 * jogada, quando este se move duas casas, é valido, ou seja, informa se o
-	 * peão tem o caminho obstruído. Esse método só é chamado na situação em que
-	 * o peão anda duas casas.
-	 * 
-	 * @param posicaoInicial
-	 *            - posição inicial do peão.
-	 * @param posicaoFinal
-	 *            - posição para onde se quer verificar se o peão consegue fazer
-	 *            o movimento.
+	 * Esse método verifica se o caminho realizado por um peão em sua
+	 * primeira jogada, quando este se move duas casas, é valido, ou seja,
+	 * informa se o peão tem o caminho obstruído. Esse método só é chamado
+	 * na situação em que o peão anda duas casas.
+	 *
+	 * @param posicaoInicial - posição inicial do peão.
+	 * @param posicaoFinal - posição para onde se quer verificar se o peão
+	 * consegue fazer o movimento.
 	 * @return true se o peão não tiver o caminho obstruído.
 	 */
 	private boolean verificaCaminhoPeao(Posicao posicaoInicial,
-			Posicao posicaoFinal) {
+		Posicao posicaoFinal) {
 
 		/* peao preto */
 		if (posicaoInicial.getLinha() == 6) {
 			if (this.getCasas(posicaoInicial.getColuna(),
-					posicaoInicial.getLinha() - 1) != null)
+				posicaoInicial.getLinha() - 1) != null) {
 				return false;
+			}
 			/* peao branco */
 		} else {
 			if (this.getCasas(posicaoInicial.getColuna(),
-					posicaoInicial.getLinha() + 1) != null)
+				posicaoInicial.getLinha() + 1) != null) {
 				return false;
+			}
 		}
 
 		return true;
@@ -746,31 +855,27 @@ public class Tabuleiro {
 	public void setPosicaoReiPreto(Posicao posicaoReiPreto) {
 		this.posicaoReiPreto = posicaoReiPreto;
 	}
-        
-        public boolean enPassaint(Posicao posicaoPeao){
-            
-            
-            if ((this.getCasas(ultimaMovida.getColuna(), ultimaMovida.getLinha()).getNome() == NomePecas.Peao)//se a **ULTIMA MOVIDA** é um peão
-                &&(this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).getNome() == NomePecas.Peao) //se o que você quer mover é um peão
-                &&(Math.abs(posicaoPeao.getColuna() - ultimaMovida.getColuna()) == 1) //verifica se estão em colunas adjacentes    
-                &&(posicaoPeao.getLinha() == ultimaMovida.getLinha() )//verifica se os dois peões estão na mesma linha
-                &&((ultimaMovida.getLinha() == 4 && getCasas(ultimaMovida.getColuna(),ultimaMovida.getLinha()).getCor() == Cores.preto )
-                    || (ultimaMovida.getLinha() == 3 && getCasas(ultimaMovida.getColuna(),ultimaMovida.getLinha()).getCor() == Cores.branco ))//verifica se os peões estão na linha a qual andam duas casas.
-                    ){
-                capturarPeca(posicaoPeao, ultimaMovida);//come o peão que se moveu por ultimo e assume a posição ao lado
-                
-                
-                if (this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).mover(new Posicao(ultimaMovida.getColuna(), ultimaMovida.getLinha()+1)))
-                        moverPeca(posicaoPeao.getColuna(), posicaoPeao.getLinha(), posicaoPeao.getColuna(), posicaoPeao.getLinha()+1); //anda uma casa para frente
-                
-                else if (this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).mover(new Posicao(ultimaMovida.getColuna(), ultimaMovida.getLinha()-1)))
-                        moverPeca(posicaoPeao.getColuna(), posicaoPeao.getLinha(), posicaoPeao.getColuna(), posicaoPeao.getLinha()-1); //anda uma casa para frente
-                
-                
-                return true;
-            }
-            return false;
-        }
-        
-        
+
+	public boolean enPassaint(Posicao posicaoPeao) {
+
+		if ((this.getCasas(ultimaMovida.getColuna(), ultimaMovida.getLinha()).getNome() == NomePecas.Peao)//se a **ULTIMA MOVIDA** é um peão
+			&& (this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).getNome() == NomePecas.Peao) //se o que você quer mover é um peão
+			&& (Math.abs(posicaoPeao.getColuna() - ultimaMovida.getColuna()) == 1) //verifica se estão em colunas adjacentes    
+			&& (posicaoPeao.getLinha() == ultimaMovida.getLinha())//verifica se os dois peões estão na mesma linha
+			&& ((ultimaMovida.getLinha() == 4 && getCasas(ultimaMovida.getColuna(), ultimaMovida.getLinha()).getCor() == Cores.preto)
+			|| (ultimaMovida.getLinha() == 3 && getCasas(ultimaMovida.getColuna(), ultimaMovida.getLinha()).getCor() == Cores.branco))//verifica se os peões estão na linha a qual andam duas casas.
+			) {
+			capturarPeca(posicaoPeao, ultimaMovida);//come o peão que se moveu por ultimo e assume a posição ao lado
+
+			if (this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).mover(new Posicao(ultimaMovida.getColuna(), ultimaMovida.getLinha() + 1))) {
+				moverPeca(posicaoPeao.getColuna(), posicaoPeao.getLinha(), posicaoPeao.getColuna(), posicaoPeao.getLinha() + 1); //anda uma casa para frente
+			} else if (this.getCasas(posicaoPeao.getColuna(), posicaoPeao.getLinha()).mover(new Posicao(ultimaMovida.getColuna(), ultimaMovida.getLinha() - 1))) {
+				moverPeca(posicaoPeao.getColuna(), posicaoPeao.getLinha(), posicaoPeao.getColuna(), posicaoPeao.getLinha() - 1); //anda uma casa para frente
+			}
+
+			return true;
+		}
+		return false;
+	}
+
 }
