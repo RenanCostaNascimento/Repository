@@ -10,7 +10,7 @@ import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 public class Peao extends PecaAbstrata {
 	
 	public Peao(Cores cor) {
-		super(cor, NomePecas.peao, 1);
+		super(NomePecas.Peao, 1, cor);
 	}
 
 	@Override

@@ -11,6 +11,6 @@ package ifes.poo1.xadrez.model.cdp.constantes;
  * @author pedronakibar
  */
 public enum NomePecas {
-    peao, bispo, cavalo, rainha, rei, torre;
+    Peao, Bispo, Cavalo, Rainha, Rei, Torre;
     
 }

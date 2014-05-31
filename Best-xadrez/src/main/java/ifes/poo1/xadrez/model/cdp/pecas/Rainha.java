@@ -10,7 +10,7 @@ import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 public class Rainha extends PecaAbstrata {
 	
 	public Rainha(Cores cor) {
-		super(cor, NomePecas.rainha, 9);
+		super(NomePecas.Rainha, 9, cor);
 		// TODO Auto-generated constructor stub
 	}
 

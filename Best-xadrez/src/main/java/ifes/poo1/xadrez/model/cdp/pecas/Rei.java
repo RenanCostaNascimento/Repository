@@ -11,9 +11,11 @@ public class Rei extends PecaAbstrata {
 	
 	private boolean seMovimentou = false;
 	
+	
+	
 	public Rei(Cores cor) {
 		
-		super(cor, NomePecas.rei, 999);
+		super(NomePecas.Rei, 999, cor);
 		// TODO Auto-generated constructor stub
 	}
 	

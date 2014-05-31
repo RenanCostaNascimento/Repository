@@ -11,7 +11,8 @@ public class HistoricoJogador extends Model implements Comparable<HistoricoJogad
     private int empates;
     private String nome;
 
-    public HistoricoJogador(){}
+    public HistoricoJogador() {
+    }
 
     public HistoricoJogador(String nome) {
         this.vitorias = 0;
@@ -19,7 +20,7 @@ public class HistoricoJogador extends Model implements Comparable<HistoricoJogad
         this.empates = 0;
         this.nome = nome;
     }
-    
+
     public String toString() {
         return nome + " V:" + vitorias + " D:" + derrotas + " E:" + empates;
     }
