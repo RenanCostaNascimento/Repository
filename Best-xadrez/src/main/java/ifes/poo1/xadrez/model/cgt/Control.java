@@ -50,15 +50,15 @@ import java.util.logging.Logger;
  */
 public class Control {
 
-    private ControladorTelas controladorTela = new ControladorTelas();
+    private final ControladorTelas controladorTela = new ControladorTelas();
     private Jogo jogo;
     private List<HistoricoPartida> partidas = new ArrayList<>();
     private List<HistoricoJogador> jogadores = new ArrayList<>();
     private ArrayList<Checkpoint> checkpoints = new ArrayList<>();
     private PecaAbstrata ultimaJogada;
-    private HighScore highScore;
-    private DAOHistoricoPartida historicoPartidaDAO;
-    private DAOHistoricoJogador historicoJogadorDAO;
+    private final HighScore highScore;
+    private final DAOHistoricoPartida historicoPartidaDAO;
+    private final DAOHistoricoJogador historicoJogadorDAO;
 
     public Control() throws SQLException, ClassNotFoundException {
         historicoPartidaDAO = new DAOHistoricoPartida();
@@ -217,7 +217,7 @@ public class Control {
         PecaAbstrata pecaRandomica = null, pecaDestino;
 
         /*enquanto a peca escolhida nao conseguir se mover, escolha outra peca*/
-        while (posicoesPossiveis.size() == 0) {
+        while (posicoesPossiveis.isEmpty()) {
             /*randomiza uma peca da lista de pecas de zeus*/
             pecaRandomica = (PecaAbstrata) jogo.getTabuleiro().getPecasPretas().get(gerador.nextInt(jogo.getTabuleiro().getPecasPretas().size()));
             /*pega as posicoes possiveis que a peca consegue se mover*/
@@ -716,11 +716,7 @@ public class Control {
                 }
             }
         }
-        /*se o rei nao tiver posicoes seguras para se movimentar, eh xeque-mate*/
-        if (posicoesSeguras == 0) {
-            return true;
-        }
-        return false;
+        return posicoesSeguras == 0;
 
     }
 
@@ -855,9 +851,7 @@ public class Control {
                 try {
                     salvarJogadorEmpate(jogo.getBranco().getNome());
                     salvarJogadorEmpate(jogo.getPreto().getNome());
-                } catch (SQLException ex) {
-                    Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
+                } catch (SQLException | ClassNotFoundException ex) {
                     Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
@@ -1141,7 +1135,7 @@ public class Control {
             case 1:
                 String nomeJogadores[] = new String[2];
                 nomeJogadores = controladorTela.controlarNovoJogo();
-                if (nomeJogadores[1] == "ZEUS") {
+                if ("ZEUS".equals(nomeJogadores[1])) {
                     iniciarJogoSingleplayer(nomeJogadores);
                 } else {
                     iniciarJogoMultiplayer(nomeJogadores);

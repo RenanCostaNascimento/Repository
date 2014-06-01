@@ -6,7 +6,6 @@
 package ifes.poo1.xadrez.util.persist;
 
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoJogador;
-import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
