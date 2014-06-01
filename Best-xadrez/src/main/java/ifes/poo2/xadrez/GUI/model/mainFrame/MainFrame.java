@@ -52,30 +52,76 @@ public class MainFrame extends javax.swing.JFrame {
         private void initComponents() {
 
                 topMenu = new javax.swing.JMenuBar();
-                jMenu1 = new javax.swing.JMenu();
-                jMenu2 = new javax.swing.JMenu();
+                gameMenu = new javax.swing.JMenu();
+                newSPGameItem = new javax.swing.JMenuItem();
+                newMPGameItem = new javax.swing.JMenuItem();
+                loadGameItem = new javax.swing.JMenuItem();
+                highScoresItem = new javax.swing.JMenuItem();
+                exitItem = new javax.swing.JMenuItem();
+                helpMenu = new javax.swing.JMenu();
+                aboutItem = new javax.swing.JMenuItem();
+                howToPlayItem = new javax.swing.JMenu();
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
                 getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
-                jMenu1.setText("File");
-                topMenu.add(jMenu1);
+                gameMenu.setText("Game");
 
-                jMenu2.setText("Edit");
-                topMenu.add(jMenu2);
+                newSPGameItem.setText("Single Player game");
+                gameMenu.add(newSPGameItem);
+
+                newMPGameItem.setText("Multiplayer game");
+                gameMenu.add(newMPGameItem);
+
+                loadGameItem.setText("Load Game");
+                gameMenu.add(loadGameItem);
+
+                highScoresItem.setText("High Scores");
+                gameMenu.add(highScoresItem);
+
+                exitItem.setText("Exit");
+                exitItem.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                exitItemActionPerformed(evt);
+                        }
+                });
+                gameMenu.add(exitItem);
+
+                topMenu.add(gameMenu);
+
+                helpMenu.setText("Help");
+
+                aboutItem.setText("About");
+                helpMenu.add(aboutItem);
+
+                howToPlayItem.setText("jMenu1");
+                helpMenu.add(howToPlayItem);
+
+                topMenu.add(helpMenu);
 
                 setJMenuBar(topMenu);
 
                 pack();
         }// </editor-fold>//GEN-END:initComponents
+
+        private void exitItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitItemActionPerformed
+                // TODO add your handling code here:
+        }//GEN-LAST:event_exitItemActionPerformed
         
         /**
          * @param args the command line arguments
          */
      
         // Variables declaration - do not modify//GEN-BEGIN:variables
-        private javax.swing.JMenu jMenu1;
-        private javax.swing.JMenu jMenu2;
+        private javax.swing.JMenuItem aboutItem;
+        private javax.swing.JMenuItem exitItem;
+        private javax.swing.JMenu gameMenu;
+        private javax.swing.JMenu helpMenu;
+        private javax.swing.JMenuItem highScoresItem;
+        private javax.swing.JMenu howToPlayItem;
+        private javax.swing.JMenuItem loadGameItem;
+        private javax.swing.JMenuItem newMPGameItem;
+        private javax.swing.JMenuItem newSPGameItem;
         private javax.swing.JMenuBar topMenu;
         // End of variables declaration//GEN-END:variables
 

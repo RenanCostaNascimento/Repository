@@ -2,8 +2,10 @@ package ifes.poo2.xadrez.GUI.model.table;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
+import ifes.poo1.xadrez.util.exception.MuitosComponentesException;
 import ifes.poo2.xadrez.GUI.pecaView.PecaView;
 import java.awt.Color;
+import java.awt.Dimension;
 import javax.swing.JLabel;
 
 /*
@@ -26,7 +28,9 @@ public class Tile extends javax.swing.JPanel {
         public Tile() {
                 initComponents();
                 originalColor = getBackground();
-                  
+                
+                
+              
         }
 
         /**
@@ -39,8 +43,8 @@ public class Tile extends javax.swing.JPanel {
 
                 setBackground(new java.awt.Color(206, 148, 0));
                 setMaximumSize(new java.awt.Dimension(300, 300));
-                setMinimumSize(new java.awt.Dimension(300, 300));
-                setPreferredSize(new java.awt.Dimension(100, 100));
+                setMinimumSize(new java.awt.Dimension(60, 60));
+                setPreferredSize(new java.awt.Dimension(60, 60));
                 addMouseListener(new java.awt.event.MouseAdapter() {
                         public void mouseClicked(java.awt.event.MouseEvent evt) {
                                 formMouseClicked(evt);
@@ -52,27 +56,20 @@ public class Tile extends javax.swing.JPanel {
                                 formMouseReleased(evt);
                         }
                 });
-                setLayout(new java.awt.BorderLayout());
         }// </editor-fold>//GEN-END:initComponents
 
         private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-                JLabel pic = new PecaView(ifes.poo1.xadrez.model.cdp.constantes.NomePecas.Cavalo, ifes.poo1.xadrez.model.cdp.constantes.Cores.branco);
-                add(pic);
-                revalidate();
-                repaint();
+                 
         }//GEN-LAST:event_formMouseClicked
 
         private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-                //setOriginalColor();
+               
+                setOriginalColor();
                 
         }//GEN-LAST:event_formMouseReleased
 
         private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
-               // setColor(Color.GREEN);
-                JLabel pic = new PecaView(ifes.poo1.xadrez.model.cdp.constantes.NomePecas.Cavalo, ifes.poo1.xadrez.model.cdp.constantes.Cores.branco);
-                this.add(pic);
-                this.revalidate();
-                this.repaint();
+                setColor(Color.GREEN);    
         }//GEN-LAST:event_formMousePressed
 
 
@@ -105,11 +102,23 @@ public class Tile extends javax.swing.JPanel {
                 this.originalColor = originalColor;
         }
         
-         public void addPecaView(PecaView pv){
-                add(pv);
-                revalidate();
-                repaint();
+        public void addPecaView(PecaView pecaView) throws MuitosComponentesException{
+                if (getComponentCount() >= 1) throw new MuitosComponentesException();
+                else{
+                        pecaView.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+                        pecaView.setLabelFor(pecaView);
+                        pecaView.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+                        add(pecaView);
+                        revalidate();
+                        repaint();  
+                }
+                
         }
+        
+  
+
+        
+       
         
        
 

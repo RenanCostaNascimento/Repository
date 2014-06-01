@@ -1,22 +1,24 @@
 package br.ifes.poo1.Best_xadrez;
 
-import static org.junit.Assert.assertTrue;
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
+import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
+import ifes.poo1.xadrez.model.cdp.pecas.Peca;
 import ifes.poo1.xadrez.model.cdp.pecas.PecaAbstrata;
 import ifes.poo1.xadrez.model.cdp.pecas.Torre;
+import ifes.poo1.xadrez.model.cdp.pecas.factory.PecasPool;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class TorreTeste  {
 
 	Tabuleiro tabuleiro;
 	List<Posicao> posicoesPossiveis;
-
+                  PecasPool pp = PecasPool.getInstanceOf();
+                  
 	@Test
 	public void testaMoverCapturar(){
 		
@@ -24,7 +26,7 @@ public class TorreTeste  {
 		
 		posicoesPossiveis = new ArrayList<>();
 		
-		PecaAbstrata torre = new Torre(Cores.preto);
+		Peca torre = pp.getPeca(NomePecas.Torre, Cores.branco);
 		torre.setPosicao(new Posicao(4, 3));
 		tabuleiro.setCasas(torre, 4, 3);
 		posicoesPossiveis = tabuleiro.posicoesPossiveisPeca(torre.getPosicao());

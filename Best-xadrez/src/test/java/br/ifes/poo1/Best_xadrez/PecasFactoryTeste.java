@@ -13,13 +13,7 @@ public class PecasFactoryTeste {
 	
 	@Test
 	public void testaCriarPeca(){
-		
 		pecasfactory = new PecasFactory();
-		Cavalo pc = new Cavalo();
-		pc.setCor(Cores.branco);
-		
-		assertTrue(PecasFactory.fabricate("Cavalo", Cores.branco).toString() == pc.toString());
-		assertTrue(PecasFactory.fabricate(NomePecas.Cavalo, Cores.branco).toString() == pc.toString());
-
+		assertTrue(PecasFactory.fabricate("Cavalo", Cores.branco) != PecasFactory.fabricate("Cavalo", Cores.branco));
 	}
 }

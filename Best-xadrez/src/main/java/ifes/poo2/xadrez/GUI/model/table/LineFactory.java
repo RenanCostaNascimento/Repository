@@ -19,7 +19,7 @@ public class LineFactory {
                 for(int index=0; index<8; index++){
                         if (index%2 == 0) tiles[index] =TileFactory.createBlackTile();
                         else tiles[index] = TileFactory.createWhiteTile();
-
+                  /*      
                          javax.swing.GroupLayout jPanelLayout = new javax.swing.GroupLayout(tiles[index]);
                          tiles[index].setLayout(jPanelLayout);
                          jPanelLayout.setHorizontalGroup(
@@ -30,10 +30,12 @@ public class LineFactory {
                                  jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                  .addGap(0, 100, Short.MAX_VALUE)
                         );
-                         line.add(tiles[index]);
+                  */      
+                        line.add(tiles[index]);
                 }
                 line.setTiles(tiles);
                 return line;
+                
         }
          
          public static Line createEvenLine(){
@@ -42,7 +44,7 @@ public class LineFactory {
                 for(int index=0; index<8; index++){
                         if (index%2 == 0) tiles[index] =TileFactory.createWhiteTile();
                         else tiles[index] = TileFactory.createBlackTile();
-
+                        /*
                          javax.swing.GroupLayout jPanelLayout = new javax.swing.GroupLayout(tiles[index]);
                          tiles[index].setLayout(jPanelLayout);
                          jPanelLayout.setHorizontalGroup(
@@ -53,8 +55,10 @@ public class LineFactory {
                                  jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                  .addGap(0, 100, Short.MAX_VALUE)
                         );
+                        */
                          line.add(tiles[index]);
                 }
+        
                 line.setTiles(tiles);
                 return line; 
          }

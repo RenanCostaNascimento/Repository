@@ -8,6 +8,7 @@ package ifes.poo2.xadrez.GUI.control;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
+import ifes.poo1.xadrez.util.exception.MuitosComponentesException;
 import javax.swing.JTextField;
 import ifes.poo2.xadrez.GUI.model.mainFrame.MainFrame;
 import ifes.poo2.xadrez.GUI.model.messagePane.MessagePane;
@@ -16,6 +17,8 @@ import ifes.poo2.xadrez.GUI.model.table.Posicao;
 import ifes.poo2.xadrez.GUI.model.table.TableFactory;
 import ifes.poo2.xadrez.GUI.model.textBar.TextBar;
 import ifes.poo2.xadrez.GUI.pecaView.PecaView;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 
 /**
@@ -70,6 +73,16 @@ public class GUIControl {
         
         private JTextField getTextField(){
                 return mf.getTextField();
+        }
+        
+        public void add(){
+                 PecaView jlabel1 = new PecaView(NomePecas.Bispo, Cores.branco);
+                try {
+                        mf.getChessTable().getPosicao(new Posicao(0,0)).addPecaView(jlabel1);
+                } catch (MuitosComponentesException ex) {
+                        Logger.getLogger(GUIControl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                        
         }
         
         

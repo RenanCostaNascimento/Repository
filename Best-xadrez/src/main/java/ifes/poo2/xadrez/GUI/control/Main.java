@@ -24,6 +24,9 @@ public class Main {
         public static void main(String args[]) {
                 GUIControl gc = new GUIControl();
                 gc.startGUI();
+                gc.add();
+                gc.add();
+               
                 
                 
                 

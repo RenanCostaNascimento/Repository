@@ -6,6 +6,8 @@
 
 package ifes.poo2.xadrez.GUI.model.table;
 
+import ifes.poo2.xadrez.GUI.pecaView.PecaView;
+
 /**
  *
  * @author pdr
@@ -37,6 +39,19 @@ public class ChessTable extends javax.swing.JPanel {
                         else lines[index] = LineFactory.createOddLine();
                         table.add(lines[index]);
                 }
+        }
+        
+        public void addPeca(PecaView p){
+                lines[0].getTile(0).add(p);
+                lines[0].getTile(0).repaint();
+                lines[0].getTile(0).revalidate();
+                lines[0].repaint();
+                lines[0].revalidate();
+                repaint();
+                revalidate();
+                
+                
+                
         }
         
         

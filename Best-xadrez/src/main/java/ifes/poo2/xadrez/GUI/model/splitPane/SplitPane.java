@@ -44,7 +44,7 @@ public class SplitPane extends javax.swing.JPanel {
 
                 setLayout(new java.awt.GridLayout(1, 0));
 
-                splitPane.setDividerLocation(800);
+                splitPane.setDividerLocation(480);
                 splitPane.setDividerSize(2);
                 add(splitPane);
         }// </editor-fold>//GEN-END:initComponents

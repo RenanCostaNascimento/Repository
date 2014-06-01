@@ -16,7 +16,8 @@ public class Line extends javax.swing.JPanel {
          * Creates new form TableRow
          */
         public Line() {
-                initComponents();    
+                initComponents();
+                
         }
 
 
