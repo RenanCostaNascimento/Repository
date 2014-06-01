@@ -3,10 +3,11 @@ package ifes.poo1.xadrez.model.cdp.pecas.factory;
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.pecas.Peca;
+import java.io.Serializable;
 
 import java.util.HashMap;
 
-public class PecasPool {
+public class PecasPool implements Serializable{
 	private HashMap<Cores, HashMap<NomePecas, Peca>> pecas = new HashMap<>();
 	private static PecasPool pp = null;
 	

@@ -38,6 +38,7 @@ public class DAOHistoricoPartidaTest {
     public void criarTabelaUsuario() throws ClassNotFoundException, SQLException {
 
         // Criando a tabela
+//        historicoPartidaDAO.dropTabela();
         historicoPartidaDAO.criarTabela();
     }
 

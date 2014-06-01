@@ -149,7 +149,7 @@ public class Tela {
         return scanner.next();
     }
 
-    public String controlarMenuJogosSalvos(ArrayList<Checkpoint> checkpoints) {
+    public String controlarMenuJogosSalvos(List<Checkpoint> checkpoints) {
 
         if (checkpoints.isEmpty()) {
             System.out.println("Nenhum jogo salvo!");

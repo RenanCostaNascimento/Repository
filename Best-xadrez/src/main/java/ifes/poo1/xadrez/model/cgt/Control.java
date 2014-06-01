@@ -16,7 +16,6 @@ import ifes.poo1.xadrez.model.cdp.pecas.PecaAbstrata;
 import ifes.poo1.xadrez.model.cdp.pecas.Rainha;
 
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
-import ifes.poo1.xadrez.model.cgd.highscore.HighScore;
 import ifes.poo1.xadrez.util.exception.CaminhoBloqueadoException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
@@ -28,6 +27,7 @@ import ifes.poo1.xadrez.util.exception.RoqueInvalidoCaminhoBloqueadoException;
 import ifes.poo1.xadrez.util.exception.RoqueInvalidoReiAmeacadoException;
 import ifes.poo1.xadrez.util.exception.RoqueInvalidoReiMovimentadoException;
 import ifes.poo1.xadrez.util.exception.RoqueInvalidoTorreMovimentadaException;
+import ifes.poo1.xadrez.util.persist.DAOCheckpoint;
 import ifes.poo1.xadrez.util.persist.DAOHistoricoJogador;
 import ifes.poo1.xadrez.util.persist.DAOHistoricoPartida;
 import ifes.poo1.xadrez.view.cci.ControladorTelas;
@@ -54,18 +54,16 @@ public class Control {
     private Jogo jogo;
     private List<HistoricoPartida> partidas = new ArrayList<>();
     private List<HistoricoJogador> jogadores = new ArrayList<>();
-    private ArrayList<Checkpoint> checkpoints = new ArrayList<>();
+    private List<Checkpoint> checkpoints = new ArrayList<>();
     private PecaAbstrata ultimaJogada;
-    private final HighScore highScore;
     private final DAOHistoricoPartida historicoPartidaDAO;
     private final DAOHistoricoJogador historicoJogadorDAO;
+    private final DAOCheckpoint checkpointDAO;
 
     public Control() throws SQLException, ClassNotFoundException {
         historicoPartidaDAO = new DAOHistoricoPartida();
         historicoJogadorDAO = new DAOHistoricoJogador();
-        highScore = new HighScore();
-        jogadores = highScore.getJogadoresAntigos();
-        checkpoints = highScore.getChecpoints();
+        checkpointDAO = new DAOCheckpoint();
     }
 
     /**
@@ -117,13 +115,21 @@ public class Control {
 
     private void controlarSalvarPartida() {
 
-        highScore.addCheckpoint(new Checkpoint(jogo, controladorTela.controlarSalvarSairPartida()));
+        try {
+            checkpointDAO.insert(new Checkpoint(jogo, controladorTela.controlarSalvarSairPartida()));
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
     private void controlarSairPartida() {
 
-        highScore.addCheckpoint(new Checkpoint(jogo, controladorTela.controlarSalvarSairPartida()));
+        try {
+            checkpointDAO.insert(new Checkpoint(jogo, controladorTela.controlarSalvarSairPartida()));
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+        }
         jogo = null;
         ultimaJogada = null;
 
@@ -1146,9 +1152,7 @@ public class Control {
                 try {
                     partidas = historicoPartidaDAO.findAll();
                     jogadores = historicoJogadorDAO.findAll();
-                } catch (SQLException ex) {
-                    Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
+                } catch (SQLException | ClassNotFoundException ex) {
                     Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 controladorTela.controlarDadosPartidas(partidas, jogadores);
@@ -1158,6 +1162,11 @@ public class Control {
                 controlarMenuSair();
                 break;
             default:
+                try {
+                    checkpoints = checkpointDAO.findAll();
+                } catch (SQLException | ClassNotFoundException ex) {
+                    Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 String nomeJogo = controladorTela.controlarMenuJogosSalvos(checkpoints);
                 if (nomeJogo != null) {
                     try {
@@ -1174,16 +1183,19 @@ public class Control {
 
     private void carregarJogo(String nomeJogo) throws JogoInexistenteExcpetion {
 
-        Checkpoint checkpoint = highScore.getCheckpointByNome(nomeJogo);
-        if (checkpoint != null) {
-            jogo = checkpoint.getJogo();
-            if (jogo.getPreto().getNome().equals("ZEUS")) {
-                controlarJogoSingleplayer();
+        try {
+            Checkpoint checkpoint = checkpointDAO.findbyNome(nomeJogo);
+            if (checkpoint.getJogo() != null) {
+                jogo = checkpoint.getJogo();
+                if (jogo.getPreto().getNome().equals("ZEUS")) {
+                    controlarJogoSingleplayer();
+                }
+                controlarJogoMultiplayer();
+            } else {
+                throw new JogoInexistenteExcpetion();
             }
-            controlarJogoMultiplayer();
-
-        } else {
-            throw new JogoInexistenteExcpetion();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -1197,8 +1209,8 @@ public class Control {
 
 //        highScore.setJogadoresAntigos(jogadores);
 //		highScore.setPartidasAntigos(partidas);
-        highScore.setCheckpoint(checkpoints);
-        controladorTela.exibirMensagem(highScore.serializar());
+//        highScore.setCheckpoint(checkpoints);
+//        controladorTela.exibirMensagem(highScore.serializar());
 
         controladorTela.controlarSair();
     }

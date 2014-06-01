@@ -6,10 +6,8 @@
 package br.ifes.poo1.xadrez.persist.test;
 
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoJogador;
-import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
 import ifes.poo1.xadrez.util.persist.DAOHistoricoJogador;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
@@ -38,6 +36,7 @@ public class DAOHistoricoJogadorTest {
     public void criarTabelaUsuario() throws ClassNotFoundException, SQLException {
 
         // Criando a tabela
+//        historicoJogadorDAO.dropTabela();
         historicoJogadorDAO.criarTabela();
     }
 

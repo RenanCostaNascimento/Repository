@@ -7,9 +7,11 @@ package ifes.poo1.xadrez.util.persist;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.Properties;
 
 /**
@@ -56,6 +58,27 @@ public class DAOGeneric {
         int numero = 0;
         // Comando para update, insert e delete		
         statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+
+        ResultSet rs = statement.getGeneratedKeys();
+
+        if (rs.next()) {
+            numero = rs.getInt(1);
+        }
+
+        statement.close();
+
+        return numero;
+    }
+    
+    protected int executeUpdateSerializable(String query, HashMap<String, Object> objetcs) throws SQLException {
+        PreparedStatement statement = con.prepareStatement(query);
+        statement.setObject(1, objetcs.get("nome"));
+        statement.setObject(2, objetcs.get("jogo"));
+        statement.setObject(3, objetcs.get("data"));
+
+        int numero = 0;
+        // Comando para update, insert e delete		
+        statement.executeUpdate();
 
         ResultSet rs = statement.getGeneratedKeys();
 

@@ -40,11 +40,22 @@ public class DAOHistoricoJogador extends DAOGeneric implements DAO<HistoricoJoga
         this.closeConnection();
     }
 
+    public void dropTabela() throws ClassNotFoundException, SQLException {
+        this.openConnection();
+
+        String sql
+                = " DROP TABLE HistoricoJogador";
+
+        this.execute(sql);
+
+        this.closeConnection();
+    }
+
     @Override
     public void insert(HistoricoJogador obj) throws SQLException, ClassNotFoundException {
         this.openConnection();
-        
-        String sql = "INSERT INTO HistoricoJogador (nome, vitorias, empates, derrotas) VALUES ('" + obj.getNome()+ "'," + obj.getVitorias() + "," + obj.getEmpates()+ "," + obj.getDerrotas() +")";
+
+        String sql = "INSERT INTO HistoricoJogador (nome, vitorias, empates, derrotas) VALUES ('" + obj.getNome() + "'," + obj.getVitorias() + "," + obj.getEmpates() + "," + obj.getDerrotas() + ")";
 
         int id = this.executeUpdate(sql);
         obj.setId(id);
@@ -58,7 +69,7 @@ public class DAOHistoricoJogador extends DAOGeneric implements DAO<HistoricoJoga
 
         String sql = "UPDATE HistoricoJogador SET"
                 + "(nome, vitorias, empates, derrotas) ="
-                + "('" + obj.getNome()+ "'," + obj.getVitorias() + "," + obj.getEmpates()+ "," + obj.getDerrotas() +")"
+                + "('" + obj.getNome() + "'," + obj.getVitorias() + "," + obj.getEmpates() + "," + obj.getDerrotas() + ")"
                 + "WHERE ID =" + obj.getId();
 
         this.executeUpdate(sql);
@@ -77,7 +88,7 @@ public class DAOHistoricoJogador extends DAOGeneric implements DAO<HistoricoJoga
 
         this.closeConnection();
     }
-    
+
     public void deleteAll() throws SQLException, ClassNotFoundException {
         this.openConnection();
 
@@ -112,11 +123,11 @@ public class DAOHistoricoJogador extends DAOGeneric implements DAO<HistoricoJoga
 
         return historicoJogador;
     }
-    
+
     public HistoricoJogador findbyNome(String nome) throws SQLException, ClassNotFoundException {
         this.openConnection();
 
-        String sql = "SELECT * FROM HistoricoJogador WHERE nome like '" + nome +"'";
+        String sql = "SELECT * FROM HistoricoJogador WHERE nome like '" + nome + "'";
 
         HistoricoJogador historicoJogador = new HistoricoJogador();
 
@@ -147,13 +158,13 @@ public class DAOHistoricoJogador extends DAOGeneric implements DAO<HistoricoJoga
         ResultSet rs = this.executeQuery(sql);
         while (rs.next()) {
             historicoJogador = new HistoricoJogador();
-            
+
             historicoJogador.setId(rs.getInt("ID"));
             historicoJogador.setNome(rs.getString("nome"));
             historicoJogador.setVitorias(rs.getInt("vitorias"));
             historicoJogador.setEmpates(rs.getInt("empates"));
             historicoJogador.setDerrotas(rs.getInt("derrotas"));
-            
+
             listaHistorico.add(historicoJogador);
         }
 

@@ -8,19 +8,30 @@ import ifes.poo1.xadrez.model.cdp.pecas.Peca;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.builder.TabuleiroAssembler;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
+import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tabuleiro {
+public class Tabuleiro implements Serializable{
 
-    private TabuleiroAssembler tabAsm = TabuleiroAssembler.getInstanceOf();
-    private Peca[][] casas = tabAsm.getCasas();
-    private List<Peca> pecasBrancas = tabAsm.getPecasBrancas();
-    private List<Peca> pecasPretas = tabAsm.getPecasBrancas();
-    private Posicao ultimaMovida = null;
-    private Posicao posicaoReiBranco = new Posicao(4, 0);
-    private Posicao posicaoReiPreto = new Posicao(4, 7);
+    private TabuleiroAssembler tabAsm;
+    private Peca[][] casas;
+    private List<Peca> pecasBrancas;
+    private List<Peca> pecasPretas;
+    private Posicao ultimaMovida;
+    private Posicao posicaoReiBranco;
+    private Posicao posicaoReiPreto;
+
+    public Tabuleiro() {
+        tabAsm = TabuleiroAssembler.getInstanceOf();
+        casas = tabAsm.getCasas();
+        pecasBrancas = tabAsm.getPecasBrancas();
+        pecasPretas = tabAsm.getPecasPretas();
+        ultimaMovida = new Posicao();
+        posicaoReiBranco = new Posicao(4, 0);
+        posicaoReiPreto = new Posicao(4, 7);
+    }
 
     /*
      * posicaoReiBranco e posicaoReiPreto serao usados para determinar se houve
@@ -645,7 +656,7 @@ public class Tabuleiro {
         if (getCasas(posicaoFinal.getColuna(), posicaoFinal.getLinha()) == null) {
             throw new CapturaInvalidaPecaInexistenteException();
         }
-		// verifica a peca que se deseja capturar eh da mesma cor que o jogador
+        // verifica a peca que se deseja capturar eh da mesma cor que o jogador
         // que fez a captura
         if (getCasas(posicaoFinal.getColuna(), posicaoFinal.getLinha()).getCor().equals(jogo.getVez().getCor())) {
             throw new CapturaInvalidaPecaPropriaException();

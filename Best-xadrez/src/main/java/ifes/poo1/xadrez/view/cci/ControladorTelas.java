@@ -156,7 +156,7 @@ public class ControladorTelas {
 		return tela.controlarSalvarSairPartida();
 	}
 
-	public String  controlarMenuJogosSalvos(ArrayList<Checkpoint> checkpoints) {
+	public String  controlarMenuJogosSalvos(List<Checkpoint> checkpoints) {
 		
 		return tela.controlarMenuJogosSalvos(checkpoints);
 		
