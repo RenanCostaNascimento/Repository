@@ -3,6 +3,7 @@ package ifes.poo2.xadrez.GUI.model.table;
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.util.exception.MuitosComponentesException;
+import ifes.poo2.xadrez.GUI.control.GUIControl;
 import ifes.poo2.xadrez.GUI.pecaView.PecaView;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -41,7 +42,8 @@ public class Tile extends javax.swing.JPanel {
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
-                setBackground(new java.awt.Color(206, 148, 0));
+                setBackground(new java.awt.Color(121, 138, 245));
+                setBorder(javax.swing.BorderFactory.createEtchedBorder());
                 setMaximumSize(new java.awt.Dimension(300, 300));
                 setMinimumSize(new java.awt.Dimension(60, 60));
                 setPreferredSize(new java.awt.Dimension(60, 60));
@@ -63,13 +65,13 @@ public class Tile extends javax.swing.JPanel {
         }//GEN-LAST:event_formMouseClicked
 
         private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-               
-                setOriginalColor();
-                
+
         }//GEN-LAST:event_formMouseReleased
 
         private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
-                setColor(Color.GREEN);    
+                GUIControl.getInstanceOf().restoreAllOriginalTileColors();
+                if (this.getComponentCount()>0) GUIControl.getInstanceOf().iluminarPosicoesPossiveis(this);
+                
         }//GEN-LAST:event_formMousePressed
 
 
@@ -94,7 +96,11 @@ public class Tile extends javax.swing.JPanel {
         public Color getOriginalColor() {
                 return originalColor;
         }
-
+        public void iluminar(){
+                if (getOriginalColor() ==TileFactory.getWhiteTile()) setColor(new java.awt.Color(0, 204, 255));
+                else if (getOriginalColor() == TileFactory.getBlackTile()) setColor(new java.awt.Color(121,138,245));
+                else setColor(new java.awt.Color(0, 204, 255));
+        }
         /**
          * @param originalColor the originalColor to set
          */
@@ -113,6 +119,10 @@ public class Tile extends javax.swing.JPanel {
                         repaint();  
                 }
                 
+        }
+        
+        public PecaView getPecaView(){
+                return (PecaView) this.getComponent(0);
         }
         
   

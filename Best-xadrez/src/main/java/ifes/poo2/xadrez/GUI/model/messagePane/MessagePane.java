@@ -55,13 +55,17 @@ public class MessagePane extends javax.swing.JPanel {
 
         }//GEN-LAST:event_jTextArea1MouseClicked
 
-        public void addMessage(String message){
+        /**
+         *
+         * @param message
+         */
+        public static void addMessage(String message){
                 jTextArea1.append(message);
         }
         
        
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JScrollPane jScrollPane1;
-        private javax.swing.JTextArea jTextArea1;
+        private static javax.swing.JTextArea jTextArea1;
         // End of variables declaration//GEN-END:variables
 }

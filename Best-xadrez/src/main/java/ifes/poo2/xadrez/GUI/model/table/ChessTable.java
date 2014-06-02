@@ -6,6 +6,7 @@
 
 package ifes.poo2.xadrez.GUI.model.table;
 
+import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo2.xadrez.GUI.pecaView.PecaView;
 
 /**
@@ -87,7 +88,16 @@ public class ChessTable extends javax.swing.JPanel {
                 this.lines = lines;
         }
         
-        public Tile getPosicao(ifes.poo2.xadrez.GUI.model.table.Posicao pos){        
+        public Tile getPosicao(Posicao pos){        
                 return lines[pos.getLinha()].getTile(pos.getColuna());
+        }
+        
+        public Posicao getPosicaoTile(Tile t){
+                for (int i=0; i<8; i++){
+                        for (int j=0; j<8; j++){
+                                if (lines[i].getTile(j) == t) return new Posicao(i,j);
+                        }
+                }
+                return null;
         }
 }

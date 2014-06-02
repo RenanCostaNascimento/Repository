@@ -25,10 +25,12 @@ public class Bispo extends PecaAbstrata{
 
 		
 		for (int aux = 0; aux < 8; aux++){
-			if ((getPosicao().getColuna()+aux == posicaoFinal.getColuna()) && (getPosicao().getLinha()+aux == posicaoFinal.getLinha())) return true;
-			if ((getPosicao().getColuna()-aux == posicaoFinal.getColuna()) && (getPosicao().getLinha()-aux == posicaoFinal.getLinha())) return true;
+                                                                   if ((getPosicao().getColuna()+aux == posicaoFinal.getColuna()) && (getPosicao().getLinha()+aux == posicaoFinal.getLinha())) return true;                         
+                                                                   if ((getPosicao().getColuna()-aux == posicaoFinal.getColuna()) && (getPosicao().getLinha()-aux == posicaoFinal.getLinha())) return true;
 			if ((getPosicao().getColuna()+aux == posicaoFinal.getColuna()) && (getPosicao().getLinha()-aux == posicaoFinal.getLinha())) return true;
 			if ((getPosicao().getColuna()-aux == posicaoFinal.getColuna()) && (getPosicao().getLinha()+aux == posicaoFinal.getLinha())) return true;
+                                                                
+   
 		}
 		
 		return false;

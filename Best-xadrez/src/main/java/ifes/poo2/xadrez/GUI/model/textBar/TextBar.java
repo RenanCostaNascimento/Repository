@@ -6,6 +6,7 @@
 
 package ifes.poo2.xadrez.GUI.model.textBar;
 
+import ifes.poo2.xadrez.GUI.model.messagePane.MessagePane;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -74,7 +75,20 @@ public class TextBar extends javax.swing.JPanel {
         }//GEN-LAST:event_textFieldFocusGained
 
         private void textFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldKeyPressed
-               
+               if (evt.getKeyCode() == KeyEvent.VK_ENTER){
+                        String input = textField.getText();
+                        Calendar cal = Calendar.getInstance();
+                        cal.getTime();
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                        
+                        if (input.startsWith(":m")){
+                                input = input.replace(":m", "");
+                                MessagePane.addMessage("<<"+sdf.format(cal.getTime())+" Player" +" says >> \n"+input+"\n");
+                                //TODO: save in a logfile
+                        }
+                        
+                        textField.setText(null);
+                }
         }//GEN-LAST:event_textFieldKeyPressed
 
         public JTextField getTextField(){

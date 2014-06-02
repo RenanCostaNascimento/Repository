@@ -42,14 +42,14 @@ public class PecaView extends JLabel{
         /**
          * @return the peca
          */
-        public NomePecas getPeca() {
+        public NomePecas getNomePeca() {
                 return peca;
         }
 
         /**
          * @param peca the peca to set
          */
-        public void setPeca(NomePecas peca) {
+        public void setNomePeca(NomePecas peca) {
                 this.peca = peca;
         }
 

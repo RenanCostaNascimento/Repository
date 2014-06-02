@@ -24,7 +24,7 @@ public class Rei extends PecaAbstrata {
 		return "R";
 	}
 	
-	@Override
+	
 	public boolean mover(Posicao posicaoFinal) {
 
 		if ((Math.abs(posicaoFinal.getColuna() - getPosicao().getColuna()) <= 1)
@@ -50,5 +50,7 @@ public class Rei extends PecaAbstrata {
 		return false;
 
 	}
+
+        
 
 }
