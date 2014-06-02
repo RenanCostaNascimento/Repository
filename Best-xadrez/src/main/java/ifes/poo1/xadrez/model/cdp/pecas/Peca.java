@@ -29,7 +29,7 @@ public interface Peca extends Cloneable {
 	public void setPosicao(Posicao posicao);
 
 
-	public Object getCor();
+	public Cores getCor();
 
 
 

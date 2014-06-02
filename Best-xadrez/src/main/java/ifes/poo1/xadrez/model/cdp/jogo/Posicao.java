@@ -8,6 +8,10 @@ public class Posicao {
 	public Posicao(){
 		
 	}
+                       
+                        public static Posicao create(int coluna, int linha){
+                                return new Posicao(coluna, linha);
+                        }
 	
 	public Posicao(int coluna, int linha){
 		this.coluna = coluna;

@@ -6,7 +6,7 @@ import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.Peca;
 import ifes.poo1.xadrez.model.cdp.pecas.factory.PecasPool;
-import ifes.poo1.xadrez.model.cdp.tabuleiro.builder.TabuleiroAssembler;
+
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
 
@@ -18,8 +18,8 @@ public class Tabuleiro {
 	private List<Peca> pecasBrancas = new ArrayList<>();
 	private List<Peca> pecasPretas = new ArrayList<>();
 	private Posicao ultimaMovida = null;
-	private Posicao posicaoReiBranco = new Posicao(4, 0);
-	private Posicao posicaoReiPreto = new Posicao(4, 7);
+	private Posicao posicaoReiBranco =  Posicao.create(4, 0);
+	private Posicao posicaoReiPreto = Posicao.create(4, 7);
 	/*
 	 * posicaoReiBranco e posicaoReiPreto serao usados para determinar se houve
 	 * cheque ou cheque-mate
@@ -34,101 +34,88 @@ public class Tabuleiro {
 		PecasPool pecasPool = PecasPool.getInstanceOf();
 		// inserindo os pe�es
 		for (int i = 0; i < 8; i++) {
-			peca = pecasPool.getPeca(NomePecas.Peao, Cores.branco);
+			peca = pecasPool.getPeca(NomePecas.Peao, Cores.branco, Posicao.create(i, 1));
 			casas[1][i] = peca;
 			pecasBrancas.add(peca);
-			peca.setPosicao(new Posicao(i, 1));
+			
 
-			peca = pecasPool.getPeca(NomePecas.Peao, Cores.preto);
+			peca = pecasPool.getPeca(NomePecas.Peao, Cores.preto, Posicao.create(i, 6));
 			casas[6][i] = peca;
 			pecasPretas.add(peca);
-			peca.setPosicao(new Posicao(i, 6));
+                              
+			
 
 		}
 
 		// inserindo as torres
-		peca = pecasPool.getPeca(NomePecas.Torre, Cores.branco);
+		peca = pecasPool.getPeca(NomePecas.Torre, Cores.branco, Posicao.create(0, 0));
 		casas[0][0] = peca;
 		pecasBrancas.add(peca);
-		peca.setPosicao(new Posicao(0, 0));
+		
 
-		peca = pecasPool.getPeca(NomePecas.Torre, Cores.branco);
+		peca = pecasPool.getPeca(NomePecas.Torre, Cores.branco, Posicao.create(7, 0));
 		casas[0][7] = peca;
 		pecasBrancas.add(peca);
-		peca.setPosicao(new Posicao(7, 0));
+		
 
-		peca = pecasPool.getPeca(NomePecas.Torre, Cores.preto);
+                                        peca = pecasPool.getPeca(NomePecas.Torre, Cores.preto , Posicao.create(0, 7));
 		casas[7][0] = peca;
 		pecasPretas.add(peca);
-		peca.setPosicao(new Posicao(0, 7));
 
-		peca = pecasPool.getPeca(NomePecas.Torre, Cores.preto);
+		peca = pecasPool.getPeca(NomePecas.Torre, Cores.preto, Posicao.create(7, 7));
 		casas[7][7] = peca;
 		pecasPretas.add(peca);
-		peca.setPosicao(new Posicao(7, 7));
 
 		// inserindo os cavalos
-		peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.branco);
+		peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.branco, Posicao.create(1, 0));
 		casas[0][1] = peca;
 		pecasBrancas.add(peca);
-		peca.setPosicao(new Posicao(1, 0));
 
-		peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.branco);
+		peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.branco, Posicao.create(6, 0));
 		casas[0][6] = peca;
 		pecasBrancas.add(peca);
-		peca.setPosicao(new Posicao(6, 0));
 
-		peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.preto);
+		peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.preto, Posicao.create(1, 7));
 		casas[7][1] = peca;
 		pecasPretas.add(peca);
-		peca.setPosicao(new Posicao(1, 7));
 
-		peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.preto);
+		peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.preto, Posicao.create(6, 7));
 		casas[7][6] = peca;
 		pecasPretas.add(peca);
-		peca.setPosicao(new Posicao(6, 7));
 
 		// inserindo os bispos
-		peca = pecasPool.getPeca(NomePecas.Bispo, Cores.branco);
+		peca = pecasPool.getPeca(NomePecas.Bispo, Cores.branco, Posicao.create(2, 0));
 		casas[0][2] = peca;
 		pecasBrancas.add(peca);
-		peca.setPosicao(new Posicao(2, 0));
 
-		peca = pecasPool.getPeca(NomePecas.Bispo, Cores.branco);
+		peca = pecasPool.getPeca(NomePecas.Bispo, Cores.branco, Posicao.create(5, 0));
 		casas[0][5] = peca;
 		pecasBrancas.add(peca);
-		peca.setPosicao(new Posicao(5, 0));
 
-		peca = pecasPool.getPeca(NomePecas.Bispo, Cores.preto);
+		peca = pecasPool.getPeca(NomePecas.Bispo, Cores.preto, Posicao.create(2, 7));
 		casas[7][2] = peca;
 		pecasPretas.add(peca);
-		peca.setPosicao(new Posicao(2, 7));
 
-		peca = pecasPool.getPeca(NomePecas.Bispo, Cores.preto);
+		peca = pecasPool.getPeca(NomePecas.Bispo, Cores.preto, Posicao.create(5, 7));
 		casas[7][5] = peca;
 		pecasPretas.add(peca);
-		peca.setPosicao(new Posicao(5, 7));
 
 		// inserindo rei e dama
-		peca = pecasPool.getPeca(NomePecas.Rei, Cores.branco);
+		peca = pecasPool.getPeca(NomePecas.Rei, Cores.branco, Posicao.create(4, 0));
 		casas[0][4] = peca;
 		pecasBrancas.add(peca);
-		peca.setPosicao(new Posicao(4, 0));
 
-		peca = pecasPool.getPeca(NomePecas.Rei, Cores.preto);
+		peca = pecasPool.getPeca(NomePecas.Rei, Cores.preto, Posicao.create(4, 7));
 		casas[7][4] = peca;
 		pecasPretas.add(peca);
-		peca.setPosicao(new Posicao(4, 7));
 
-		peca = pecasPool.getPeca(NomePecas.Rainha, Cores.branco);
+		peca = pecasPool.getPeca(NomePecas.Rainha, Cores.branco, Posicao.create(3, 0));
 		casas[0][3] = peca;
 		pecasBrancas.add(peca);
-		peca.setPosicao(new Posicao(3, 0));
 
-		peca = pecasPool.getPeca(NomePecas.Rainha, Cores.preto);
+		peca = pecasPool.getPeca(NomePecas.Rainha, Cores.preto, Posicao.create(3, 7));
 		casas[7][3] = peca;
 		pecasPretas.add(peca);
-		peca.setPosicao(new Posicao(3, 7));
 	}
 
 	public Peca getCasas(int coluna, int linha) {

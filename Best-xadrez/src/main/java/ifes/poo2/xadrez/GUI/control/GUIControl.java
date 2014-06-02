@@ -132,11 +132,13 @@ public class GUIControl {
                 ChessTable ct = getChessTable();
                 Tile tileInicial = ct.getPosicao(posInicial);
                 Tile tileFinal = ct.getPosicao(posFinal);
+                
                 PecaView pv =  tileInicial.getPecaView();
-                if (tileFinal.getComponentCount() == 0){
+                if ((tileFinal.getComponentCount() == 0 ) && (tileInicial.getPecaView().getPeca().mover(posFinal))) {
                         try {
                                 tileFinal.addPecaView(pv);
                                 tileInicial.remove(pv);
+                                pv.getPeca().setPosicao(ct.getPosicaoTile(tileFinal));
                         } catch (MuitosComponentesException ex) {
                                 Logger.getLogger(GUIControl.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -150,41 +152,41 @@ public class GUIControl {
         public void iluminarPosicoesPossiveis(Tile t ){
                 ChessTable ct = getChessTable();
                 PecaView pv = t.getPecaView();
-                Peca peca = PecasPool.getInstanceOf().getPeca(pv.getNomePeca(), pv.getCor());
-                peca.setPosicao(ct.getPosicaoTile(t));
-                
-                
                 
                 for (int i = 0; i<8; i++){
                         for (int j=0; j<8; j++){
                                 Posicao pos = new Posicao(i, j);
-                                if (peca.mover(pos)){
+                                if (pv.getPeca().mover(pos)){
                                         ct.getPosicao(pos).iluminar();                                     
                                 }
-                                if ((ct.getPosicao(pos).getComponentCount() > 0) && peca.capturar(pos) && (ct.getPosicao(pos).getPecaView().getCor() != t.getPecaView().getCor())){
+                                if ((ct.getPosicao(pos).getComponentCount() > 0) && pv.getPeca().capturar(pos) && (ct.getPosicao(pos).getPecaView().getCor() != t.getPecaView().getCor())){
                                                 ct.getPosicao(pos).setColor(Color.RED);
                                 }
                         }
                         
                 }
                 t.setColor(Color.GREEN);
-                
-                
         }
         
-        public void debug(){
-                try {        
-                        getChessTable().getPosicao(new Posicao(0, 5)).addPecaView(new PecaView(NomePecas.Bispo, Cores.branco));
-                        getChessTable().getPosicao(new Posicao(5, 5)).addPecaView(new PecaView(NomePecas.Bispo, Cores.branco));
-                        getChessTable().getPosicao(new Posicao(3,3)).addPecaView(new PecaView(NomePecas.Rainha, Cores.branco));
-                        //getChessTable().getPosicao(new Posicao(3, 3)).addPecaView(new PecaView(NomePecas.Peao, Cores.branco));
-                        //getChessTable().getPosicao(new Posicao(4,4)).addPecaView(new PecaView(NomePecas.Peao, Cores.preto));
-                        
-                        
-                        
+        private void addPecaOnPosition(Posicao pos, Peca peca){
+                peca.setPosicao(pos);
+                try {
+                        getChessTable().getPosicao(pos).addPecaView(new PecaView(peca));
                 } catch (MuitosComponentesException ex) {
                         Logger.getLogger(GUIControl.class.getName()).log(Level.SEVERE, null, ex);
                 }
+        }
+         private void addPecaOnPosition(Posicao pos, NomePecas np, Cores cor){
+                 addPecaOnPosition(pos, PecasPool.getInstanceOf().getPeca(np, cor, pos));
+         }
+        
+        public void debug(){
+                addPecaOnPosition(Posicao.create(4, 0), NomePecas.Bispo, Cores.preto);
+                addPecaOnPosition(Posicao.create(0, 0), NomePecas.Bispo, Cores.preto);
+                addPecaOnPosition(Posicao.create(5, 5), NomePecas.Bispo, Cores.branco);
+                
+                
+                addPecaOnPosition(Posicao.create(3, 7), NomePecas.Bispo, Cores.branco);
         }
 }
 

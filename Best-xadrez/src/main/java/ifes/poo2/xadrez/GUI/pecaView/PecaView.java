@@ -8,6 +8,7 @@ package ifes.poo2.xadrez.GUI.pecaView;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
+import ifes.poo1.xadrez.model.cdp.pecas.Peca;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -22,16 +23,14 @@ import javax.swing.JLabel;
  * @author pdr
  */
 public class PecaView extends JLabel{
-        private NomePecas peca;
-        private Cores cor;
+        private Peca peca;
         private BufferedImage myPicture;    
         private BufferedImage image;
         
-        public PecaView(NomePecas peca,  Cores cor) {
+        public PecaView(Peca peca) {
                 this.peca = peca;
-                this.cor = cor;
                 try {
-                        myPicture = ImageIO.read(new File("/home/pdr/Documents/chessPieces/"+cor.toString()+peca.toString()+".png"));
+                        myPicture = ImageIO.read(new File("/home/pdr/Documents/chessPieces/"+peca.getCor().toString()+peca.getNome().toString()+".png"));
                 } catch (IOException ex) {
                         Logger.getLogger(PecaView.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -42,14 +41,14 @@ public class PecaView extends JLabel{
         /**
          * @return the peca
          */
-        public NomePecas getNomePeca() {
+        public Peca getPeca() {
                 return peca;
         }
 
         /**
          * @param peca the peca to set
          */
-        public void setNomePeca(NomePecas peca) {
+        public void setPeca(Peca peca) {
                 this.peca = peca;
         }
 
@@ -57,15 +56,13 @@ public class PecaView extends JLabel{
          * @return the cor
          */
         public Cores getCor() {
-                return cor;
+                return peca.getCor();
         }
 
         /**
          * @param cor the cor to set
          */
-        public void setCor(Cores cor) {
-                this.cor = cor;
-        }
+        
 
         /**
          * @return the myPicture
