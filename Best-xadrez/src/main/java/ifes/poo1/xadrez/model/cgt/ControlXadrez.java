@@ -1387,4 +1387,8 @@ public class ControlXadrez {
         }
     }
 
+    public Jogo getJogo() {
+        return jogo;
+    }
+
 }
