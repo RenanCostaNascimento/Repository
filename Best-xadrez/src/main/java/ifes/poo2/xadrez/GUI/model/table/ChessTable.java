@@ -33,9 +33,18 @@ public class ChessTable extends javax.swing.JPanel {
         }
         
         private void setComponents(){
+                /*
                 table.setLayout(new java.awt.GridLayout(0, 1));
                 int index;
                 for (index=0; index<8; index++){
+                        if (index%2 == 0) lines[index] =LineFactory.createEvenLine();
+                        else lines[index] = LineFactory.createOddLine();
+                        table.add(lines[index]);
+                }
+                */
+                table.setLayout(new java.awt.GridLayout(0, 1));
+                int index;
+                for (index=7; index>=0; index--){
                         if (index%2 == 0) lines[index] =LineFactory.createEvenLine();
                         else lines[index] = LineFactory.createOddLine();
                         table.add(lines[index]);

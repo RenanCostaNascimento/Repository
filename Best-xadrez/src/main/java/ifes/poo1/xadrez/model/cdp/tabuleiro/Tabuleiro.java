@@ -117,10 +117,16 @@ public class Tabuleiro {
 		casas[7][3] = peca;
 		pecasPretas.add(peca);
 	}
+          
+                        
 
 	public Peca getCasas(int coluna, int linha) {
 		return casas[linha][coluna];
 	}
+          
+                        public Peca getCasas(Posicao pos){
+                                return getCasas(pos.getColuna(), pos.getLinha());
+                        }
 
 	public void setCasas(Peca peca, int coluna, int linha) {
 		this.casas[linha][coluna] = peca;

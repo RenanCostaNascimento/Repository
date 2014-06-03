@@ -11,8 +11,8 @@ import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.Peca;
 import ifes.poo1.xadrez.model.cdp.pecas.factory.PecasPool;
+import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 import ifes.poo1.xadrez.util.exception.MuitosComponentesException;
-import javax.swing.JTextField;
 import ifes.poo2.xadrez.GUI.model.mainFrame.MainFrame;
 import ifes.poo2.xadrez.GUI.model.messagePane.MessagePane;
 import ifes.poo2.xadrez.GUI.model.table.ChessTable;
@@ -24,15 +24,18 @@ import ifes.poo2.xadrez.GUI.pecaView.PecaView;
 import ifes.poo2.xadrez.GUI.pecaView.PecaViewFactory;
 import java.awt.Color;
 import java.awt.Component;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 /**
  *
  * @author pdr
  */
 public class GUIControl {
+        private Tabuleiro tabuleiro = new Tabuleiro();
         private MainFrame mf = MainFrame.create();
         private static GUIControl gc = null;
         public static GUIControl getInstanceOf(){
@@ -150,6 +153,17 @@ public class GUIControl {
         }
         
         public void iluminarPosicoesPossiveis(Tile t ){
+                
+                ChessTable ct = getChessTable();
+                
+                t.setColor(Color.GREEN);
+                List<Posicao> posicoes = tabuleiro.posicoesPossiveisPeca(t.getPecaView().getPeca().getPosicao());
+                //for (int i=0; i<posicoes.size(); i++) ct.getPosicao(posicoes.get(i)).iluminar();  
+                for (int i=0; i<posicoes.size(); i++) (ct.getPosicao(posicoes.get(i))).iluminar();
+                System.out.println(t.getPecaView().getPeca().getNome());
+                for (int i=0; i<posicoes.size(); i++) System.out.println("Coluna: "+posicoes.get(i).getColuna()+"\nLinha:"+posicoes.get(i).getLinha());
+                
+                /*
                 ChessTable ct = getChessTable();
                 PecaView pv = t.getPecaView();
                 
@@ -166,6 +180,11 @@ public class GUIControl {
                         
                 }
                 t.setColor(Color.GREEN);
+                   
+                */
+                        
+                
+                
         }
         
         private void addPecaOnPosition(Posicao pos, Peca peca){
@@ -176,17 +195,28 @@ public class GUIControl {
                         Logger.getLogger(GUIControl.class.getName()).log(Level.SEVERE, null, ex);
                 }
         }
-         private void addPecaOnPosition(Posicao pos, NomePecas np, Cores cor){
+        private void addPecaOnPosition(Posicao pos, NomePecas np, Cores cor){
                  addPecaOnPosition(pos, PecasPool.getInstanceOf().getPeca(np, cor, pos));
          }
         
+        private void populateGUITable(){
+                
+                for (int i=0; i<8; i++){
+                        for (int j=0; j<8; j++){
+                                Posicao pos = Posicao.create(i, j);
+                                if (tabuleiro.getCasas(pos) != null) addPecaOnPosition(pos, tabuleiro.getCasas(pos));
+                        }
+                }
+        } 
+         
+        
+        public void startGameFacade(){
+                populateGUITable();
+        }
+                
         public void debug(){
-                addPecaOnPosition(Posicao.create(4, 0), NomePecas.Bispo, Cores.preto);
-                addPecaOnPosition(Posicao.create(0, 0), NomePecas.Bispo, Cores.preto);
-                addPecaOnPosition(Posicao.create(5, 5), NomePecas.Bispo, Cores.branco);
+                startGameFacade();
                 
-                
-                addPecaOnPosition(Posicao.create(3, 7), NomePecas.Bispo, Cores.branco);
         }
 }
 
