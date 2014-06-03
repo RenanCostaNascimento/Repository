@@ -71,23 +71,31 @@ public class Tela {
 
     public void mostrarMenuDadosPartidas(List<HistoricoPartida> partidas, List<HistoricoJogador> jogadores) {
 
+        StringBuffer buffer = new StringBuffer();
+        
         if (partidas.isEmpty()) {
+            buffer.append("Ainda não houve nenhuma partida!\n");
             System.out.println("Ainda não houve nenhuma partida!");
         } else {
             int quantPartidas = 1;
             int quantJogadores = 1;
             SimpleDateFormat formatoData = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+            buffer.append("Partidas realizadas...");
             System.out.println("Partidas realizadas...");
+            buffer.append("N°  -  Inicio  -  Fim  -  Vencedor");
             System.out.println("N°  -  Inicio  -  Fim  -  Vencedor");
             for (HistoricoPartida partida : partidas) {
+                buffer.append(quantPartidas + "  -  " + formatoData.format(partida.getDataHoraInicio()) + "  -  " + formatoData.format(partida.getDataHoraFim()) + "  -  " + partida.getVencedor());
                 System.out.println(quantPartidas + "  -  " + formatoData.format(partida.getDataHoraInicio()) + "  -  " + formatoData.format(partida.getDataHoraFim()) + "  -  " + partida.getVencedor());
                 quantPartidas++;
             }
-
+            buffer.append("... e os seus jogadores...");
             System.out.println("... e os seus jogadores...");
+            buffer.append("N°  -  Nome  -  Vitorias  -  Empates  -  Derrotas");
             System.out.println("N°  -  Nome  -  Vitorias  -  Empates  -  Derrotas");
             for (HistoricoJogador jogador : jogadores) {
+                buffer.append(quantJogadores + "  -  " + jogador.getNome() + "  -  " + jogador.getVitorias() + "  -  " + jogador.getEmpates() + "  -  " + jogador.getDerrotas());
                 System.out.println(quantJogadores + "  -  " + jogador.getNome() + "  -  " + jogador.getVitorias() + "  -  " + jogador.getEmpates() + "  -  " + jogador.getDerrotas());
                 quantJogadores++;
             }

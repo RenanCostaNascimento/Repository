@@ -50,7 +50,9 @@ import java.util.logging.Logger;
  */
 
 public class ControlXadrez {
-
+    
+    private static ControlXadrez controlXadrez = null;
+    
     private final ControladorTelas controladorTela = new ControladorTelas();
     private Jogo jogo;
     private List<HistoricoPartida> partidas = new ArrayList<>();
@@ -61,10 +63,22 @@ public class ControlXadrez {
     private final DAOHistoricoJogador historicoJogadorDAO;
     private final DAOCheckpoint checkpointDAO;
 
-    public ControlXadrez() throws SQLException, ClassNotFoundException {
+    private ControlXadrez() throws SQLException, ClassNotFoundException {
         historicoPartidaDAO = new DAOHistoricoPartida();
         historicoJogadorDAO = new DAOHistoricoJogador();
         checkpointDAO = new DAOCheckpoint();
+    }
+    
+    public static ControlXadrez getInstanceOf(){
+        if(controlXadrez == null){
+            try {
+                controlXadrez =  new ControlXadrez();
+            } catch (    SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return controlXadrez;
     }
 
     /**
@@ -1143,7 +1157,7 @@ public class ControlXadrez {
                 String nomeJogadores[] = new String[2];
                 nomeJogadores = controladorTela.controlarNovoJogo();
                 if ("ZEUS".equals(nomeJogadores[1])) {
-                    iniciarJogoSingleplayer(nomeJogadores);
+//                    iniciarJogoSingleplayer(nomeJogadores);
                 } else {
                     iniciarJogoMultiplayer(nomeJogadores);
                 }
@@ -1220,10 +1234,10 @@ public class ControlXadrez {
      *
      * @param nomeJogadores - o vetor contendo os dois nomes dos participantes.
      */
-    private void iniciarJogoSingleplayer(String[] nomeJogadores) {
+    private void iniciarJogoSingleplayer(String nomeJogadores) {
 
-        Jogador branco = new Jogador(nomeJogadores[0], Cores.branco);
-        Jogador preto = new Jogador(nomeJogadores[1], Cores.preto);
+        Jogador branco = new Jogador(nomeJogadores, Cores.branco);
+        Jogador preto = new Jogador("ZEUS", Cores.preto);
 
         Tabuleiro tabuleiro = new Tabuleiro();
 
