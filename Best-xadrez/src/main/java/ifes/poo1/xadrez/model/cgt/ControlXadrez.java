@@ -48,7 +48,8 @@ import java.util.logging.Logger;
  * @author Renan
  *
  */
-public class Control {
+
+public class ControlXadrez {
 
     private final ControladorTelas controladorTela = new ControladorTelas();
     private Jogo jogo;
@@ -60,7 +61,7 @@ public class Control {
     private final DAOHistoricoJogador historicoJogadorDAO;
     private final DAOCheckpoint checkpointDAO;
 
-    public Control() throws SQLException, ClassNotFoundException {
+    public ControlXadrez() throws SQLException, ClassNotFoundException {
         historicoPartidaDAO = new DAOHistoricoPartida();
         historicoJogadorDAO = new DAOHistoricoJogador();
         checkpointDAO = new DAOCheckpoint();
@@ -118,7 +119,7 @@ public class Control {
         try {
             checkpointDAO.insert(new Checkpoint(jogo, controladorTela.controlarSalvarSairPartida()));
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -128,7 +129,7 @@ public class Control {
         try {
             checkpointDAO.insert(new Checkpoint(jogo, controladorTela.controlarSalvarSairPartida()));
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
         }
         jogo = null;
         ultimaJogada = null;
@@ -648,10 +649,10 @@ public class Control {
             salvarJogadorVitoria(vencedor.getNome());
             salvarJogadorDerrota(perdedor.getNome());
         } catch (SQLException ex) {
-            Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
             controladorTela.exibirMensagem("Não foi possivel salvar a partida!");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
         }
 
 //        adicionarHistoricoJogadorVitoria(vencedor.getNome());
@@ -858,7 +859,7 @@ public class Control {
                     salvarJogadorEmpate(jogo.getBranco().getNome());
                     salvarJogadorEmpate(jogo.getPreto().getNome());
                 } catch (SQLException | ClassNotFoundException ex) {
-                    Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
 //                adicionarHistoricoJogadorEmpate();
@@ -922,10 +923,10 @@ public class Control {
         try {
             historicoPartidaDAO.insert(partida);
         } catch (SQLException ex) {
-            Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
             controladorTela.exibirMensagem("Não foi possivel salvar a partida!");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -1153,7 +1154,7 @@ public class Control {
                     partidas = historicoPartidaDAO.findAll();
                     jogadores = historicoJogadorDAO.findAll();
                 } catch (SQLException | ClassNotFoundException ex) {
-                    Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 controladorTela.controlarDadosPartidas(partidas, jogadores);
                 controlarMenuInicial();
@@ -1165,7 +1166,7 @@ public class Control {
                 try {
                     checkpoints = checkpointDAO.findAll();
                 } catch (SQLException | ClassNotFoundException ex) {
-                    Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 String nomeJogo = controladorTela.controlarMenuJogosSalvos(checkpoints);
                 if (nomeJogo != null) {
@@ -1195,7 +1196,7 @@ public class Control {
                 throw new JogoInexistenteExcpetion();
             }
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -1211,7 +1212,6 @@ public class Control {
 //		highScore.setPartidasAntigos(partidas);
 //        highScore.setCheckpoint(checkpoints);
 //        controladorTela.exibirMensagem(highScore.serializar());
-
         controladorTela.controlarSair();
     }
 

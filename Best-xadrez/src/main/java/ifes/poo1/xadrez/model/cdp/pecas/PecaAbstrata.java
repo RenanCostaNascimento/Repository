@@ -22,6 +22,11 @@ public abstract class PecaAbstrata implements Peca, Serializable {
         this.valor = valor;
         this.cor = cor;
     }
+    
+    public PecaAbstrata(NomePecas nome, int valor) {
+        this.nome = nome;
+        this.valor = valor;
+    }
 
     public NomePecas getNome() {
         return nome;

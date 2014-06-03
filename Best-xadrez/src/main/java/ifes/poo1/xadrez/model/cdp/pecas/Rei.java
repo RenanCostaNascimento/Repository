@@ -15,12 +15,8 @@ public class Rei extends PecaAbstrata {
 
     public Rei() {
 
-        super(NomePecas.Rei, 999, null);
-    }
-
-    public Rei(Cores cor) {
-
-        super(NomePecas.Rei, 999, cor);
+        super(NomePecas.Rei, 999);
+        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -28,7 +24,6 @@ public class Rei extends PecaAbstrata {
         return "R";
     }
 
-    @Override
     public boolean mover(Posicao posicaoFinal) {
 
         if ((Math.abs(posicaoFinal.getColuna() - getPosicao().getColuna()) <= 1)

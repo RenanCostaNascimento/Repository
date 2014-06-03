@@ -2,6 +2,7 @@ package ifes.poo1.xadrez.model.cdp.pecas.factory;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
+import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.Peca;
 import java.io.Serializable;
 
@@ -24,12 +25,13 @@ public class PecasPool implements Serializable{
 	
 	
 	
-	public Peca getPeca(NomePecas peca, Cores cor){
+	public Peca getPeca(NomePecas peca, Cores cor, Posicao pos){
 		if (!pecas.get(cor).containsKey(peca)){
 			pecas.get(cor).put(peca, PecasFactory.fabricate(peca, cor));
 		}
-		
-		return pecas.get(cor).get(peca).clone();
+		Peca r = pecas.get(cor).get(peca).clone();
+                                             r.setPosicao(pos);
+		return r;
 		
 	}
 	

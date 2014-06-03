@@ -5,7 +5,8 @@ import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.Peca;
-import ifes.poo1.xadrez.model.cdp.tabuleiro.builder.TabuleiroAssembler;
+import ifes.poo1.xadrez.model.cdp.pecas.factory.PecasPool;
+
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
 import java.io.Serializable;
@@ -15,24 +16,12 @@ import java.util.List;
 
 public class Tabuleiro implements Serializable{
 
-    private TabuleiroAssembler tabAsm;
-    private Peca[][] casas;
-    private List<Peca> pecasBrancas;
-    private List<Peca> pecasPretas;
-    private Posicao ultimaMovida;
-    private Posicao posicaoReiBranco;
-    private Posicao posicaoReiPreto;
-
-    public Tabuleiro() {
-        tabAsm = TabuleiroAssembler.getInstanceOf();
-        casas = tabAsm.getCasas();
-        pecasBrancas = tabAsm.getPecasBrancas();
-        pecasPretas = tabAsm.getPecasPretas();
-        ultimaMovida = new Posicao();
-        posicaoReiBranco = new Posicao(4, 0);
-        posicaoReiPreto = new Posicao(4, 7);
-    }
-
+    private Peca[][] casas = new Peca[8][8];
+    private List<Peca> pecasBrancas = new ArrayList<>();
+    private List<Peca> pecasPretas = new ArrayList<>();
+    private Posicao ultimaMovida = null;
+    private Posicao posicaoReiBranco = Posicao.create(4, 0);
+    private Posicao posicaoReiPreto = Posicao.create(4, 7);
     /*
      * posicaoReiBranco e posicaoReiPreto serao usados para determinar se houve
      * cheque ou cheque-mate
@@ -42,8 +31,97 @@ public class Tabuleiro implements Serializable{
      * questao de desempenho, ou seja, nao sera necessario buscar a posicao dos
      * reis sempre que a verificacao do xeque for realizada
      */
+
+    public Tabuleiro() {
+        Peca peca;
+        PecasPool pecasPool = PecasPool.getInstanceOf();
+        // inserindo os pe�es
+        for (int i = 0; i < 8; i++) {
+            peca = pecasPool.getPeca(NomePecas.Peao, Cores.branco, Posicao.create(i, 1));
+            casas[1][i] = peca;
+            pecasBrancas.add(peca);
+
+            peca = pecasPool.getPeca(NomePecas.Peao, Cores.preto, Posicao.create(i, 6));
+            casas[6][i] = peca;
+            pecasPretas.add(peca);
+
+        }
+
+        // inserindo as torres
+        peca = pecasPool.getPeca(NomePecas.Torre, Cores.branco, Posicao.create(0, 0));
+        casas[0][0] = peca;
+        pecasBrancas.add(peca);
+
+        peca = pecasPool.getPeca(NomePecas.Torre, Cores.branco, Posicao.create(7, 0));
+        casas[0][7] = peca;
+        pecasBrancas.add(peca);
+
+        peca = pecasPool.getPeca(NomePecas.Torre, Cores.preto, Posicao.create(0, 7));
+        casas[7][0] = peca;
+        pecasPretas.add(peca);
+
+        peca = pecasPool.getPeca(NomePecas.Torre, Cores.preto, Posicao.create(7, 7));
+        casas[7][7] = peca;
+        pecasPretas.add(peca);
+
+        // inserindo os cavalos
+        peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.branco, Posicao.create(1, 0));
+        casas[0][1] = peca;
+        pecasBrancas.add(peca);
+
+        peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.branco, Posicao.create(6, 0));
+        casas[0][6] = peca;
+        pecasBrancas.add(peca);
+
+        peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.preto, Posicao.create(1, 7));
+        casas[7][1] = peca;
+        pecasPretas.add(peca);
+
+        peca = pecasPool.getPeca(NomePecas.Cavalo, Cores.preto, Posicao.create(6, 7));
+        casas[7][6] = peca;
+        pecasPretas.add(peca);
+
+        // inserindo os bispos
+        peca = pecasPool.getPeca(NomePecas.Bispo, Cores.branco, Posicao.create(2, 0));
+        casas[0][2] = peca;
+        pecasBrancas.add(peca);
+
+        peca = pecasPool.getPeca(NomePecas.Bispo, Cores.branco, Posicao.create(5, 0));
+        casas[0][5] = peca;
+        pecasBrancas.add(peca);
+
+        peca = pecasPool.getPeca(NomePecas.Bispo, Cores.preto, Posicao.create(2, 7));
+        casas[7][2] = peca;
+        pecasPretas.add(peca);
+
+        peca = pecasPool.getPeca(NomePecas.Bispo, Cores.preto, Posicao.create(5, 7));
+        casas[7][5] = peca;
+        pecasPretas.add(peca);
+
+        // inserindo rei e dama
+        peca = pecasPool.getPeca(NomePecas.Rei, Cores.branco, Posicao.create(4, 0));
+        casas[0][4] = peca;
+        pecasBrancas.add(peca);
+
+        peca = pecasPool.getPeca(NomePecas.Rei, Cores.preto, Posicao.create(4, 7));
+        casas[7][4] = peca;
+        pecasPretas.add(peca);
+
+        peca = pecasPool.getPeca(NomePecas.Rainha, Cores.branco, Posicao.create(3, 0));
+        casas[0][3] = peca;
+        pecasBrancas.add(peca);
+
+        peca = pecasPool.getPeca(NomePecas.Rainha, Cores.preto, Posicao.create(3, 7));
+        casas[7][3] = peca;
+        pecasPretas.add(peca);
+    }
+
     public Peca getCasas(int coluna, int linha) {
         return casas[linha][coluna];
+    }
+
+    public Peca getCasas(Posicao pos) {
+        return getCasas(pos.getColuna(), pos.getLinha());
     }
 
     public void setCasas(Peca peca, int coluna, int linha) {
@@ -656,7 +734,7 @@ public class Tabuleiro implements Serializable{
         if (getCasas(posicaoFinal.getColuna(), posicaoFinal.getLinha()) == null) {
             throw new CapturaInvalidaPecaInexistenteException();
         }
-        // verifica a peca que se deseja capturar eh da mesma cor que o jogador
+		// verifica a peca que se deseja capturar eh da mesma cor que o jogador
         // que fez a captura
         if (getCasas(posicaoFinal.getColuna(), posicaoFinal.getLinha()).getCor().equals(jogo.getVez().getCor())) {
             throw new CapturaInvalidaPecaPropriaException();
@@ -718,11 +796,9 @@ public class Tabuleiro implements Serializable{
             }
             /* peao branco */
         } else {
-            if (posicaoInicial.getLinha() == 1) {
-                if (this.getCasas(posicaoInicial.getColuna(),
-                        posicaoInicial.getLinha() + 1) != null) {
-                    return false;
-                }
+            if (this.getCasas(posicaoInicial.getColuna(),
+                    posicaoInicial.getLinha() + 1) != null) {
+                return false;
             }
         }
 
@@ -790,5 +866,4 @@ public class Tabuleiro implements Serializable{
         }
         return false;
     }
-
 }

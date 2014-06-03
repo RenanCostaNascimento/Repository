@@ -25,8 +25,7 @@ public class TesteBispo {
             tabuleiro = new Tabuleiro();
             posicoesPossiveis = new ArrayList<>();
 
-            Peca bispo = pp.getPeca(NomePecas.Bispo, Cores.branco);
-            bispo.setPosicao(new Posicao(4, 3));
+            Peca bispo = pp.getPeca(NomePecas.Bispo, Cores.branco, new Posicao(4, 3));
             tabuleiro.setCasas(bispo, 4, 3);
             posicoesPossiveis = tabuleiro.posicoesPossiveisPeca(bispo.getPosicao());
 

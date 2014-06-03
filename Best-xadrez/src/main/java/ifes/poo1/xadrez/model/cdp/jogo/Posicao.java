@@ -10,6 +10,10 @@ public class Posicao implements Serializable{
 	public Posicao(){
 		
 	}
+                       
+                        public static Posicao create(int coluna, int linha){
+                                return new Posicao(coluna, linha);
+                        }
 	
 	public Posicao(int coluna, int linha){
 		this.coluna = coluna;
