@@ -1234,7 +1234,7 @@ public class ControlXadrez {
      *
      * @param nomeJogadores - o vetor contendo os dois nomes dos participantes.
      */
-    private void iniciarJogoSingleplayer(String nomeJogadores) {
+    public void iniciarJogoSingleplayer(String nomeJogadores) {
 
         Jogador branco = new Jogador(nomeJogadores, Cores.branco);
         Jogador preto = new Jogador("ZEUS", Cores.preto);
@@ -1290,7 +1290,7 @@ public class ControlXadrez {
      *
      * @param nomeJogadores - o vetor contendo o nome dos dois jogadores.
      */
-    private void iniciarJogoMultiplayer(String[] nomeJogadores) {
+    public void iniciarJogoMultiplayer(String[] nomeJogadores) {
 
         Jogador branco = new Jogador(nomeJogadores[0], Cores.branco);
         Jogador preto = new Jogador(nomeJogadores[1], Cores.preto);
