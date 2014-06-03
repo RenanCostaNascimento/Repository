@@ -17,17 +17,12 @@ import ifes.poo2.xadrez.GUI.model.mainFrame.MainFrame;
 import ifes.poo2.xadrez.GUI.model.messagePane.MessagePane;
 import ifes.poo2.xadrez.GUI.model.table.ChessTable;
 import ifes.poo2.xadrez.GUI.model.table.Line;
-import ifes.poo2.xadrez.GUI.model.table.TableFactory;
 import ifes.poo2.xadrez.GUI.model.table.Tile;
-import ifes.poo2.xadrez.GUI.model.textBar.TextBar;
 import ifes.poo2.xadrez.GUI.pecaView.PecaView;
-import ifes.poo2.xadrez.GUI.pecaView.PecaViewFactory;
 import java.awt.Color;
-import java.awt.Component;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 /**

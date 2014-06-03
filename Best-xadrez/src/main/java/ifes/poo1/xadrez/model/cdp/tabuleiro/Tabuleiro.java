@@ -12,6 +12,7 @@ import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Tabuleiro implements Serializable{
@@ -237,7 +238,7 @@ public class Tabuleiro implements Serializable{
         switch (peca.toString()) {
             // verificacao do peao
             case "P":
-                posicoesPossiveis = posicoesPossiveisPeaoPreto(posicao);
+                posicoesPossiveis = posicoesPossiveisPeao(posicao);
                 break;
             // verificacao do cavalo
             case "C":
@@ -304,7 +305,7 @@ public class Tabuleiro implements Serializable{
                      * nao eh necessario continuar verificando a reta apos
                      * encontrar o primeiro obstaculo
                      */
-                    if (peca.getCor().equals(Cores.branco)) {
+                    if (!peca.getCor().equals(this.getCasas(posicao).getCor())) {
                         posicoesPossiveis.add(new Posicao(colunaAtual,
                                 linhaAtual));
                     }
@@ -334,7 +335,7 @@ public class Tabuleiro implements Serializable{
                      * nao eh necessario continuar verificando a reta apos
                      * encontrar o primeiro obstaculo
                      */
-                    if (peca.getCor().equals(Cores.branco)) {
+                    if (!peca.getCor().equals(this.getCasas(posicao).getCor())) {
                         posicoesPossiveis.add(new Posicao(colunaAtual,
                                 linhaAtual));
                     }
@@ -394,7 +395,7 @@ public class Tabuleiro implements Serializable{
                          * disso, nao eh necessario continuar verificando a
                          * diagonal apos encontrar o primeiro obstaculo
                          */
-                        if (peca.getCor().equals(Cores.branco)) {
+                        if (!peca.getCor().equals(this.getCasas(posicao).getCor())) {
                             posicoesPossiveis.add(new Posicao(colunaAtual,
                                     linhaAtual));
                         }
@@ -458,7 +459,7 @@ public class Tabuleiro implements Serializable{
                         /* verifica se tem alguma coisa na posicao */
                         if (peca != null) {
                             /* se tiver e a cor for branca, pode capturar */
-                            if (peca.getCor().equals(Cores.branco)) {
+                            if (!peca.getCor().equals(this.getCasas(posicao).getCor())) {
                                 posicoesPossiveis
                                         .add(new Posicao(coluna, linha));
                             }
@@ -518,7 +519,7 @@ public class Tabuleiro implements Serializable{
                         /* verifica se tem alguma coisa na posicao */
                         if (peca != null) {
                             /* se tiver e a cor for branca, pode capturar */
-                            if (peca.getCor().equals(Cores.branco)) {
+                            if (!peca.getCor().equals(this.getCasas(posicao).getCor())) {
                                 posicoesPossiveis.add(new Posicao(colunaAtual,
                                         linhaAtual));
                             }
@@ -543,7 +544,7 @@ public class Tabuleiro implements Serializable{
                         /* verifica se tem alguma coisa na posicao */
                         if (peca != null) {
                             /* se tiver e a cor for branca, pode capturar */
-                            if (peca.getCor().equals(Cores.branco)) {
+                            if (!peca.getCor().equals(this.getCasas(posicao).getCor())) {
                                 posicoesPossiveis.add(new Posicao(colunaAtual,
                                         linhaAtual));
                             }
@@ -566,13 +567,18 @@ public class Tabuleiro implements Serializable{
      * @param posicao - a posição na qual o peão se encontra;
      * @return A lista com as posições possíveis.
      */
-    private List<Posicao> posicoesPossiveisPeaoPreto(Posicao posicao) {
-
+    private List<Posicao> posicoesPossiveisPeao(Posicao posicao) {
+       
         List<Posicao> posicoesPossiveis = new ArrayList<>();
-
-        posicoesPossiveis.addAll(capturasPossiveisPeaoPreto(posicao));
-        posicoesPossiveis.addAll(movimentosPossiveisPeaoPreto(posicao));
-
+        
+        if(this.getCasas(posicao).getCor().equals(Cores.preto)){
+            posicoesPossiveis.addAll(capturasPossiveisPeaoPreto(posicao));
+            posicoesPossiveis.addAll(movimentosPossiveisPeaoPreto(posicao));
+        } else{
+            posicoesPossiveis.addAll(capturasPossiveisPeaoBranco(posicao));
+            posicoesPossiveis.addAll(movimentosPossiveisPeaoBranco(posicao));
+        }
+    
         return posicoesPossiveis;
 
     }
@@ -865,5 +871,68 @@ public class Tabuleiro implements Serializable{
             return true;
         }
         return false;
+    }
+
+    private Collection<? extends Posicao> capturasPossiveisPeaoBranco(Posicao posicao) {
+        List<Posicao> capturasPossiveis = new ArrayList<>();
+        Peca peca;
+
+        /* verifica se nao esta na primeira linha */
+        if (posicao.getLinha() - 1 >= 0) {
+            /* verifica se nao esta na primeira coluna */
+            if (posicao.getColuna() - 1 >= 0) {
+                peca = this.getCasas(posicao.getColuna() - 1,
+                        posicao.getLinha() - 1);
+                if (peca != null) /* se a peca de destino for preta, pode capturar */ {
+                    if (peca.getCor().equals(Cores.preto)) {
+                        capturasPossiveis
+                                .add(new Posicao(posicao.getColuna() - 1,
+                                                posicao.getLinha() - 1));
+                    }
+                }
+            }
+            /* verifica se nao esta na ultima coluna */
+            if (posicao.getColuna() + 1 <= 7) {
+                peca = this.getCasas(posicao.getColuna() + 1,
+                        posicao.getLinha() - 1);
+                if (peca != null) /* se a peca de destino for preta, pode capturar */ {
+                    if (peca.getCor().equals(Cores.preto)) {
+                        capturasPossiveis
+                                .add(new Posicao(posicao.getColuna() + 1,
+                                                posicao.getLinha() - 1));
+                    }
+                }
+            }
+        }
+
+        return capturasPossiveis;
+    }
+
+    private Collection<? extends Posicao> movimentosPossiveisPeaoBranco(Posicao posicao) {
+        List<Posicao> movimentosPossiveis = new ArrayList<>();
+
+        /* movimento inicial */
+        if (posicao.getLinha() == 1) {
+            if (this.getCasas(posicao.getColuna(), posicao.getLinha() + 1) == null) {
+                movimentosPossiveis.add(new Posicao(posicao.getColuna(),
+                        posicao.getLinha() + 1));
+                if (this.getCasas(posicao.getColuna(), posicao.getLinha() + 2) == null) {
+                    movimentosPossiveis.add(new Posicao(posicao.getColuna(),
+                            posicao.getLinha() + 2));
+                }
+            }
+
+            return movimentosPossiveis;
+        }
+
+        /* movimento comum */
+        if (posicao.getLinha() + 1 >= 0) {
+            if (this.getCasas(posicao.getColuna(), posicao.getLinha() + 1) == null) {
+                movimentosPossiveis.add(new Posicao(posicao.getColuna(),
+                        posicao.getLinha() + 1));
+            }
+        }
+
+        return movimentosPossiveis;
     }
 }

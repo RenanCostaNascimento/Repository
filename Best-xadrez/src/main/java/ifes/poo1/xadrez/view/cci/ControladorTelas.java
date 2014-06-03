@@ -9,7 +9,6 @@ import ifes.poo1.xadrez.model.cdp.jogo.Jogada;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 import ifes.poo1.xadrez.view.cih.Tela;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ControladorTelas {
