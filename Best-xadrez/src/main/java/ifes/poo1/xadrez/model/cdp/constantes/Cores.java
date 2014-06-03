@@ -6,10 +6,12 @@
 
 package ifes.poo1.xadrez.model.cdp.constantes;
 
+import java.io.Serializable;
+
 /**
  *As cores para as peças do jogo.
  * @author pedronakibar
  */
-public enum Cores {
+public enum Cores implements Serializable{
     branco, preto;
 }
