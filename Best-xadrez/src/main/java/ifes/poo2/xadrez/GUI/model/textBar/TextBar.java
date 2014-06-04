@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ifes.poo2.xadrez.GUI.model.textBar;
 
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
@@ -29,16 +28,20 @@ import javax.swing.JTextField;
  * @author pdr
  */
 public class TextBar extends javax.swing.JPanel {
+
         private static TextBar textBar = null;
+
         /**
          * Creates new form TextBar
          */
         private TextBar() {
                 initComponents();
         }
-        
-        public static TextBar getInstanceOf(){
-                if (textBar == null) textBar = new TextBar();
+
+        public static TextBar getInstanceOf() {
+                if (textBar == null) {
+                        textBar = new TextBar();
+                }
                 return textBar;
         }
 
@@ -83,46 +86,46 @@ public class TextBar extends javax.swing.JPanel {
         }//GEN-LAST:event_textFieldActionPerformed
 
         private void textFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_textFieldFocusGained
-               textField.setText(null);
+                textField.setText(null);
         }//GEN-LAST:event_textFieldFocusGained
 
         private void textFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textFieldKeyPressed
-               if (evt.getKeyCode() == KeyEvent.VK_ENTER){
+                if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
                         String input = textField.getText();
                         Calendar cal = Calendar.getInstance();
                         cal.getTime();
                         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-                        
-                        if (input.startsWith(":m")){
+
+                        if (input.startsWith(":m")) {
                                 input = input.replace(":m", "");
-                                MessagePane.addMessage("<<"+sdf.format(cal.getTime())+" Player" +" says >> \n"+input+"\n");
+                                MessagePane.addMessage("<<" + sdf.format(cal.getTime()) + " Player" + " says >> \n" + input + "\n");
                                 //TODO: save in a logfile
                         }
-                        if (input.startsWith(":x")) ChessTable.getInstanceOf().limparTabuleiro();
-                        if (input.startsWith(":r")) GUIControl.getInstanceOf().populateGUITable();
-                        else{
-                               Character.getNumericValue(input.charAt(0)); 
-                                       
-                                int i = Character.getNumericValue(input.charAt(0));
-                                int j = Character.getNumericValue(input.charAt(1));
+                        if (input.startsWith(":x")) {
+                                ChessTable.getInstanceOf().limparTabuleiro();
+                        }
+                        if (input.startsWith(":r")) {
+                                GUIControl.getInstanceOf().populateGUITable();
+                        } else {
+                                Posicao posIni = Posicao.create(Character.getNumericValue(input.charAt(0)), Character.getNumericValue(input.charAt(1)));
+                                Posicao posFin = Posicao.create(Character.getNumericValue(input.charAt(2)), Character.getNumericValue(input.charAt(3)));
+                                System.out.println(posIni);
+                                System.out.println(posFin);
+                                        
+                                        
+                                        try {
+                                                ControlXadrez.getInstanceOf().realizarJogadaSingleplayer(posIni, posFin);
+                                        } catch (PecaAlheiaException | MovimentoInvalidoException | CaminhoBloqueadoException | CasaVaziaException | CapturaInvalidaPecaInexistenteException | CapturaInvalidaPecaPropriaException ex) {
+                                                Logger.getLogger(TextBar.class.getName()).log(Level.SEVERE, null, ex);
+                                                MessagePane.addMessage(ex.getMessage() + "\n");
+                                        }
+                                ChessTable.getInstanceOf().limparTabuleiro();
+                                GUIControl.getInstanceOf().populateGUITable();
                                 
-                                Posicao posI = Posicao.create(i, j);
-                                
-                                i = Character.getNumericValue(input.charAt(2));
-                                j = Character.getNumericValue(input.charAt(3));
-                                
-                                Posicao posF = Posicao.create(i, j);
-                                
-                                try {
-                                        ControlXadrez.getInstanceOf().realizarJogadaSingleplayer(posI, posF);
-                                } catch (PecaAlheiaException | MovimentoInvalidoException | CaminhoBloqueadoException | CasaVaziaException | CapturaInvalidaPecaInexistenteException | CapturaInvalidaPecaPropriaException ex) {
-                                        Logger.getLogger(TextBar.class.getName()).log(Level.SEVERE, null, ex);
-                                        MessagePane.addMessage(ex.getMessage()+"\n");
                                 }
                         }
-                        
-                        textField.setText(null);
-                }
+                textField.setText(null);
+                
         }//GEN-LAST:event_textFieldKeyPressed
 
         public JTextField getTextField(){
