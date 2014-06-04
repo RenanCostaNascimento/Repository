@@ -14,24 +14,21 @@ import javax.swing.JLabel;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author pdr
  */
 public class Tile extends javax.swing.JPanel {
-        
+
         private Color originalColor;
-        
+
         /**
          * Creates new form Tile
          */
         public Tile() {
                 initComponents();
                 originalColor = getBackground();
-                
-                
-              
+
         }
 
         /**
@@ -61,7 +58,7 @@ public class Tile extends javax.swing.JPanel {
         }// </editor-fold>//GEN-END:initComponents
 
         private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-                 
+
         }//GEN-LAST:event_formMouseClicked
 
         private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
@@ -70,77 +67,94 @@ public class Tile extends javax.swing.JPanel {
 
         private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
                 GUIControl.getInstanceOf().restoreAllOriginalTileColors();
-                if (this.getComponentCount()>0){
+                if (this.getComponentCount() > 0) {
                         GUIControl.getInstanceOf().iluminarPosicoesPossiveis(this);
                         System.out.println(this.getPecaView().getPeca().getPosicao());
                 }
-                
+
+                if ((getComponentCount() == 1) && GUIControl.getInstanceOf().getPosicaoBuffer() != null) {
+                        GUIControl.getInstanceOf().moverPeca(GUIControl.getInstanceOf().getPosicaoBuffer(), this.getPecaView().getPeca().getPosicao());
+                        GUIControl.getInstanceOf().setPosicaoBuffer(null);
+                } else if (getComponentCount() > 0) {
+                        GUIControl.getInstanceOf().setPosicaoBuffer(getPecaView().getPeca().getPosicao());
+                } else if ((getComponentCount() == 0) && GUIControl.getInstanceOf().getPosicaoBuffer() != null) {
+                        GUIControl.getInstanceOf().moverPeca(GUIControl.getInstanceOf().getPosicaoBuffer(),
+                                GUIControl.getInstanceOf().getChessTable().getPosicaoTile(this));
+                        GUIControl.getInstanceOf().setPosicaoBuffer(null);
+                }
+
+
         }//GEN-LAST:event_formMousePressed
 
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
         // End of variables declaration//GEN-END:variables
-        
-        public void setColor(Color color){
+        public void setColor(Color color) {
                 this.setBackground(color);
                 this.revalidate();
                 this.repaint();
         }
-        
-        public void setOriginalColor(){
+
+        public void setOriginalColor() {
                 this.setBackground(originalColor);
                 this.revalidate();
                 this.repaint();
         }
-        
+
         /**
          * @return the originalColor
          */
         public Color getOriginalColor() {
                 return originalColor;
         }
-        public void iluminar(){
-                if (getOriginalColor() ==TileFactory.getWhiteTile()) setColor(new java.awt.Color(0, 204, 255));
-                else if (getOriginalColor() == TileFactory.getBlackTile()) setColor(new java.awt.Color(121,138,245));
-                else setColor(new java.awt.Color(0, 204, 255));
+
+        public void iluminarCaptura() {
+                setColor(Color.RED);
         }
+
+        public void iluminar() {
+                if (getComponentCount() > 0) {
+                        setColor(Color.RED);
+                } else if (getOriginalColor() == TileFactory.getWhiteTile()) {
+                        setColor(new java.awt.Color(0, 204, 255));
+                } else if (getOriginalColor() == TileFactory.getBlackTile()) {
+                        setColor(new java.awt.Color(121, 138, 245));
+                } else {
+                        setColor(new java.awt.Color(0, 204, 255));
+                }
+        }
+
         /**
          * @param originalColor the originalColor to set
          */
         public void setOriginalColor(Color originalColor) {
                 this.originalColor = originalColor;
         }
-        
-        public void addPecaView(PecaView pecaView) throws MuitosComponentesException{
-                if (getComponentCount() >= 1) throw new MuitosComponentesException();
-                else{
+
+        public void addPecaView(PecaView pecaView) throws MuitosComponentesException {
+                if (getComponentCount() >= 1) {
+                        throw new MuitosComponentesException();
+                } else {
                         pecaView.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
                         pecaView.setLabelFor(pecaView);
                         pecaView.setVerticalAlignment(javax.swing.SwingConstants.TOP);
                         add(pecaView);
                         revalidate();
-                        repaint();  
+                        repaint();
                 }
-                
+
         }
-        
-        public void removerPeca(){
-                if (getComponentCount() > 0){
+
+        public void removerPeca() {
+                if (getComponentCount() > 0) {
                         this.removeAll();
                         revalidate();
-                        repaint(); 
+                        repaint();
                 }
         }
-        
-        public PecaView getPecaView(){
+
+        public PecaView getPecaView() {
                 return (PecaView) this.getComponent(0);
         }
-        
-  
-
-        
-       
-        
-       
 
 }

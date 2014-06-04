@@ -1,11 +1,15 @@
 package ifes.poo2.xadrez.GUI.model.messagePane;
 
+import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
+import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author pdr
@@ -13,13 +17,15 @@ package ifes.poo2.xadrez.GUI.model.messagePane;
 public class MessagePane extends javax.swing.JPanel {
 
         private static MessagePane messagePane = null;
-        
+
         private MessagePane() {
                 initComponents();
         }
-        
-        public static MessagePane getInstanceOf(){
-                if (messagePane == null) messagePane = new MessagePane();
+
+        public static MessagePane getInstanceOf() {
+                if (messagePane == null) {
+                        messagePane = new MessagePane();
+                }
                 return messagePane;
         }
 
@@ -59,11 +65,29 @@ public class MessagePane extends javax.swing.JPanel {
          *
          * @param message
          */
-        public static void addMessage(String message){
+        public static void addMessage(String message) {
                 jTextArea1.append(message);
         }
+
+        public static void addMessageJogada(Posicao posI, Posicao posF, Jogador jogador) {
+                String msg = "<<" + getTime() + " " + jogador.getNome() + " jogou:" + posI.toString() + " para " + posF.toString() + ">>\n";
+                addMessage(msg);
+        }
+
+        public static void addMessageJogador(Jogador jogador,String message) {
+                addMessage("<<" + getTime() + " " + jogador.getNome() + " says: \n" + message + ">>\n");
+        }
         
-       
+        public static void addMessageJogadaInvalida(){
+                addMessage("<<" + getTime() + " jogada inválida >>\n");
+        }
+        
+        private static String getTime(){
+                Calendar cal = Calendar.getInstance();
+                cal.getTime();
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                return sdf.format(cal.getTime());
+        }
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JScrollPane jScrollPane1;
         private static javax.swing.JTextArea jTextArea1;

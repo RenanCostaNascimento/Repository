@@ -105,7 +105,7 @@ public class ChessTable extends javax.swing.JPanel {
         public Posicao getPosicaoTile(Tile t){
                 for (int i=0; i<8; i++){
                         for (int j=0; j<8; j++){
-                                if (lines[i].getTile(j) == t) return new Posicao(i,j);
+                                if (lines[i].getTile(j) == t) return new Posicao(j,i);
                         }
                 }
                 return null;

@@ -98,7 +98,8 @@ public class TextBar extends javax.swing.JPanel {
 
                         if (input.startsWith(":m")) {
                                 input = input.replace(":m", "");
-                                MessagePane.addMessage("<<" + sdf.format(cal.getTime()) + " Player" + " says >> \n" + input + "\n");
+                                GUIControl.getInstanceOf().enviarMensagemJogador(input);
+                                //MessagePane.addMessage("<<" + sdf.format(cal.getTime()) + " Player" + " says >> \n" + input + "\n");
                                 //TODO: save in a logfile
                         }
                         if (input.startsWith(":x")) {
@@ -107,28 +108,20 @@ public class TextBar extends javax.swing.JPanel {
                         if (input.startsWith(":r")) {
                                 GUIControl.getInstanceOf().populateGUITable();
                         } else {
-                                Posicao posIni = Posicao.create(Character.getNumericValue(input.charAt(0)), Character.getNumericValue(input.charAt(1)));
-                                Posicao posFin = Posicao.create(Character.getNumericValue(input.charAt(2)), Character.getNumericValue(input.charAt(3)));
-                                System.out.println(posIni);
-                                System.out.println(posFin);
-                                        
-                                        
-                                        try {
-                                                ControlXadrez.getInstanceOf().realizarJogadaSingleplayer(posIni, posFin);
-                                        } catch (PecaAlheiaException | MovimentoInvalidoException | CaminhoBloqueadoException | CasaVaziaException | CapturaInvalidaPecaInexistenteException | CapturaInvalidaPecaPropriaException ex) {
-                                                Logger.getLogger(TextBar.class.getName()).log(Level.SEVERE, null, ex);
-                                                MessagePane.addMessage(ex.getMessage() + "\n");
-                                        }
-                                ChessTable.getInstanceOf().limparTabuleiro();
-                                GUIControl.getInstanceOf().populateGUITable();
-                                
+                                if (input.length() == 4) {
+                                        Posicao posIni = Posicao.create(Character.getNumericValue(input.charAt(0)), Character.getNumericValue(input.charAt(1)));
+                                        Posicao posFin = Posicao.create(Character.getNumericValue(input.charAt(2)), Character.getNumericValue(input.charAt(3)));
+                                        GUIControl.getInstanceOf().moverPeca(posIni, posFin);
                                 }
+                                else GUIControl.getInstanceOf().enviarMensagemJogadaInvalida();
                         }
-                textField.setText(null);
-                
+                        textField.setText(null);
+                }
+
+
         }//GEN-LAST:event_textFieldKeyPressed
 
-        public JTextField getTextField(){
+        public JTextField getTextField() {
                 return textField;
         }
         // Variables declaration - do not modify//GEN-BEGIN:variables

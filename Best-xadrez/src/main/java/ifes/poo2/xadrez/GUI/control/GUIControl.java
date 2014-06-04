@@ -3,22 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ifes.poo2.xadrez.GUI.control;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
+import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.Peca;
 import ifes.poo1.xadrez.model.cdp.pecas.factory.PecasPool;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 import ifes.poo1.xadrez.model.cgt.ControlXadrez;
+import ifes.poo1.xadrez.util.exception.CaminhoBloqueadoException;
+import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
+import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
+import ifes.poo1.xadrez.util.exception.CasaVaziaException;
+import ifes.poo1.xadrez.util.exception.MovimentoInvalidoException;
 import ifes.poo1.xadrez.util.exception.MuitosComponentesException;
+import ifes.poo1.xadrez.util.exception.PecaAlheiaException;
 import ifes.poo2.xadrez.GUI.model.mainFrame.MainFrame;
 import ifes.poo2.xadrez.GUI.model.messagePane.MessagePane;
 import ifes.poo2.xadrez.GUI.model.table.ChessTable;
 import ifes.poo2.xadrez.GUI.model.table.Line;
 import ifes.poo2.xadrez.GUI.model.table.Tile;
+import ifes.poo2.xadrez.GUI.model.textBar.TextBar;
 import ifes.poo2.xadrez.GUI.pecaView.PecaView;
 import java.awt.Color;
 import java.util.List;
@@ -31,19 +38,26 @@ import javax.swing.JTextField;
  * @author pdr
  */
 public class GUIControl {
+
         private ControlXadrez controlXadrez = ControlXadrez.getInstanceOf();
         private MainFrame mf = MainFrame.create();
-        
+        private Posicao posicaoBuffer = null;
+
         private static GUIControl gc = null;
-        public static GUIControl getInstanceOf(){
-                if (gc == null) gc = new GUIControl();
+
+        public static GUIControl getInstanceOf() {
+                if (gc == null) {
+                        gc = new GUIControl();
+                }
                 return gc;
         }
-        private GUIControl(){}
-        
+
+        private GUIControl() {
+        }
+
         public void startGUI() {
                 /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+                //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
                  * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
                  */
@@ -63,165 +77,207 @@ public class GUIControl {
                 } catch (javax.swing.UnsupportedLookAndFeelException ex) {
                         java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
                 }
-        //</editor-fold>
+                //</editor-fold>
 
                 /* Create and display the form */
-               java.awt.EventQueue.invokeLater(new Runnable() {
+                java.awt.EventQueue.invokeLater(new Runnable() {
                         public void run() {
-                                mf.setVisible(true);
+                                getMf().setVisible(true);
                         }
                 });
         }
-        public Tabuleiro getTabuleiro(){
+
+        public Tabuleiro getTabuleiro() {
                 return controlXadrez.getJogo().getTabuleiro();
         }
-        public MainFrame getMainframe(){
-                return mf;
+
+        public MainFrame getMainframe() {
+                return getMf();
         }
-        
-        private ChessTable getChessTable(){
-                return mf.getChessTable();
+
+        public ChessTable getChessTable() {
+                return getMf().getChessTable();
         }
-        
-        private MessagePane getMessagePane(){
-                return mf.getMessagePane();
+
+        private MessagePane getMessagePane() {
+                return getMf().getMessagePane();
         }
-        
-        private JTextField getTextField(){
-                return mf.getTextField();
+
+        private JTextField getTextField() {
+                return getMf().getTextField();
         }
-        
-        private void addPeca(PecaView com, Posicao pos){
-                 
+
+        private void addPeca(PecaView com, Posicao pos) {
+
                 try {
-                        mf.getChessTable().getPosicao(pos).addPecaView(com);
+                        getMf().getChessTable().getPosicao(pos).addPecaView(com);
                 } catch (MuitosComponentesException ex) {
                         Logger.getLogger(GUIControl.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                        
+
         }
-        
-        private void removePeca(Posicao pos){
-                mf.getChessTable().getPosicao(pos).removeAll();
+
+        private void removePeca(Posicao pos) {
+                getMf().getChessTable().getPosicao(pos).removeAll();
         }
-        
-        private PecaView getPecaPos(Posicao pos){
-                return (PecaView) mf.getChessTable().getPosicao(pos).getComponent(0);
+
+        private PecaView getPecaPos(Posicao pos) {
+                return (PecaView) getMf().getChessTable().getPosicao(pos).getComponent(0);
         }
-        
-        private void iluminarTile(Posicao pos){
-                mf.getChessTable().getPosicao(pos).iluminar();
+
+        private void iluminarTile(Posicao pos) {
+                getMf().getChessTable().getPosicao(pos).iluminar();
         }
-        
-        private void restoreOriginalTileColor(Posicao pos){
-                mf.getChessTable().getPosicao(pos).setOriginalColor();
+
+        private void restoreOriginalTileColor(Posicao pos) {
+                getMf().getChessTable().getPosicao(pos).setOriginalColor();
         }
-        
-        public void restoreAllOriginalTileColors(){
+
+        public void restoreAllOriginalTileColors() {
                 ChessTable ct = getChessTable();
                 Line[] ln = ct.getLines();
-                
-                for (int i = 0; i<8; i++){
-                        for (int j=0; j<8; j++){
-                                ln[i].getTile(j).setOriginalColor();
+
+                for (int i = 0; i < 8; i++) {
+                        for (int j = 0; j < 8; j++) {
+                                Tile t = ln[i].getTile(j);
+                                if (t.getBackground() != t.getOriginalColor()) t.setOriginalColor();
                         }
-                        
+
                 }
-                
+
+        }
+
+        public void moverPeca(Posicao posInicial, Posicao posFinal) {
+                try {
+                        ControlXadrez.getInstanceOf().realizarJogadaSingleplayer(posInicial, posFinal);
+                        restoreAllOriginalTileColors();
+                } catch (PecaAlheiaException | MovimentoInvalidoException | CaminhoBloqueadoException |
+                        CasaVaziaException | CapturaInvalidaPecaInexistenteException | CapturaInvalidaPecaPropriaException ex) {
+                        Logger.getLogger(TextBar.class.getName()).log(Level.SEVERE, null, ex);
+                        MessagePane.addMessage(ex.getMessage() + "\n");
+                }
+                ChessTable.getInstanceOf().limparTabuleiro();
+                this.populateGUITable();
+
         }
         
-        public void moverPeca(Posicao posInicial, Posicao posFinal){
-                ChessTable ct = getChessTable();
-                Tile tileInicial = ct.getPosicao(posInicial);
-                Tile tileFinal = ct.getPosicao(posFinal);
-                
-                PecaView pv =  tileInicial.getPecaView();
-                if ((tileFinal.getComponentCount() == 0 ) && (tileInicial.getPecaView().getPeca().mover(posFinal))) {
-                        try {
-                                tileFinal.addPecaView(pv);
-                                tileInicial.remove(pv);
-                                pv.getPeca().setPosicao(ct.getPosicaoTile(tileFinal));
-                        } catch (MuitosComponentesException ex) {
-                                Logger.getLogger(GUIControl.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        
-                        
-                }                
-                
-                
+        public void mensagemMoverPeca(Posicao posicaoInicial, Posicao posicaoFinal, Jogador jogador){
+                MessagePane.addMessageJogada(posicaoInicial, posicaoFinal, jogador);
         }
         
-        public void iluminarPosicoesPossiveis(Tile t ){
-                
+        public void iluminarPosicoesPossiveis(Tile t) {
+
                 ChessTable ct = getChessTable();
-                
+
                 t.setColor(Color.GREEN);
                 List<Posicao> posicoes = getTabuleiro().posicoesPossiveisPeca(t.getPecaView().getPeca().getPosicao());
                 //for (int i=0; i<posicoes.size(); i++) ct.getPosicao(posicoes.get(i)).iluminar();  
-                for (int i=0; i<posicoes.size(); i++) (ct.getPosicao(posicoes.get(i))).iluminar();
-                System.out.println(t.getPecaView().getPeca().getNome());
-               // for (int i=0; i<posicoes.size(); i++) System.out.println("Coluna: "+posicoes.get(i).getColuna()+"\nLinha:"+posicoes.get(i).getLinha());
-                
-                /*
-                ChessTable ct = getChessTable();
-                PecaView pv = t.getPecaView();
-                
-                for (int i = 0; i<8; i++){
-                        for (int j=0; j<8; j++){
-                                Posicao pos = new Posicao(i, j);
-                                if (pv.getPeca().mover(pos)){
-                                        ct.getPosicao(pos).iluminar();                                     
-                                }
-                                if ((ct.getPosicao(pos).getComponentCount() > 0) && pv.getPeca().capturar(pos) && (ct.getPosicao(pos).getPecaView().getCor() != t.getPecaView().getCor())){
-                                                ct.getPosicao(pos).setColor(Color.RED);
-                                }
-                        }
-                        
+                for (int i = 0; i < posicoes.size(); i++) {
+                       (ct.getPosicao(posicoes.get(i))).iluminar();                        
                 }
-                t.setColor(Color.GREEN);
-                   
-                */
+                System.out.println(t.getPecaView().getPeca().getNome());
+                // for (int i=0; i<posicoes.size(); i++) System.out.println("Coluna: "+posicoes.get(i).getColuna()+"\nLinha:"+posicoes.get(i).getLinha());
+
+                /*
+                 ChessTable ct = getChessTable();
+                 PecaView pv = t.getPecaView();
+                
+                 for (int i = 0; i<8; i++){
+                 for (int j=0; j<8; j++){
+                 Posicao pos = new Posicao(i, j);
+                 if (pv.getPeca().mover(pos)){
+                 ct.getPosicao(pos).iluminar();                                     
+                 }
+                 if ((ct.getPosicao(pos).getComponentCount() > 0) && pv.getPeca().capturar(pos) && (ct.getPosicao(pos).getPecaView().getCor() != t.getPecaView().getCor())){
+                 ct.getPosicao(pos).setColor(Color.RED);
+                 }
+                 }
                         
-                
-                
+                 }
+                 t.setColor(Color.GREEN);
+                   
+                 */
         }
-        
-        private void addPecaOnPosition(Posicao pos, Peca peca){
+
+        private void addPecaOnPosition(Posicao pos, Peca peca) {
                 peca.setPosicao(pos);
                 try {
                         getChessTable().getPosicao(pos).addPecaView(new PecaView(peca));
+
                 } catch (MuitosComponentesException ex) {
-                        Logger.getLogger(GUIControl.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(GUIControl.class
+                                .getName()).log(Level.SEVERE, null, ex);
                 }
         }
-        private void addPecaOnPosition(Posicao pos, NomePecas np, Cores cor){
-                 addPecaOnPosition(pos, PecasPool.getInstanceOf().getPeca(np, cor, pos));
-         }
-        
-        public void populateGUITable(){
-                
-                for (int i=0; i<8; i++){
-                        for (int j=0; j<8; j++){
+
+        private void addPecaOnPosition(Posicao pos, NomePecas np, Cores cor) {
+                addPecaOnPosition(pos, PecasPool.getInstanceOf().getPeca(np, cor, pos));
+        }
+
+        public void populateGUITable() {
+
+                for (int i = 0; i < 8; i++) {
+                        for (int j = 0; j < 8; j++) {
                                 Posicao pos = Posicao.create(i, j);
-                                if (getTabuleiro().getCasas(pos) != null) addPecaOnPosition(pos, getTabuleiro().getCasas(pos));
+                                if (getTabuleiro().getCasas(pos) != null) {
+                                        addPecaOnPosition(pos, getTabuleiro().getCasas(pos));
+                                }
                         }
                 }
-        } 
-        
-        public void reiniciarTabuleiro(){
+        }
+
+        public void reiniciarTabuleiro() {
                 getChessTable().limparTabuleiro();
                 GUIControl.getInstanceOf().populateGUITable();
         }
-         
-        
-        public void startGameFacade(){
+
+        public void startGameFacade() {
                 getChessTable().limparTabuleiro();
                 populateGUITable();
         }
-                
-        public void debug(){
+
+        public void debug() {
                 startGameFacade();
+        }
+
+        public void enviarMensagem(String msg){
+                MessagePane.addMessage(msg);
+        }
+        
+        public void enviarMensagemJogador(String msg){
+                MessagePane.addMessageJogador(controlXadrez.getJogo().getVez(), msg);
                 
         }
-}
+        
+        public void enviarMensagemJogadaInvalida(){
+                MessagePane.addMessageJogadaInvalida();
+        }
 
+        /**
+         * @return the mf
+         */
+        public MainFrame getMf() {
+                return mf;
+        }
+
+        /**
+         * @param mf the mf to set
+         */
+        public void setMf(MainFrame mf) {
+                this.mf = mf;
+        }
+
+        /**
+         * @return the posicaoBuffer
+         */
+        public Posicao getPosicaoBuffer() {
+                return posicaoBuffer;
+        }
+
+        /**
+         * @param posicaoBuffer the posicaoBuffer to set
+         */
+        public void setPosicaoBuffer(Posicao posicaoBuffer) {
+                this.posicaoBuffer = posicaoBuffer;
+        }
+}
