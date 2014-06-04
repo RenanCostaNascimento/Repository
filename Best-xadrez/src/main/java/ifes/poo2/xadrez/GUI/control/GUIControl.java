@@ -12,6 +12,7 @@ import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.Peca;
 import ifes.poo1.xadrez.model.cdp.pecas.factory.PecasPool;
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
+import ifes.poo1.xadrez.model.cgt.ControlXadrez;
 import ifes.poo1.xadrez.util.exception.MuitosComponentesException;
 import ifes.poo2.xadrez.GUI.model.mainFrame.MainFrame;
 import ifes.poo2.xadrez.GUI.model.messagePane.MessagePane;
@@ -30,8 +31,9 @@ import javax.swing.JTextField;
  * @author pdr
  */
 public class GUIControl {
-        private Tabuleiro tabuleiro = new Tabuleiro();
+        private ControlXadrez controlXadrez = ControlXadrez.getInstanceOf();
         private MainFrame mf = MainFrame.create();
+        
         private static GUIControl gc = null;
         public static GUIControl getInstanceOf(){
                 if (gc == null) gc = new GUIControl();
@@ -70,7 +72,9 @@ public class GUIControl {
                         }
                 });
         }
-        
+        public Tabuleiro getTabuleiro(){
+                return controlXadrez.getJogo().getTabuleiro();
+        }
         public MainFrame getMainframe(){
                 return mf;
         }
@@ -152,7 +156,7 @@ public class GUIControl {
                 ChessTable ct = getChessTable();
                 
                 t.setColor(Color.GREEN);
-                List<Posicao> posicoes = tabuleiro.posicoesPossiveisPeca(t.getPecaView().getPeca().getPosicao());
+                List<Posicao> posicoes = getTabuleiro().posicoesPossiveisPeca(t.getPecaView().getPeca().getPosicao());
                 //for (int i=0; i<posicoes.size(); i++) ct.getPosicao(posicoes.get(i)).iluminar();  
                 for (int i=0; i<posicoes.size(); i++) (ct.getPosicao(posicoes.get(i))).iluminar();
                 System.out.println(t.getPecaView().getPeca().getNome());
@@ -194,15 +198,20 @@ public class GUIControl {
                  addPecaOnPosition(pos, PecasPool.getInstanceOf().getPeca(np, cor, pos));
          }
         
-        private void populateGUITable(){
+        public void populateGUITable(){
                 
                 for (int i=0; i<8; i++){
                         for (int j=0; j<8; j++){
                                 Posicao pos = Posicao.create(i, j);
-                                if (tabuleiro.getCasas(pos) != null) addPecaOnPosition(pos, tabuleiro.getCasas(pos));
+                                if (getTabuleiro().getCasas(pos) != null) addPecaOnPosition(pos, getTabuleiro().getCasas(pos));
                         }
                 }
         } 
+        
+        public void reiniciarTabuleiro(){
+                getChessTable().limparTabuleiro();
+                GUIControl.getInstanceOf().populateGUITable();
+        }
          
         
         public void startGameFacade(){

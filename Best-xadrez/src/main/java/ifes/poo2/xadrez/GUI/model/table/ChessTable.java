@@ -7,6 +7,7 @@
 package ifes.poo2.xadrez.GUI.model.table;
 
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
+import ifes.poo2.xadrez.GUI.control.GUIControl;
 import ifes.poo2.xadrez.GUI.pecaView.PecaView;
 
 /**
@@ -109,4 +110,14 @@ public class ChessTable extends javax.swing.JPanel {
                 }
                 return null;
         }
+        
+        public void limparTabuleiro(){
+                for (int i=0; i<8; i++){
+                        for (int j=0; j<8; j++){
+                                lines[i].getTile(j).removerPeca();
+                        }
+                }
+        }
+        
+        
 }

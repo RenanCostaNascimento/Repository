@@ -121,6 +121,14 @@ public class Tile extends javax.swing.JPanel {
                 
         }
         
+        public void removerPeca(){
+                if (getComponentCount() > 0){
+                        this.removeAll();
+                        revalidate();
+                        repaint(); 
+                }
+        }
+        
         public PecaView getPecaView(){
                 return (PecaView) this.getComponent(0);
         }

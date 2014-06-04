@@ -6,10 +6,22 @@
 
 package ifes.poo2.xadrez.GUI.model.textBar;
 
+import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
+import ifes.poo1.xadrez.model.cgt.ControlXadrez;
+import ifes.poo1.xadrez.util.exception.CaminhoBloqueadoException;
+import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
+import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
+import ifes.poo1.xadrez.util.exception.CasaVaziaException;
+import ifes.poo1.xadrez.util.exception.MovimentoInvalidoException;
+import ifes.poo1.xadrez.util.exception.PecaAlheiaException;
+import ifes.poo2.xadrez.GUI.control.GUIControl;
 import ifes.poo2.xadrez.GUI.model.messagePane.MessagePane;
+import ifes.poo2.xadrez.GUI.model.table.ChessTable;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JTextField;
 
 /**
@@ -85,6 +97,27 @@ public class TextBar extends javax.swing.JPanel {
                                 input = input.replace(":m", "");
                                 MessagePane.addMessage("<<"+sdf.format(cal.getTime())+" Player" +" says >> \n"+input+"\n");
                                 //TODO: save in a logfile
+                        }
+                        if (input.startsWith(":x")) ChessTable.getInstanceOf().limparTabuleiro();
+                        else{
+                               Character.getNumericValue(input.charAt(0)); 
+                                       
+                                int i = Character.getNumericValue(input.charAt(0));
+                                int j = Character.getNumericValue(input.charAt(1));
+                                
+                                Posicao posI = Posicao.create(i, j);
+                                
+                                i = Character.getNumericValue(input.charAt(2));
+                                j = Character.getNumericValue(input.charAt(3));
+                                
+                                Posicao posF = Posicao.create(i, j);
+                                try {
+                                        ControlXadrez.getInstanceOf().realizarJogadaSingleplayer(posI, posF);
+                                        GUIControl.getInstanceOf().reiniciarTabuleiro();
+                                } catch (PecaAlheiaException | MovimentoInvalidoException | CaminhoBloqueadoException | CasaVaziaException | CapturaInvalidaPecaInexistenteException | CapturaInvalidaPecaPropriaException ex) {
+                                        Logger.getLogger(TextBar.class.getName()).log(Level.SEVERE, null, ex);
+                                        MessagePane.addMessage(ex.getMessage()+"\n");
+                                }
                         }
                         
                         textField.setText(null);

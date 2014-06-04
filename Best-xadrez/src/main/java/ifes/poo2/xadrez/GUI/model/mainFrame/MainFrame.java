@@ -1,6 +1,8 @@
 package ifes.poo2.xadrez.GUI.model.mainFrame;
 
 
+import ifes.poo1.xadrez.model.cgt.ControlXadrez;
+import ifes.poo2.xadrez.GUI.control.GUIControl;
 import java.awt.Color;
 import javax.swing.JTextField;
 import ifes.poo2.xadrez.GUI.model.mainPanel.MainPanel;
@@ -68,6 +70,11 @@ public class MainFrame extends javax.swing.JFrame {
                 gameMenu.setText("Game");
 
                 newSPGameItem.setText("Single Player game");
+                newSPGameItem.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                newSPGameItemActionPerformed(evt);
+                        }
+                });
                 gameMenu.add(newSPGameItem);
 
                 newMPGameItem.setText("Multiplayer game");
@@ -107,6 +114,11 @@ public class MainFrame extends javax.swing.JFrame {
         private void exitItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitItemActionPerformed
                 // TODO add your handling code here:
         }//GEN-LAST:event_exitItemActionPerformed
+
+        private void newSPGameItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newSPGameItemActionPerformed
+                ControlXadrez.getInstanceOf().iniciarJogoSingleplayer("asd");
+                GUIControl.getInstanceOf().startGameFacade();
+        }//GEN-LAST:event_newSPGameItemActionPerformed
         
         /**
          * @param args the command line arguments

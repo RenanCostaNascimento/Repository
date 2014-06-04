@@ -14,7 +14,7 @@ public class Main {
         public static void main(String args[]) {
                 GUIControl gc = GUIControl.getInstanceOf();
                 gc.startGUI();
-                gc.debug();
+                
                
                
                 
