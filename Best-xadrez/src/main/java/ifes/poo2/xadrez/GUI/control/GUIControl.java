@@ -160,7 +160,7 @@ public class GUIControl {
                 //for (int i=0; i<posicoes.size(); i++) ct.getPosicao(posicoes.get(i)).iluminar();  
                 for (int i=0; i<posicoes.size(); i++) (ct.getPosicao(posicoes.get(i))).iluminar();
                 System.out.println(t.getPecaView().getPeca().getNome());
-                for (int i=0; i<posicoes.size(); i++) System.out.println("Coluna: "+posicoes.get(i).getColuna()+"\nLinha:"+posicoes.get(i).getLinha());
+               // for (int i=0; i<posicoes.size(); i++) System.out.println("Coluna: "+posicoes.get(i).getColuna()+"\nLinha:"+posicoes.get(i).getLinha());
                 
                 /*
                 ChessTable ct = getChessTable();
@@ -215,6 +215,7 @@ public class GUIControl {
          
         
         public void startGameFacade(){
+                getChessTable().limparTabuleiro();
                 populateGUITable();
         }
                 

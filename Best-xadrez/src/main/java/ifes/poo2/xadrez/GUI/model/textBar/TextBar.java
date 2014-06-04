@@ -99,6 +99,7 @@ public class TextBar extends javax.swing.JPanel {
                                 //TODO: save in a logfile
                         }
                         if (input.startsWith(":x")) ChessTable.getInstanceOf().limparTabuleiro();
+                        if (input.startsWith(":r")) GUIControl.getInstanceOf().populateGUITable();
                         else{
                                Character.getNumericValue(input.charAt(0)); 
                                        
@@ -111,9 +112,9 @@ public class TextBar extends javax.swing.JPanel {
                                 j = Character.getNumericValue(input.charAt(3));
                                 
                                 Posicao posF = Posicao.create(i, j);
+                                
                                 try {
                                         ControlXadrez.getInstanceOf().realizarJogadaSingleplayer(posI, posF);
-                                        GUIControl.getInstanceOf().reiniciarTabuleiro();
                                 } catch (PecaAlheiaException | MovimentoInvalidoException | CaminhoBloqueadoException | CasaVaziaException | CapturaInvalidaPecaInexistenteException | CapturaInvalidaPecaPropriaException ex) {
                                         Logger.getLogger(TextBar.class.getName()).log(Level.SEVERE, null, ex);
                                         MessagePane.addMessage(ex.getMessage()+"\n");

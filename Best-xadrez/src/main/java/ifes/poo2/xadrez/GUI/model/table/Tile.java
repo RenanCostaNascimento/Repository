@@ -70,7 +70,10 @@ public class Tile extends javax.swing.JPanel {
 
         private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
                 GUIControl.getInstanceOf().restoreAllOriginalTileColors();
-                if (this.getComponentCount()>0) GUIControl.getInstanceOf().iluminarPosicoesPossiveis(this);
+                if (this.getComponentCount()>0){
+                        GUIControl.getInstanceOf().iluminarPosicoesPossiveis(this);
+                        System.out.println(this.getPecaView().getPeca().getPosicao());
+                }
                 
         }//GEN-LAST:event_formMousePressed
 
