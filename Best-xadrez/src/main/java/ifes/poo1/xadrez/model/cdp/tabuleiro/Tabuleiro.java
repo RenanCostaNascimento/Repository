@@ -146,9 +146,6 @@ public class Tabuleiro implements Serializable{
         peca.getPosicao().setColuna(colunaFinal);
         peca.getPosicao().setLinha(linhaFinal);
 
-        ultimaMovida.setColuna(colunaFinal);
-        ultimaMovida.setLinha(linhaFinal);
-
     }
 
     /**
