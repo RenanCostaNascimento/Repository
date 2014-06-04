@@ -2,6 +2,7 @@ package ifes.poo1.xadrez.model.cgt;
 
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
+import ifes.poo1.xadrez.model.cdp.constantes.TipoJogada;
 import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
 import ifes.poo1.xadrez.model.cdp.jogo.Checkpoint;
 import ifes.poo1.xadrez.model.cdp.jogo.HistoricoJogador;
@@ -48,11 +49,10 @@ import java.util.logging.Logger;
  * @author Renan
  *
  */
-
 public class ControlXadrez {
-    
+
     private static ControlXadrez controlXadrez = null;
-    
+
     private final ControladorTelas controladorTela = new ControladorTelas();
     private Jogo jogo;
     private List<HistoricoPartida> partidas = new ArrayList<>();
@@ -68,16 +68,16 @@ public class ControlXadrez {
         historicoJogadorDAO = new DAOHistoricoJogador();
         checkpointDAO = new DAOCheckpoint();
     }
-    
-    public static ControlXadrez getInstanceOf(){
-        if(controlXadrez == null){
+
+    public static ControlXadrez getInstanceOf() {
+        if (controlXadrez == null) {
             try {
-                controlXadrez =  new ControlXadrez();
-            } catch (    SQLException | ClassNotFoundException ex) {
+                controlXadrez = new ControlXadrez();
+            } catch (SQLException | ClassNotFoundException ex) {
                 Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         return controlXadrez;
     }
 
@@ -85,8 +85,8 @@ public class ControlXadrez {
      * Controla o comando executado pelos jogadores.
      *
      */
-    public void controlarComandoRecebido() {
-        Jogada jogada = controladorTela.determinarJogadaUsuario(jogo.getVez());
+    public void controlarComandoRecebido(Jogada jogada) throws PecaAlheiaException, MovimentoInvalidoException, CaminhoBloqueadoException, CasaVaziaException, CapturaInvalidaPecaInexistenteException, CapturaInvalidaPecaPropriaException {
+//        Jogada jogada = controladorTela.determinarJogadaUsuario(jogo.getVez());
         switch (jogada.getTipoJogada()) {
             case MOVIMENTO:
                 controlarMovimentoPeca(jogada);
@@ -106,7 +106,7 @@ public class ControlXadrez {
                 break;
             case PONTUACAO:
                 exibirPontuacaoJogador();
-                controlarComandoRecebido();
+//                controlarComandoRecebido();
                 break;
             case ROQUE_MAIOR:
                 controlarRoqueMaior();
@@ -116,7 +116,7 @@ public class ControlXadrez {
                 break;
             case SALVAR:
                 controlarSalvarPartida();
-                controlarComandoRecebido();
+//                controlarComandoRecebido();
                 break;
             case SAIR:
                 controlarSairPartida();
@@ -124,7 +124,7 @@ public class ControlXadrez {
                 break;
             case INEXISTENTE:
                 controladorTela.exibirMensagem("Que porra eh essa?!");
-                controlarComandoRecebido();
+//                controlarComandoRecebido();
         }
     }
 
@@ -340,14 +340,14 @@ public class ControlXadrez {
                 roqueMenorBranco();
             } catch (RoqueInvalidoReiAmeacadoException | RoqueInvalidoTorreMovimentadaException | RoqueInvalidoCaminhoBloqueadoException | RoqueInvalidoReiMovimentadoException e) {
                 controladorTela.exibirMensagem(e.getMessage());
-                controlarComandoRecebido();
+//                controlarComandoRecebido();
             }
         } else {
             try {
                 roqueMenorPreto();
             } catch (RoqueInvalidoReiAmeacadoException | RoqueInvalidoTorreMovimentadaException | RoqueInvalidoCaminhoBloqueadoException | RoqueInvalidoReiMovimentadoException e) {
                 controladorTela.exibirMensagem(e.getMessage());
-                controlarComandoRecebido();
+//                controlarComandoRecebido();
             }
         }
     }
@@ -363,14 +363,14 @@ public class ControlXadrez {
                 roqueMaiorBranco();
             } catch (RoqueInvalidoReiAmeacadoException | RoqueInvalidoTorreMovimentadaException | RoqueInvalidoCaminhoBloqueadoException | RoqueInvalidoReiMovimentadoException e) {
                 controladorTela.exibirMensagem(e.getMessage());
-                controlarComandoRecebido();
+//                controlarComandoRecebido();
             }
         } else {
             try {
                 roqueMaiorPreto();
             } catch (RoqueInvalidoReiAmeacadoException | RoqueInvalidoTorreMovimentadaException | RoqueInvalidoCaminhoBloqueadoException | RoqueInvalidoReiMovimentadoException e) {
                 controladorTela.exibirMensagem(e.getMessage());
-                controlarComandoRecebido();
+//                controlarComandoRecebido();
             }
         }
     }
@@ -587,13 +587,8 @@ public class ControlXadrez {
      *
      * @param jogada - a jogada realizada pelo jogador.
      */
-    private void controlarMovimentoPeca(Jogada jogada) {
-        try {
-            movimentarPeca(jogada.getPosicaoInicial(), jogada.getPosicaoFinal());
-        } catch (PecaAlheiaException | MovimentoInvalidoException | CaminhoBloqueadoException | CasaVaziaException e) {
-            controladorTela.exibirMensagem(e.getMessage());
-            controlarComandoRecebido();
-        }
+    private void controlarMovimentoPeca(Jogada jogada) throws PecaAlheiaException, MovimentoInvalidoException, CaminhoBloqueadoException, CasaVaziaException {
+        movimentarPeca(jogada.getPosicaoInicial(), jogada.getPosicaoFinal());
     }
 
     /**
@@ -602,13 +597,9 @@ public class ControlXadrez {
      *
      * @param jogada - a jogada realizada pelo jogador.
      */
-    private void controlarCapturaPeca(Jogada jogada) {
-        try {
-            capturarPeca(jogada.getPosicaoInicial(), jogada.getPosicaoFinal());
-        } catch (CasaVaziaException | PecaAlheiaException | CaminhoBloqueadoException | MovimentoInvalidoException | CapturaInvalidaPecaInexistenteException | CapturaInvalidaPecaPropriaException e) {
-            controladorTela.exibirMensagem(e.getMessage());
-            controlarComandoRecebido();
-        }
+    private void controlarCapturaPeca(Jogada jogada) throws CasaVaziaException, PecaAlheiaException, CaminhoBloqueadoException, MovimentoInvalidoException, CapturaInvalidaPecaInexistenteException, CapturaInvalidaPecaPropriaException {
+        capturarPeca(jogada.getPosicaoInicial(), jogada.getPosicaoFinal());
+
     }
 
     /**
@@ -655,7 +646,7 @@ public class ControlXadrez {
      */
     private void finalizarJogo(Jogador vencedor, Jogador perdedor) {
 
-        controladorTela.exibirMensagem("XEQUE-MATE do jogador " + vencedor.getNome() + ", parabéns!\n");
+//        controladorTela.exibirMensagem("XEQUE-MATE do jogador " + vencedor.getNome() + ", parabéns!\n");
         jogo.setDataHoraFim(new Date());
 
         try {
@@ -672,7 +663,7 @@ public class ControlXadrez {
 //        adicionarHistoricoJogadorVitoria(vencedor.getNome());
 //        adicionarHistoricoJogadorDerrota(perdedor.getNome());
         jogo.setEmAndamento(false);
-        controlarMenuInicial();
+//        controlarMenuInicial();
 
     }
 
@@ -838,7 +829,7 @@ public class ControlXadrez {
                 break;
             default:
                 controladorTela.exibirMensagem("Ahhh tomou coragem, ne!!");
-                controlarComandoRecebido();
+//                controlarComandoRecebido();
                 break;
         }
     }
@@ -882,7 +873,7 @@ public class ControlXadrez {
                 break;
             default:
                 controladorTela.exibirMensagem("O empate nao foi aceito, a partida continuara!");
-                controlarComandoRecebido();
+//                controlarComandoRecebido();
                 break;
         }
     }
@@ -1205,7 +1196,7 @@ public class ControlXadrez {
                 if (jogo.getPreto().getNome().equals("ZEUS")) {
                     controlarJogoSingleplayer();
                 }
-                controlarJogoMultiplayer();
+//                controlarJogoMultiplayer();
             } else {
                 throw new JogoInexistenteExcpetion();
             }
@@ -1243,8 +1234,7 @@ public class ControlXadrez {
 
         jogo = new Jogo(tabuleiro, branco, preto);
 
-        controlarJogoSingleplayer();
-
+//        controlarJogoSingleplayer();
     }
 
     /**
@@ -1254,21 +1244,35 @@ public class ControlXadrez {
     private void controlarJogoSingleplayer() {
 
         while (jogo.isEmAndamento()) {
-            realizarJogadaSingleplayer();
+//            realizarJogadaSingleplayer();
         }
 
+    }
+
+    private Jogada determinarJogada(Posicao posicaoInicial, Posicao posicaoFinal) {
+        Jogada jogada = new Jogada();
+        if (this.getJogo().getTabuleiro().getCasas(posicaoFinal) == null) {
+            jogada.setTipoJogada(TipoJogada.MOVIMENTO);
+        } else {
+            jogada.setTipoJogada(TipoJogada.CAPTURA);
+        }
+        jogada.setPosicaoInicial(posicaoInicial);
+        jogada.setPosicaoFinal(posicaoFinal);
+        return jogada;
     }
 
     /**
      * Um típica jogada de um jogo singleplayer.
      *
      */
-    private void realizarJogadaSingleplayer() {
+    public void realizarJogadaSingleplayer(Posicao posicaoInicial, Posicao posicaoFinal) throws PecaAlheiaException, MovimentoInvalidoException, CaminhoBloqueadoException, CasaVaziaException, CapturaInvalidaPecaInexistenteException, CapturaInvalidaPecaPropriaException {
 
-        controladorTela.mostrarTabuleiro(jogo.getTabuleiro());
+//        controladorTela.mostrarTabuleiro(jogo.getTabuleiro());
+        Jogada jogada = determinarJogada(posicaoInicial, posicaoFinal);
 
         if (jogo.getVez().equals(jogo.getBranco())) {
-            controlarComandoRecebido();
+            controlarComandoRecebido(jogada);
+            controlarComandoZeus();
         } else {
             controlarComandoZeus();
         }
@@ -1299,27 +1303,27 @@ public class ControlXadrez {
 
         jogo = new Jogo(tabuleiro, branco, preto);
 
-        controlarJogoMultiplayer();
+//        controlarJogoMultiplayer();
     }
 
     /**
      * Controla o andamento de uma partida multiplayer.
      *
      */
-    private void controlarJogoMultiplayer() {
-        while (jogo.isEmAndamento()) {
-            realizarJogadaMultiplayer();
-        }
-    }
-
+//    private void controlarJogoMultiplayer() {
+//        while (jogo.isEmAndamento()) {
+//            realizarJogadaMultiplayer();
+//        }
+//    }
     /**
      * Uma típica jogada de um jogo multiplayer.
      *
      */
-    private void realizarJogadaMultiplayer() {
+    public void realizarJogadaMultiplayer(Posicao posicaoInicial, Posicao posicaoFinal) throws PecaAlheiaException, MovimentoInvalidoException, CaminhoBloqueadoException, CasaVaziaException, CapturaInvalidaPecaInexistenteException, CapturaInvalidaPecaPropriaException {
 
-        controladorTela.mostrarTabuleiro(jogo.getTabuleiro());
-        controlarComandoRecebido();
+        Jogada jogada = determinarJogada(posicaoInicial, posicaoFinal);
+//        controladorTela.mostrarTabuleiro(jogo.getTabuleiro());
+        controlarComandoRecebido(jogada);
         if (jogo.getVez().getPontuacao() >= 999) {
             Jogador vencedor;
             Jogador perdedor;
@@ -1390,5 +1394,4 @@ public class ControlXadrez {
     public Jogo getJogo() {
         return jogo;
     }
-
 }
