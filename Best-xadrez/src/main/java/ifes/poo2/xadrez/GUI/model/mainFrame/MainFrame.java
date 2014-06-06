@@ -1,6 +1,7 @@
 package ifes.poo2.xadrez.GUI.model.mainFrame;
 
 import ifes.poo1.xadrez.model.cgt.ControlXadrez;
+import ifes.poo2.xadrez.GUI.control.About;
 import ifes.poo2.xadrez.GUI.control.GUIControl;
 import java.awt.Color;
 import javax.swing.JTextField;
@@ -109,6 +110,11 @@ public class MainFrame extends javax.swing.JFrame {
                 helpMenu.setText("Help");
 
                 aboutItem.setText("About");
+                aboutItem.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                aboutItemActionPerformed(evt);
+                        }
+                });
                 helpMenu.add(aboutItem);
 
                 howToPlayItem.setText("jMenu1");
@@ -155,8 +161,8 @@ public class MainFrame extends javax.swing.JFrame {
                 };
 
                 //option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
-                while (jogador1.getText().isEmpty() || jogador2.getText().isEmpty() || jogador1.getText().contains(jogador2.getText())){
-                        if (jogador1.getText().isEmpty() || jogador2.getText().isEmpty()){
+                while (jogador1.getText().isEmpty() || jogador2.getText().isEmpty() || jogador1.getText().contains(jogador2.getText())) {
+                        if (jogador1.getText().isEmpty() || jogador2.getText().isEmpty()) {
                                 message[0] = "Digite o nome dos jogadores";
                                 option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
                         }
@@ -167,12 +173,17 @@ public class MainFrame extends javax.swing.JFrame {
                         }
 
                 }
-                String[] nomes = {jogador1.getText(), jogador2.getText() };
+                String[] nomes = {jogador1.getText(), jogador2.getText()};
                 GUIControl.getInstanceOf().startGameMultiplayer(nomes);
-                
 
 
         }//GEN-LAST:event_newMPGameItemActionPerformed
+
+        private void aboutItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutItemActionPerformed
+                
+                JOptionPane.showMessageDialog(null, "THE BEST CHESS\n\nHARD CODED.\nDONE.\n\nBY PEDRO AND RENAN","About Best Chess", JOptionPane.PLAIN_MESSAGE, null);
+                
+        }//GEN-LAST:event_aboutItemActionPerformed
 
         /**
          * @param args the command line arguments

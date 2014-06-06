@@ -38,11 +38,14 @@ import javax.swing.JTextField;
  * @author pdr
  */
 public class GUIControl {
+        private enum TipoJogo{
+                singleplayer, multiplayer
+        }
         
         private ControlXadrez controlXadrez = ControlXadrez.getInstanceOf();
         private MainFrame mf = MainFrame.create();
         private Posicao posicaoBuffer = null;
-        private Boolean jogoEhSinglePlayer;
+        private TipoJogo tipoJogo;
         private static GUIControl gc = null;
         
         public static GUIControl getInstanceOf() {
@@ -151,7 +154,7 @@ public class GUIControl {
         
         public void moverPeca(Posicao posInicial, Posicao posFinal) {
                 try {
-                        if (jogoEhSinglePlayer == true) ControlXadrez.getInstanceOf().realizarJogadaSingleplayer(posInicial, posFinal);
+                        if (tipoJogo == TipoJogo.singleplayer) ControlXadrez.getInstanceOf().realizarJogadaSingleplayer(posInicial, posFinal);
                         else ControlXadrez.getInstanceOf().realizarJogadaMultiplayer(posInicial, posFinal);
                         
                         restoreAllOriginalTileColors();
@@ -198,13 +201,13 @@ public class GUIControl {
         
         public void startGameSingleplayer(String nome){
                 ControlXadrez.getInstanceOf().iniciarJogoSingleplayer(nome);
-                jogoEhSinglePlayer = true;
+                tipoJogo = TipoJogo.singleplayer;
                 startGameFacade();
         }
         
         public void startGameMultiplayer(String[] nomes){
                 ControlXadrez.getInstanceOf().iniciarJogoMultiplayer(nomes);
-                jogoEhSinglePlayer = false;
+                tipoJogo = TipoJogo.multiplayer;
                 startGameFacade();
         }
         
