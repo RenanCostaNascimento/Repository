@@ -38,8 +38,6 @@ public class MainFrame extends javax.swing.JFrame {
         public static MainFrame create() {
                 return new MainFrame(); //To change body of generated methods, choose Tools | Templates.
         }
-        
-        
 
         private MainPanel mainPanel = MainPanel.create();
 
@@ -145,19 +143,18 @@ public class MainFrame extends javax.swing.JFrame {
                 String nome = "";
 
                 while (nome.isEmpty()) {
-                        nome = JOptionPane.showInputDialog(null, "Digite seu nome", "Digite seu nome", JOptionPane.OK_CANCEL_OPTION);
+                        nome = JOptionPane.showInputDialog(null, "Digite seu nome", "Digite seu nome", JOptionPane.INFORMATION_MESSAGE);
 
                 }
 
                 //ControlXadrez.getInstanceOf().iniciarJogoSingleplayer(nome);
-                
                 GUIControl.getInstanceOf().startGameSingleplayer(nome);
         }//GEN-LAST:event_newSPGameItemActionPerformed
 
         private void newMPGameItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newMPGameItemActionPerformed
                 JTextField jogador1 = new JTextField();
                 JTextField jogador2 = new JTextField();
-                int option;
+                int option = 3;
                 Object[] message = {
                         "Digite o nome dos jogadores",
                         "Jogador1:", jogador1,
@@ -168,25 +165,34 @@ public class MainFrame extends javax.swing.JFrame {
                 while (jogador1.getText().isEmpty() || jogador2.getText().isEmpty() || jogador1.getText().contains(jogador2.getText())) {
                         if (jogador1.getText().isEmpty() || jogador2.getText().isEmpty()) {
                                 message[0] = "Digite o nome dos jogadores";
-                                option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
+                                option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.INFORMATION_MESSAGE);
                         }
+                        
+                        
 
-                        if (jogador1.getText().contains(jogador2.getText())) {
+                        else  if (jogador1.getText().contains(jogador2.getText())) {
                                 message[0] = "O nome deve ser diferente!";
-                                option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
+                                option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.INFORMATION_MESSAGE);
                         }
-
+                        
+                         if (option == 1 || option == 2) {
+                                break;
+                        }
+                       
                 }
-                String[] nomes = {jogador1.getText(), jogador2.getText()};
-                GUIControl.getInstanceOf().startGameMultiplayer(nomes);
+                
+                if (option == 0) {
+                        String[] nomes = {jogador1.getText(), jogador2.getText()};
+                        GUIControl.getInstanceOf().startGameMultiplayer(nomes);
+                }
 
 
         }//GEN-LAST:event_newMPGameItemActionPerformed
 
         private void aboutItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutItemActionPerformed
-                
-                JOptionPane.showMessageDialog(null, "THE BEST CHESS\n\nHARD CODED.\nDONE.\n\nBY PEDRO AND RENAN","About Best Chess", JOptionPane.PLAIN_MESSAGE, null);
-                
+
+                JOptionPane.showMessageDialog(null, "THE BEST CHESS\n\nHARD CODED.\nDONE.\n\nBY PEDRO AND RENAN", "About Best Chess", JOptionPane.PLAIN_MESSAGE, null);
+
         }//GEN-LAST:event_aboutItemActionPerformed
 
         /**
@@ -212,11 +218,11 @@ public class MainFrame extends javax.swing.JFrame {
         public MainPanel getMainPanel() {
                 return mainPanel;
         }
-        
-        
-        public void popUpXeque(Jogador jogador){
+
+        public void popUpXeque(Jogador jogador) {
                 JOptionPane.showInternalMessageDialog(null, "XEQUE do jogador " + jogador.getNome() + "!", "XEQUE!", JOptionPane.INFORMATION_MESSAGE);
         }
+
         /**
          * @param mainPanel the mainPanel to set
          */

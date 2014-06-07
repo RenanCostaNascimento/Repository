@@ -20,6 +20,10 @@ import ifes.poo1.xadrez.util.exception.CasaVaziaException;
 import ifes.poo1.xadrez.util.exception.MovimentoInvalidoException;
 import ifes.poo1.xadrez.util.exception.MuitosComponentesException;
 import ifes.poo1.xadrez.util.exception.PecaAlheiaException;
+import ifes.poo1.xadrez.util.exception.RoqueInvalidoCaminhoBloqueadoException;
+import ifes.poo1.xadrez.util.exception.RoqueInvalidoReiAmeacadoException;
+import ifes.poo1.xadrez.util.exception.RoqueInvalidoReiMovimentadoException;
+import ifes.poo1.xadrez.util.exception.RoqueInvalidoTorreMovimentadaException;
 import ifes.poo2.xadrez.GUI.model.mainFrame.MainFrame;
 import ifes.poo2.xadrez.GUI.model.messagePane.MessagePane;
 import ifes.poo2.xadrez.GUI.model.table.ChessTable;
@@ -38,8 +42,6 @@ import javax.swing.JTextField;
  * @author pdr
  */
 public class GUIControl {
-
-      
 
         public enum TipoJogo {
 
@@ -135,11 +137,11 @@ public class GUIControl {
         private void iluminarTile(Posicao pos) {
                 getMf().getChessTable().getPosicao(pos).iluminar();
         }
-        
+
         private void iluminarTile(Posicao pos, Color cor) {
                 getMf().getChessTable().getPosicao(pos).setColor(cor);
         }
-        
+
         private void restoreOriginalTileColor(Posicao pos) {
                 getMf().getChessTable().getPosicao(pos).setOriginalColor();
         }
@@ -177,8 +179,6 @@ public class GUIControl {
                         setPosicaoBuffer(null);
                 }
 
-               
-                ChessTable.getInstanceOf().limparTabuleiro();
                 this.populateGUITable();
 
         }
@@ -226,6 +226,7 @@ public class GUIControl {
         }
 
         public void populateGUITable() {
+                ChessTable.getInstanceOf().limparTabuleiro();
 
                 for (int i = 0; i < 8; i++) {
                         for (int j = 0; j < 8; j++) {
@@ -255,18 +256,18 @@ public class GUIControl {
         public void enviarMensagem(String msg) {
                 MessagePane.addMessage(msg);
         }
-        
-        public void enviarMensagemXeque(Jogador jogador){/*
-                Tabuleiro tab = controlXadrez.getJogo().getTabuleiro();
-                Posicao posRei;
-                if (jogador.getCor() == Cores.branco) posRei = tab.getPosicaoReiPreto();
-                else posRei = tab.getPosicaoReiBranco();
+
+        public void enviarMensagemXeque(Jogador jogador) {/*
+                 Tabuleiro tab = controlXadrez.getJogo().getTabuleiro();
+                 Posicao posRei;
+                 if (jogador.getCor() == Cores.branco) posRei = tab.getPosicaoReiPreto();
+                 else posRei = tab.getPosicaoReiBranco();
                 
-                iluminarTile(posRei, Color.YELLOW);
-                */
-                
+                 iluminarTile(posRei, Color.YELLOW);
+                 */
+
                 MessagePane.addMessageXeque(jogador);
-                
+
         }
 
         public void enviarMensagemJogador(String msg) {
@@ -278,15 +279,38 @@ public class GUIControl {
                 MessagePane.addMessageJogadaInvalida();
         }
 
-        public void popUpXeque(Jogador jogador){
+        public void popUpXeque(Jogador jogador) {
                 mf.popUpXeque(jogador);
-                
+
         }
+
         /**
          * @return the mf
          */
         public MainFrame getMf() {
                 return mf;
+        }
+
+        public void realizarRoqueMaior() {
+                try {
+                        controlXadrez.controlarRoqueMenor();
+                        MessagePane.addJogadaRoque(controlXadrez.getJogo().getVez(), "Maior");
+                        this.populateGUITable();
+                } catch (RoqueInvalidoReiMovimentadoException | RoqueInvalidoTorreMovimentadaException | RoqueInvalidoCaminhoBloqueadoException | RoqueInvalidoReiAmeacadoException ex) {
+                        MessagePane.addMessage(ex.getMessage() + "\n");
+                }
+
+        }
+
+        public void realizarRoqueMenor() {
+                try {
+                        controlXadrez.controlarRoqueMaior();
+                        MessagePane.addJogadaRoque(controlXadrez.getJogo().getVez(), "Menor");
+                        this.populateGUITable();
+
+                } catch (RoqueInvalidoReiMovimentadoException | RoqueInvalidoTorreMovimentadaException | RoqueInvalidoCaminhoBloqueadoException | RoqueInvalidoReiAmeacadoException ex) {
+                        MessagePane.addMessage(ex.getMessage() + "\n");
+                }
         }
 
         /**
@@ -309,8 +333,8 @@ public class GUIControl {
         public void setPosicaoBuffer(Posicao posicaoBuffer) {
                 this.posicaoBuffer = posicaoBuffer;
         }
-        
-          /**
+
+        /**
          * @return the tipoJogo
          */
         public TipoJogo getTipoJogo() {

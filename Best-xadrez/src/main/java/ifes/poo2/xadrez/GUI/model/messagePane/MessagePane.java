@@ -84,6 +84,9 @@ public class MessagePane extends javax.swing.JPanel {
                 addMessage("<<" + getTime() + " " + jogador.getNome() + " says: \n" + message + ">>\n");
         }
         
+        public static void addJogadaRoque(Jogador jogador, String tipo){
+                addMessage("<<" + getTime() + " " + jogador.getNome() + " Realuzou o roque "+tipo+" !>>\n");
+        }
         public static void addMessageJogadaInvalida(){
                 addMessage("<<" + getTime() + " jogada inválida >>\n");
         }
