@@ -146,8 +146,9 @@ public class MainFrame extends javax.swing.JFrame {
 
                 }
 
-                ControlXadrez.getInstanceOf().iniciarJogoSingleplayer(nome);
-                GUIControl.getInstanceOf().startGameFacade();
+                //ControlXadrez.getInstanceOf().iniciarJogoSingleplayer(nome);
+                
+                GUIControl.getInstanceOf().startGameSingleplayer(nome);
         }//GEN-LAST:event_newSPGameItemActionPerformed
 
         private void newMPGameItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newMPGameItemActionPerformed

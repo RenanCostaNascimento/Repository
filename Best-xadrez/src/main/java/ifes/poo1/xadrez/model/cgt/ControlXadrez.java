@@ -275,6 +275,8 @@ public class ControlXadrez {
                 } else {
                         capturarPecaZeus(pecaRandomica, posicaoRandomica);
                 }
+                
+                GUIControl.getInstanceOf().mensagemMoverPeca(pecaRandomica.getPosicao(), posicaoRandomica, jogo.getVez());
         }
 
         /**

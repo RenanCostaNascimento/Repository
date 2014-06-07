@@ -70,7 +70,7 @@ public class MessagePane extends javax.swing.JPanel {
         }
 
         public static void addMessageJogada(Posicao posI, Posicao posF, Jogador jogador) {
-                String msg = "<<" + getTime() + " " + jogador.getNome() + " jogou:" + posI.toString() + " para " + posF.toString() + ">>\n";
+                String msg = "<<" + getTime() + " " + jogador.getNome() + " jogou:\n" + posI.toString() + " para " + posF.toString() + ">>\n";
                 addMessage(msg);
         }
 
@@ -87,6 +87,10 @@ public class MessagePane extends javax.swing.JPanel {
                 cal.getTime();
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
                 return sdf.format(cal.getTime());
+        }
+        
+        public void clear(){
+                jTextArea1.setText(null);
         }
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JScrollPane jScrollPane1;
