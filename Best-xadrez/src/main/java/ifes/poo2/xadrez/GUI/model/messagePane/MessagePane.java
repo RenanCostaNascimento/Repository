@@ -18,6 +18,7 @@ public class MessagePane extends javax.swing.JPanel {
 
         private static MessagePane messagePane = null;
 
+        
         private MessagePane() {
                 initComponents();
         }
@@ -67,6 +68,11 @@ public class MessagePane extends javax.swing.JPanel {
          */
         public static void addMessage(String message) {
                 jTextArea1.append(message);
+        }
+        
+        public static void addMessageXeque(Jogador jogador) {
+                String msg = "<<" + getTime() + " XEQUE do jogador " + jogador.getNome() + "!>>\n";
+                addMessage(msg);
         }
 
         public static void addMessageJogada(Posicao posI, Posicao posF, Jogador jogador) {

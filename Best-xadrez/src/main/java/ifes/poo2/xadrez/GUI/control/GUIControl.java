@@ -135,7 +135,11 @@ public class GUIControl {
         private void iluminarTile(Posicao pos) {
                 getMf().getChessTable().getPosicao(pos).iluminar();
         }
-
+        
+        private void iluminarTile(Posicao pos, Color cor) {
+                getMf().getChessTable().getPosicao(pos).setColor(cor);
+        }
+        
         private void restoreOriginalTileColor(Posicao pos) {
                 getMf().getChessTable().getPosicao(pos).setOriginalColor();
         }
@@ -251,6 +255,19 @@ public class GUIControl {
         public void enviarMensagem(String msg) {
                 MessagePane.addMessage(msg);
         }
+        
+        public void enviarMensagemXeque(Jogador jogador){/*
+                Tabuleiro tab = controlXadrez.getJogo().getTabuleiro();
+                Posicao posRei;
+                if (jogador.getCor() == Cores.branco) posRei = tab.getPosicaoReiPreto();
+                else posRei = tab.getPosicaoReiBranco();
+                
+                iluminarTile(posRei, Color.YELLOW);
+                */
+                
+                MessagePane.addMessageXeque(jogador);
+                
+        }
 
         public void enviarMensagemJogador(String msg) {
                 MessagePane.addMessageJogador(controlXadrez.getJogo().getVez(), msg);
@@ -261,6 +278,10 @@ public class GUIControl {
                 MessagePane.addMessageJogadaInvalida();
         }
 
+        public void popUpXeque(Jogador jogador){
+                mf.popUpXeque(jogador);
+                
+        }
         /**
          * @return the mf
          */

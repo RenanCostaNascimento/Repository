@@ -1,5 +1,6 @@
 package ifes.poo2.xadrez.GUI.model.mainFrame;
 
+import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
 import ifes.poo1.xadrez.model.cgt.ControlXadrez;
 import ifes.poo2.xadrez.GUI.control.About;
 import ifes.poo2.xadrez.GUI.control.GUIControl;
@@ -37,6 +38,8 @@ public class MainFrame extends javax.swing.JFrame {
         public static MainFrame create() {
                 return new MainFrame(); //To change body of generated methods, choose Tools | Templates.
         }
+        
+        
 
         private MainPanel mainPanel = MainPanel.create();
 
@@ -209,7 +212,11 @@ public class MainFrame extends javax.swing.JFrame {
         public MainPanel getMainPanel() {
                 return mainPanel;
         }
-
+        
+        
+        public void popUpXeque(Jogador jogador){
+                JOptionPane.showInternalMessageDialog(null, "XEQUE do jogador " + jogador.getNome() + "!", "XEQUE!", JOptionPane.INFORMATION_MESSAGE);
+        }
         /**
          * @param mainPanel the mainPanel to set
          */

@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  * Classe de controle do modelo. Controla o tabuleiro e as peças.
@@ -622,7 +623,7 @@ public class ControlXadrez {
                                         jogo.getTabuleiro().getPecasBrancas())) {
                                         finalizarJogo(jogo.getBranco(), jogo.getPreto());
                                 } else {
-                                        controladorTela.exibirMensagem("XEQUE do jogador " + jogo.getVez().getNome() + "!");
+                                        GUIControl.getInstanceOf().enviarMensagemXeque(jogo.getVez());
                                 }
                         }
                         /* senao, valida o xeque no rei branco */
@@ -635,7 +636,7 @@ public class ControlXadrez {
                                         jogo.getTabuleiro().getPecasPretas())) {
                                         finalizarJogo(jogo.getPreto(), jogo.getBranco());
                                 } else {
-                                        controladorTela.exibirMensagem("XEQUE do jogador " + jogo.getVez().getNome() + "!");
+                                        GUIControl.getInstanceOf().enviarMensagemXeque(jogo.getVez());
                                 }
                         }
                 }
@@ -1353,10 +1354,13 @@ public class ControlXadrez {
                         Jogador vencedor;
                         Jogador perdedor;
                         vencedor = jogo.getVez();
-                        mudarVezJogador();
-                        perdedor = jogo.getVez();
+                        //mudarVezJogador();
+                        //perdedor = jogo.getVez();
+                        if (vencedor == jogo.getBranco()) perdedor = jogo.getPreto();
+                        else perdedor = jogo.getBranco();
                         finalizarJogo(vencedor, perdedor);
                 }
+                
                 if (jogo.getVez().equals(jogo.getBranco())) {
                         jogo.setVez(jogo.getPreto());
                 } else {
