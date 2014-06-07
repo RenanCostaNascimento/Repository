@@ -797,8 +797,9 @@ public class Tabuleiro implements Serializable {
                     posicaoInicial.getLinha() - 1) != null) {
                 return false;
             }
-            /* peao branco */
-        } else {
+        } 
+        /* peao branco */
+        if (posicaoInicial.getLinha() == 1) {
             if (this.getCasas(posicaoInicial.getColuna(),
                     posicaoInicial.getLinha() + 1) != null) {
                 return false;
