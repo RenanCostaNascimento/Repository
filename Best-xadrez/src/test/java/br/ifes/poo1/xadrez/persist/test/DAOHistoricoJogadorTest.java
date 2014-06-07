@@ -146,4 +146,5 @@ public class DAOHistoricoJogadorTest {
         Assert.assertNotNull(historicos);
         Assert.assertNotSame(0, historicos.size());
     }
+        
 }

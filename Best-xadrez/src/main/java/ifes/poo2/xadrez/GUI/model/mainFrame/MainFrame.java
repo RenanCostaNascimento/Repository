@@ -130,9 +130,10 @@ public class MainFrame extends javax.swing.JFrame {
 
         private void exitItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitItemActionPerformed
                 int opcao = JOptionPane.showConfirmDialog(null, "Deseja salvar?", "Deseja salvar?", JOptionPane.INFORMATION_MESSAGE);
-
+                System.out.println(opcao);
                 if (opcao == 0) {
-
+                        System.out.println("Salva no banco de dados");
+                        System.exit(0);
                 } else if (opcao == 1) {
                         System.exit(0);
                 }
