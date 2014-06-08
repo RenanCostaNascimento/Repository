@@ -37,11 +37,20 @@ public class MessagePane extends javax.swing.JPanel {
         @SuppressWarnings("unchecked")
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
         private void initComponents() {
+                java.awt.GridBagConstraints gridBagConstraints;
 
+                statusBar1 = StatusBar.getInstanceOf();
                 jScrollPane1 = new javax.swing.JScrollPane();
                 jTextArea1 = new javax.swing.JTextArea();
 
-                setLayout(new java.awt.GridLayout(1, 0));
+                setLayout(new java.awt.GridBagLayout());
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 0;
+                gridBagConstraints.ipadx = 79;
+                gridBagConstraints.ipady = 2;
+                gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+                add(statusBar1, gridBagConstraints);
 
                 jTextArea1.setEditable(false);
                 jTextArea1.setColumns(20);
@@ -55,7 +64,16 @@ public class MessagePane extends javax.swing.JPanel {
                 });
                 jScrollPane1.setViewportView(jTextArea1);
 
-                add(jScrollPane1);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 1;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                gridBagConstraints.ipadx = 178;
+                gridBagConstraints.ipady = 247;
+                gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.weighty = 1.0;
+                add(jScrollPane1, gridBagConstraints);
         }// </editor-fold>//GEN-END:initComponents
 
         private void jTextArea1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextArea1MouseClicked
@@ -104,5 +122,6 @@ public class MessagePane extends javax.swing.JPanel {
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JScrollPane jScrollPane1;
         private static javax.swing.JTextArea jTextArea1;
+        private ifes.poo2.xadrez.GUI.model.messagePane.StatusBar statusBar1;
         // End of variables declaration//GEN-END:variables
 }

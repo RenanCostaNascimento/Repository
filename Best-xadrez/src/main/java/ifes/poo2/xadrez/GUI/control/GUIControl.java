@@ -29,6 +29,7 @@ import ifes.poo1.xadrez.util.exception.RoqueInvalidoReiMovimentadoException;
 import ifes.poo1.xadrez.util.exception.RoqueInvalidoTorreMovimentadaException;
 import ifes.poo2.xadrez.GUI.model.mainFrame.MainFrame;
 import ifes.poo2.xadrez.GUI.model.messagePane.MessagePane;
+import ifes.poo2.xadrez.GUI.model.messagePane.StatusBar;
 import ifes.poo2.xadrez.GUI.model.table.ChessTable;
 import ifes.poo2.xadrez.GUI.model.table.Line;
 import ifes.poo2.xadrez.GUI.model.table.Tile;
@@ -56,6 +57,7 @@ public class GUIControl {
         private Posicao posicaoBuffer = null;
         private TipoJogo tipoJogo = null;
         private static GUIControl gc = null;
+        private StatusBar statusBar = StatusBar.getInstanceOf();
 
         public static GUIControl getInstanceOf() {
                 if (gc == null) {
@@ -183,6 +185,7 @@ public class GUIControl {
                 }
 
                 this.populateGUITable();
+                updateStatusBar();
 
         }
 
@@ -254,6 +257,14 @@ public class GUIControl {
                 getChessTable().limparTabuleiro();
                 getMessagePane().clear();
                 populateGUITable();
+                updateStatusBar();
+                
+        }
+        
+        public void updateStatusBar(){
+                StatusBar.setVez(controlXadrez.getJogo().getVez());
+                StatusBar.setPontuacao(controlXadrez.getJogo().getBranco());
+                StatusBar.setPontuacao(controlXadrez.getJogo().getPreto());
         }
 
         public void debug() {
