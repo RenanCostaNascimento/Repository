@@ -9,6 +9,7 @@ import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
 import ifes.poo1.xadrez.model.cdp.jogo.Checkpoint;
+import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.Peca;
 import ifes.poo1.xadrez.model.cdp.pecas.factory.PecasPool;
@@ -352,8 +353,8 @@ public class GUIControl {
 
         public void carregarJogo(Checkpoint jogoCarregado) {
                 try {
-
-                        controlXadrez.carregarJogo(jogoCarregado);
+                         controlXadrez.carregarJogo(jogoCarregado);
+                        enviarMensagem("Jogo carregado com sucesso");
                         if (jogoCarregado.getJogo().getPreto().getNome().contentEquals("ZEUS")) {
                                 setTipoJogo(TipoJogo.singleplayer);
                         } else {
@@ -366,7 +367,9 @@ public class GUIControl {
                 }
         }
 
-        public void salvarJogo(String nomePartida) {
+
+
+public void salvarJogo(String nomePartida) {
                 controlXadrez.salvarPartida(nomePartida);
         }
 }

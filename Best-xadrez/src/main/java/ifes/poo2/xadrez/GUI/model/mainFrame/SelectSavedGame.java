@@ -13,7 +13,6 @@ import javax.swing.JList;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author cthulhu
@@ -23,13 +22,13 @@ public class SelectSavedGame extends javax.swing.JPanel {
         /**
          * Creates new form SelectSavedGame
          */
-       private  DefaultListModel listModel = new DefaultListModel();
-        
+        private DefaultListModel listModel = new DefaultListModel();
+        private List<Checkpoint> jogosSalvos = ControlXadrez.getInstanceOf().exibirJogosSalvos();
+
         public SelectSavedGame() {
                 initComponents();
                 carregarJogosSalvos();
-                
-                
+
         }
 
         /**
@@ -52,27 +51,28 @@ public class SelectSavedGame extends javax.swing.JPanel {
                 add(jScrollPane1);
         }// </editor-fold>//GEN-END:initComponents
 
-        public JList getList(){
+        public JList getList() {
                 return jList1;
         }
-        
-        public void addElement(Object object){
+
+        public void addElement(Object object) {
                 listModel.addElement(object);
         }
-        
-        public void carregarJogosSalvos(){
-                List jogosSalvos = ControlXadrez.getInstanceOf().exibirJogosSalvos();
-               for (Object jogosSalvo : jogosSalvos) {
-                       listModel.addElement(jogosSalvo);
-               }
+
+        public void carregarJogosSalvos() {
+
+                for (Object jogosSalvo : jogosSalvos) {
+                        listModel.addElement(jogosSalvo);
+                }
         }
-        
-        public void carregarJogoSalvo(){
-                GUIControl.getInstanceOf().carregarJogo((Checkpoint) jList1.getSelectedValue());
+
+        public Checkpoint getJogoSelecionado() {
+                //GUIControl.getInstanceOf().carregarJogo(jogosSalvos.get(jList1.getSelectedIndex()));
+                return (Checkpoint) jList1.getSelectedValue();
+                
         }
-        
-        
-        
+
+
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JList jList1;
         private javax.swing.JScrollPane jScrollPane1;

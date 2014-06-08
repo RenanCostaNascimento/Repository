@@ -209,8 +209,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         private void loadGameItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadGameItemActionPerformed
                 SelectSavedGame svg = new SelectSavedGame();
-                JOptionPane.showMessageDialog(null, svg);
-                System.out.println(svg.getList().getSelectedValue()); //retorna objeto
+                JOptionPane.showMessageDialog(null, svg);   
+                GUIControl.getInstanceOf().carregarJogo(svg.getJogoSelecionado()); //retorna objeto
 
         }//GEN-LAST:event_loadGameItemActionPerformed
 

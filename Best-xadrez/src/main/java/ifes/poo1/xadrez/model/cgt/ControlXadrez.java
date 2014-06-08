@@ -80,7 +80,9 @@ public class ControlXadrez {
 
         return controlXadrez;
     }
-
+    public void setJogo(Jogo jogo){
+            this.jogo = jogo;
+    }
     /**
      * Controla o comando executado pelos jogadores.
      *
@@ -149,7 +151,7 @@ public class ControlXadrez {
 
     public void salvarPartida(String nomePartida) {
         try {
-            checkpointDAO.insert(new Checkpoint(jogo, nomePartida));
+            checkpointDAO.insert(new Checkpoint(this.jogo, nomePartida));
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
         }
