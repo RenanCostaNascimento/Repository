@@ -6,6 +6,8 @@
 
 package ifes.poo2.xadrez.GUI.control;
 
+import ifes.poo1.xadrez.model.cgt.ControlXadrez;
+
 /**
  *
  * @author pdr

@@ -93,6 +93,11 @@ public class MainFrame extends javax.swing.JFrame {
                 gameMenu.add(newMPGameItem);
 
                 loadGameItem.setText("Load Game");
+                loadGameItem.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                loadGameItemActionPerformed(evt);
+                        }
+                });
                 gameMenu.add(loadGameItem);
 
                 highScoresItem.setText("High Scores");
@@ -195,6 +200,13 @@ public class MainFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "THE BEST CHESS\n\nHARD CODED.\nDONE.\n\nBY PEDRO AND RENAN", "About Best Chess", JOptionPane.PLAIN_MESSAGE, null);
 
         }//GEN-LAST:event_aboutItemActionPerformed
+
+        private void loadGameItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadGameItemActionPerformed
+                SelectSavedGame svg = new SelectSavedGame();
+                JOptionPane.showMessageDialog(null, svg);
+                System.out.println(svg.getList().getSelectedValue()); //retorna objeto
+
+        }//GEN-LAST:event_loadGameItemActionPerformed
 
         /**
          * @param args the command line arguments
