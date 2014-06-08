@@ -34,6 +34,7 @@ import ifes.poo1.xadrez.util.persist.DAOHistoricoPartida;
 import ifes.poo1.xadrez.view.cci.ControladorTelas;
 import ifes.poo2.xadrez.GUI.control.GUIControl;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -1207,6 +1208,82 @@ public class ControlXadrez {
                                 }
                 }
         }
+
+    /**
+     * Cria e retorna uma String contendo os dados do histórico de partidas, pronto para exibição.
+     * @return A string com os dados, pronta para uso
+     */ 
+    public String exibirPartidasAntigas() {
+        partidas = null;
+        try {
+            partidas = historicoPartidaDAO.findAll();
+            jogadores = historicoJogadorDAO.findAll();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return montarStringHistoricoPartidas(partidas, jogadores);
+    }
+    
+    /**
+     * Cria e retorna uma String contendo os dados do histórico de partidas, pronto para exibição.
+     * @param partidas Os dados das partidas salvas.
+     * @param jogadores Os jogadores salvos.
+     * @return A string com os dados, pronta para uso
+     */
+    private String montarStringHistoricoPartidas(List<HistoricoPartida> partidas, List<HistoricoJogador> jogadores) {
+
+        StringBuilder buffer = new StringBuilder();
+
+        if (partidas.isEmpty()) {
+            buffer.append("Ainda não houve nenhuma partida!\n");
+        } else {
+            int quantPartidas = 1;
+            int quantJogadores = 1;
+            SimpleDateFormat formatoData = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            buffer.append("Partidas realizadas...\n");
+            buffer.append("N°  -  Inicio  -  Fim  -  Vencedor\n");
+            for (HistoricoPartida partida : partidas) {
+                buffer.append(quantPartidas + "  -  " + formatoData.format(partida.getDataHoraInicio()) + "  -  " + formatoData.format(partida.getDataHoraFim()) + "  -  " + partida.getVencedor()+"\n");
+                quantPartidas++;
+            }
+            buffer.append("... e os seus jogadores...\n");
+            buffer.append("N°  -  Nome  -  Vitorias  -  Empates  -  Derrotas\n");
+            for (HistoricoJogador jogador : jogadores) {
+                buffer.append(quantJogadores + "  -  " + jogador.getNome() + "  -  " + jogador.getVitorias() + "  -  " + jogador.getEmpates() + "  -  " + jogador.getDerrotas()+"\n");
+                quantJogadores++;
+            }
+        }
+        return buffer.toString();
+    }
+    
+    public String exibirJogosSalvos() {
+        try {
+            checkpoints = checkpointDAO.findAll();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return montarStringJogosSalvos(checkpoints);
+    }
+    
+    private String montarStringJogosSalvos(List<Checkpoint> checkpoints) {
+        
+        StringBuilder builder = new StringBuilder();
+        
+        if (checkpoints.isEmpty()) {
+            builder.append("Nenhum jogo salvo!\n");
+        } else {
+            builder.append("NOME -- JOGADOR 1 X JOGADOR 2, DATA\n");
+            builder.append("----------------------------\n");
+            for (Checkpoint cp : checkpoints) {
+                System.out.println(cp.toString());
+            }
+            builder.append("Qual jogo deseja carregar?\n");
+        }
+
+        return null;
+
+    }
 
         private void carregarJogo(String nomeJogo) throws JogoInexistenteExcpetion {
 
