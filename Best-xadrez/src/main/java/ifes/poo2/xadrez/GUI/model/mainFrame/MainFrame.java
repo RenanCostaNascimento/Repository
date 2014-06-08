@@ -65,6 +65,7 @@ public class MainFrame extends javax.swing.JFrame {
                 newSPGameItem = new javax.swing.JMenuItem();
                 newMPGameItem = new javax.swing.JMenuItem();
                 loadGameItem = new javax.swing.JMenuItem();
+                saveGameItem = new javax.swing.JMenuItem();
                 highScoresItem = new javax.swing.JMenuItem();
                 exitItem = new javax.swing.JMenuItem();
                 helpMenu = new javax.swing.JMenu();
@@ -72,6 +73,14 @@ public class MainFrame extends javax.swing.JFrame {
                 howToPlayItem = new javax.swing.JMenu();
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                addWindowListener(new java.awt.event.WindowAdapter() {
+                        public void windowClosed(java.awt.event.WindowEvent evt) {
+                                formWindowClosed(evt);
+                        }
+                        public void windowClosing(java.awt.event.WindowEvent evt) {
+                                formWindowClosing(evt);
+                        }
+                });
                 getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
                 gameMenu.setText("Game");
@@ -99,6 +108,14 @@ public class MainFrame extends javax.swing.JFrame {
                         }
                 });
                 gameMenu.add(loadGameItem);
+
+                saveGameItem.setText("Save Game");
+                saveGameItem.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                saveGameItemActionPerformed(evt);
+                        }
+                });
+                gameMenu.add(saveGameItem);
 
                 highScoresItem.setText("High Scores");
                 gameMenu.add(highScoresItem);
@@ -134,14 +151,7 @@ public class MainFrame extends javax.swing.JFrame {
         }// </editor-fold>//GEN-END:initComponents
 
         private void exitItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitItemActionPerformed
-                int opcao = JOptionPane.showConfirmDialog(null, "Deseja salvar?", "Deseja salvar?", JOptionPane.INFORMATION_MESSAGE);
-                System.out.println(opcao);
-                if (opcao == 0) {
-                        System.out.println("Salva no banco de dados");
-                        System.exit(0);
-                } else if (opcao == 1) {
-                        System.exit(0);
-                }
+                fecharJanela();
 
         }//GEN-LAST:event_exitItemActionPerformed
 
@@ -172,21 +182,17 @@ public class MainFrame extends javax.swing.JFrame {
                         if (jogador1.getText().isEmpty() || jogador2.getText().isEmpty()) {
                                 message[0] = "Digite o nome dos jogadores";
                                 option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.INFORMATION_MESSAGE);
-                        }
-                        
-                        
-
-                        else  if (jogador1.getText().contains(jogador2.getText())) {
+                        } else if (jogador1.getText().contains(jogador2.getText())) {
                                 message[0] = "O nome deve ser diferente!";
                                 option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.INFORMATION_MESSAGE);
                         }
-                        
-                         if (option == 1 || option == 2) {
+
+                        if (option == 1 || option == 2) {
                                 break;
                         }
-                       
+
                 }
-                
+
                 if (option == 0) {
                         String[] nomes = {jogador1.getText(), jogador2.getText()};
                         GUIControl.getInstanceOf().startGameMultiplayer(nomes);
@@ -208,6 +214,18 @@ public class MainFrame extends javax.swing.JFrame {
 
         }//GEN-LAST:event_loadGameItemActionPerformed
 
+        private void saveGameItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveGameItemActionPerformed
+                GUIControl.getInstanceOf().salvarJogo();
+        }//GEN-LAST:event_saveGameItemActionPerformed
+
+        private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+
+        }//GEN-LAST:event_formWindowClosed
+
+        private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+                fecharJanela();
+        }//GEN-LAST:event_formWindowClosing
+
         /**
          * @param args the command line arguments
          */
@@ -222,8 +240,22 @@ public class MainFrame extends javax.swing.JFrame {
         private javax.swing.JMenuItem loadGameItem;
         private javax.swing.JMenuItem newMPGameItem;
         private javax.swing.JMenuItem newSPGameItem;
+        private javax.swing.JMenuItem saveGameItem;
         private javax.swing.JMenuBar topMenu;
         // End of variables declaration//GEN-END:variables
+
+        public void fecharJanela() {
+                if (GUIControl.getInstanceOf().getTipoJogo() != null) {
+                        int opcao = JOptionPane.showConfirmDialog(null, "Deseja salvar?", "Deseja salvar?", JOptionPane.INFORMATION_MESSAGE);
+                        System.out.println(opcao);
+                        if (opcao == 0) {
+                                GUIControl.getInstanceOf().salvarJogo();
+                                System.exit(0);
+                        } else if (opcao == 1) {
+                                System.exit(0);
+                        }
+                }
+        }
 
         /**
          * @return the mainPanel

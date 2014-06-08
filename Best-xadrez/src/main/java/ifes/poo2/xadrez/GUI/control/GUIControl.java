@@ -8,6 +8,7 @@ package ifes.poo2.xadrez.GUI.control;
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogador.Jogador;
+import ifes.poo1.xadrez.model.cdp.jogo.Checkpoint;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
 import ifes.poo1.xadrez.model.cdp.pecas.Peca;
 import ifes.poo1.xadrez.model.cdp.pecas.factory.PecasPool;
@@ -17,6 +18,7 @@ import ifes.poo1.xadrez.util.exception.CaminhoBloqueadoException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaPropriaException;
 import ifes.poo1.xadrez.util.exception.CasaVaziaException;
+import ifes.poo1.xadrez.util.exception.JogoInexistenteExcpetion;
 import ifes.poo1.xadrez.util.exception.MovimentoInvalidoException;
 import ifes.poo1.xadrez.util.exception.MuitosComponentesException;
 import ifes.poo1.xadrez.util.exception.PecaAlheiaException;
@@ -346,5 +348,24 @@ public class GUIControl {
          */
         public void setTipoJogo(TipoJogo tipoJogo) {
                 this.tipoJogo = tipoJogo;
+        }
+        
+        
+        public void carregarJogo(Checkpoint jogoCarregado){
+                try {
+                        controlXadrez.carregarJogo(jogoCarregado);
+                } catch (JogoInexistenteExcpetion ex) {
+                        Logger.getLogger(GUIControl.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                if (jogoCarregado.getJogo().getPreto().getNome().contentEquals("ZEUS")) setTipoJogo(TipoJogo.singleplayer);
+                else setTipoJogo(TipoJogo.multiplayer);
+                
+                populateGUITable();
+                
+        }
+
+        public void salvarJogo(){
+                controlXadrez.salvarPartida();
         }
 }

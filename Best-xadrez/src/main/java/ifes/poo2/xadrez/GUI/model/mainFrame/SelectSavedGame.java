@@ -1,7 +1,10 @@
 package ifes.poo2.xadrez.GUI.model.mainFrame;
 
+import ifes.poo1.xadrez.model.cdp.jogo.Checkpoint;
 import ifes.poo1.xadrez.model.cdp.pecas.Peao;
 import ifes.poo1.xadrez.model.cgt.ControlXadrez;
+import ifes.poo2.xadrez.GUI.control.GUIControl;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
@@ -24,7 +27,8 @@ public class SelectSavedGame extends javax.swing.JPanel {
         
         public SelectSavedGame() {
                 initComponents();
-                System.out.println(ControlXadrez.getInstanceOf().exibirJogosSalvos());
+                
+                
         }
 
         /**
@@ -54,6 +58,19 @@ public class SelectSavedGame extends javax.swing.JPanel {
         public void addElement(Object object){
                 listModel.addElement(object);
         }
+        
+        public void carregarJogosSalvos(){
+                List jogosSalvos = ControlXadrez.getInstanceOf().exibirJogosSalvos();
+               for (Object jogosSalvo : jogosSalvos) {
+                       listModel.addElement(jogosSalvo);
+               }
+        }
+        
+        public void carregarJogoSalvo(){
+                GUIControl.getInstanceOf().carregarJogo((Checkpoint) jList1.getSelectedValue());
+        }
+        
+        
         
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JList jList1;
