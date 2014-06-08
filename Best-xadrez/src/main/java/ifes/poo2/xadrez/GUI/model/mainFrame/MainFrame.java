@@ -151,7 +151,7 @@ public class MainFrame extends javax.swing.JFrame {
         }// </editor-fold>//GEN-END:initComponents
 
         private void exitItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitItemActionPerformed
-                fecharJanela();
+                salvarJogoDialog();
 
         }//GEN-LAST:event_exitItemActionPerformed
 
@@ -215,7 +215,7 @@ public class MainFrame extends javax.swing.JFrame {
         }//GEN-LAST:event_loadGameItemActionPerformed
 
         private void saveGameItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveGameItemActionPerformed
-                GUIControl.getInstanceOf().salvarJogo();
+                salvarJogoDialog();
         }//GEN-LAST:event_saveGameItemActionPerformed
 
         private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
@@ -223,7 +223,7 @@ public class MainFrame extends javax.swing.JFrame {
         }//GEN-LAST:event_formWindowClosed
 
         private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-                fecharJanela();
+                salvarJogoDialog();
         }//GEN-LAST:event_formWindowClosing
 
         /**
@@ -244,16 +244,20 @@ public class MainFrame extends javax.swing.JFrame {
         private javax.swing.JMenuBar topMenu;
         // End of variables declaration//GEN-END:variables
 
-        public void fecharJanela() {
+        public void salvarJogoDialog() {
                 if (GUIControl.getInstanceOf().getTipoJogo() != null) {
-                        int opcao = JOptionPane.showConfirmDialog(null, "Deseja salvar?", "Deseja salvar?", JOptionPane.INFORMATION_MESSAGE);
-                        System.out.println(opcao);
-                        if (opcao == 0) {
-                                GUIControl.getInstanceOf().salvarJogo();
-                                System.exit(0);
-                        } else if (opcao == 1) {
-                                System.exit(0);
-                        }
+                        /*int opcao = JOptionPane.showConfirmDialog(null, "Deseja salvar?", "Deseja salvar?", JOptionPane.INFORMATION_MESSAGE);
+                         System.out.println(opcao);
+                         if (opcao == 0) {
+                         GUIControl.getInstanceOf().salvarJogo(asd);
+                         System.exit(0);
+                         } else if (opcao == 1) {
+                         System.exit(0);
+                         }
+                         }*/
+
+                        String input = JOptionPane.showInputDialog(null, "Deseja salvar?", "Deseja salvar?", JOptionPane.INFORMATION_MESSAGE);
+                        GUIControl.getInstanceOf().salvarJogo(input);
                 }
         }
 

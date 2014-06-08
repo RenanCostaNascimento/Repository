@@ -10,12 +10,10 @@ import ifes.poo1.xadrez.model.cdp.jogo.HistoricoPartida;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogada;
 import ifes.poo1.xadrez.model.cdp.jogo.Jogo;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
-
 import ifes.poo1.xadrez.model.cdp.pecas.Cavalo;
 import ifes.poo1.xadrez.model.cdp.pecas.Peca;
 import ifes.poo1.xadrez.model.cdp.pecas.PecaAbstrata;
 import ifes.poo1.xadrez.model.cdp.pecas.Rainha;
-
 import ifes.poo1.xadrez.model.cdp.tabuleiro.Tabuleiro;
 import ifes.poo1.xadrez.util.exception.CaminhoBloqueadoException;
 import ifes.poo1.xadrez.util.exception.CapturaInvalidaPecaInexistenteException;
@@ -35,7 +33,6 @@ import ifes.poo1.xadrez.view.cci.ControladorTelas;
 import ifes.poo2.xadrez.GUI.control.GUIControl;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -150,9 +147,9 @@ public class ControlXadrez {
 
     }
 
-    public void salvarPartida() {
+    public void salvarPartida(String nomePartida) {
         try {
-            checkpointDAO.insert(new Checkpoint(jogo, controladorTela.controlarSalvarSairPartida()));
+            checkpointDAO.insert(new Checkpoint(jogo, nomePartida));
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ControlXadrez.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1297,10 +1294,13 @@ public class ControlXadrez {
             Checkpoint checkpoint = checkpointDAO.findbyNome(jogoCarregado.getNome());
             if (checkpoint.getJogo() != null) {
                 jogo = checkpoint.getJogo();
+                /*
                 if (jogo.getPreto().getNome().equals("ZEUS")) {
                     controlarJogoSingleplayer();
                 }
+                
 //                controlarJogoMultiplayer();
+                */
             } else {
                 throw new JogoInexistenteExcpetion();
             }

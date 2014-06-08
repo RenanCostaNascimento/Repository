@@ -27,6 +27,7 @@ public class SelectSavedGame extends javax.swing.JPanel {
         
         public SelectSavedGame() {
                 initComponents();
+                carregarJogosSalvos();
                 
                 
         }

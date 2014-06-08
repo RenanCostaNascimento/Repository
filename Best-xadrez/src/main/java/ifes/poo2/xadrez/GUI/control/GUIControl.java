@@ -349,23 +349,24 @@ public class GUIControl {
         public void setTipoJogo(TipoJogo tipoJogo) {
                 this.tipoJogo = tipoJogo;
         }
-        
-        
-        public void carregarJogo(Checkpoint jogoCarregado){
+
+        public void carregarJogo(Checkpoint jogoCarregado) {
                 try {
+
                         controlXadrez.carregarJogo(jogoCarregado);
+                        if (jogoCarregado.getJogo().getPreto().getNome().contentEquals("ZEUS")) {
+                                setTipoJogo(TipoJogo.singleplayer);
+                        } else {
+                                setTipoJogo(TipoJogo.multiplayer);
+                        }
+
+                        startGameFacade();
                 } catch (JogoInexistenteExcpetion ex) {
-                        Logger.getLogger(GUIControl.class.getName()).log(Level.SEVERE, null, ex);
+                        enviarMensagem(ex.toString());
                 }
-                
-                if (jogoCarregado.getJogo().getPreto().getNome().contentEquals("ZEUS")) setTipoJogo(TipoJogo.singleplayer);
-                else setTipoJogo(TipoJogo.multiplayer);
-                
-                populateGUITable();
-                
         }
 
-        public void salvarJogo(){
-                controlXadrez.salvarPartida();
+        public void salvarJogo(String nomePartida) {
+                controlXadrez.salvarPartida(nomePartida);
         }
 }

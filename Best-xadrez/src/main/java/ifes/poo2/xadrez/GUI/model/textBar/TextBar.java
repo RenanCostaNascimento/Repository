@@ -107,7 +107,7 @@ public class TextBar extends javax.swing.JPanel {
                                 ChessTable.getInstanceOf().limparTabuleiro();
                         }
                         if (input.startsWith(":r")) {
-                                GUIControl.getInstanceOf().populateGUITable();
+                                GUIControl.getInstanceOf().reiniciarTabuleiro();
                         }
                         if (input.contentEquals("roque")) {
                                 GUIControl.getInstanceOf().enviarMensagem("Entre com 'roqueMenor' ou 'roqueMaior' para especificar a jogada" );
