@@ -21,7 +21,7 @@ import javax.swing.JLabel;
  *
  * @author pdr
  */
-public class PecaView extends JLabel{
+public final class PecaView extends JLabel{
         private Peca peca;
         private BufferedImage myPicture;    
         private BufferedImage image;
@@ -30,13 +30,17 @@ public class PecaView extends JLabel{
                 this.peca = peca;
                 try {
                         myPicture = ImageIO.read(new File("imagens/"+peca.getCor().toString()+peca.getNome().toString()+".png"));
+                        this.setIcon(new ImageIcon(getMyPicture()));
                 } catch (IOException ex) {
                         Logger.getLogger(PecaView.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                this.setIcon(new ImageIcon(getMyPicture()));
+                
         }
         
-
+        @Override
+        public String toString(){
+                return peca.toString();
+        }
         /**
          * @return the peca
          */

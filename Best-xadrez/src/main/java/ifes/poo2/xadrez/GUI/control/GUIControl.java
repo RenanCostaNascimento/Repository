@@ -230,12 +230,16 @@ public class GUIControl {
 
         public void populateGUITable() {
                 ChessTable.getInstanceOf().limparTabuleiro();
-
+                Tabuleiro tabuleiro = controlXadrez.getJogo().getTabuleiro();
                 for (int i = 0; i < 8; i++) {
-                        for (int j = 0; j < 8; j++) {
-                                Posicao pos = Posicao.create(i, j);
-                                if (getTabuleiro().getCasas(pos) != null) {
-                                        addPecaOnPosition(pos, getTabuleiro().getCasas(pos));
+                        for (int j = 0; j < 8; j++) {/*
+                                 Posicao pos = Posicao.create(i, j);
+                                 if (getTabuleiro().getCasas(pos) != null) {
+                                 addPecaOnPosition(pos, getTabuleiro().getCasas(pos));
+                                 */
+
+                                if (tabuleiro.getCasas(j, i) != null) {
+                                       addPecaOnPosition(new Posicao(j, i), tabuleiro.getCasas(j, i));
                                 }
                         }
                 }
@@ -350,26 +354,49 @@ public class GUIControl {
         public void setTipoJogo(TipoJogo tipoJogo) {
                 this.tipoJogo = tipoJogo;
         }
-
+        
         public void carregarJogo(Checkpoint jogoCarregado) {
+                //ControlXadrez.getInstanceOf().iniciarJogoSingleplayer(jogoCarregado.getJogo().getBranco().getNome());
+                //setTipoJogo(TipoJogo.singleplayer);
+                //ControlXadrez.getInstanceOf().setJogo(jogoCarregado.getJogo());
+                //startGameFacade();
+                //startGameSingleplayer("asd");
+                
                 try {
-                         controlXadrez.carregarJogo(jogoCarregado);
-                        enviarMensagem("Jogo carregado com sucesso");
-                        if (jogoCarregado.getJogo().getPreto().getNome().contentEquals("ZEUS")) {
-                                setTipoJogo(TipoJogo.singleplayer);
-                        } else {
-                                setTipoJogo(TipoJogo.multiplayer);
+                        Tabuleiro tab = jogoCarregado.getJogo().getTabuleiro();
+                        controlXadrez.carregarJogo(jogoCarregado);
+                        String tabuleiroString = "";
+                        for (int i = 0; i < 8; i++) {
+                                for (int j = 0; j < 8; j++) {
+                                        if (tab.getCasas(j, i) == null) {
+                                                tabuleiroString += "x";
+                                        } else {
+                                                tabuleiroString += tab.getCasas(j, i).toString();
+                                        }
+                                }
+                                tabuleiroString += "\n";
+
                         }
 
-                        startGameFacade();
+                        populateGUITable();
+                        enviarMensagem("Jogo carregado com sucesso");
+                        System.out.println(tabuleiroString);
+                        
+
+                         if (jogoCarregado.getJogo().getPreto().getNome().contentEquals("ZEUS")) {
+                         setTipoJogo(TipoJogo.singleplayer);
+                         } else {
+                         setTipoJogo(TipoJogo.multiplayer);
+                         }
+
+                         
+                         
                 } catch (JogoInexistenteExcpetion ex) {
                         enviarMensagem(ex.toString());
                 }
         }
 
-
-
-public void salvarJogo(String nomePartida) {
+        public void salvarJogo(String nomePartida) {
                 controlXadrez.salvarPartida(nomePartida);
         }
 }

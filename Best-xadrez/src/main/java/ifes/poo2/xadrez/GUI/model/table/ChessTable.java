@@ -53,11 +53,20 @@ public class ChessTable extends javax.swing.JPanel {
         }
         
         public void addPeca(PecaView p){
+                /*
                 lines[0].getTile(0).add(p);
                 lines[0].getTile(0).repaint();
                 lines[0].getTile(0).revalidate();
                 lines[0].repaint();
                 lines[0].revalidate();
+                */
+                Posicao pos = p.getPeca().getPosicao();
+                lines[pos.getColuna()].getTile(pos.getLinha()).add(p);
+                lines[pos.getColuna()].getTile(pos.getLinha()).repaint();
+                lines[pos.getColuna()].getTile(pos.getLinha()).revalidate();
+                lines[pos.getColuna()].repaint();
+                lines[pos.getColuna()].revalidate();
+                
                 repaint();
                 revalidate();
                 

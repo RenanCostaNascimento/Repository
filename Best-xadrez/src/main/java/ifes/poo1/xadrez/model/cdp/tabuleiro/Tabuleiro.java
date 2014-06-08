@@ -923,4 +923,5 @@ public class Tabuleiro implements Serializable {
 
         return movimentosPossiveis;
     }
+    
 }
