@@ -680,6 +680,7 @@ public class ControlXadrez {
 //        adicionarHistoricoJogadorVitoria(vencedor.getNome());
 //        adicionarHistoricoJogadorDerrota(perdedor.getNome());
         jogo.setEmAndamento(false);
+        JOptionPane.showMessageDialog(null, "Jogador "+vencedor.getNome()+" venceu, parabéns!");
 //        controlarMenuInicial();
 
     }

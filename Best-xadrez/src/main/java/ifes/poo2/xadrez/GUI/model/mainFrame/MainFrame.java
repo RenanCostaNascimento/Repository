@@ -209,7 +209,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         private void loadGameItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadGameItemActionPerformed
                 SelectSavedGame svg = new SelectSavedGame();
-                JOptionPane.showMessageDialog(null, svg);   
+                JOptionPane.showMessageDialog(null, svg);
                 GUIControl.getInstanceOf().carregarJogo(svg.getJogoSelecionado()); //retorna objeto
 
         }//GEN-LAST:event_loadGameItemActionPerformed
@@ -246,18 +246,25 @@ public class MainFrame extends javax.swing.JFrame {
 
         public void salvarJogoDialog() {
                 if (GUIControl.getInstanceOf().getTipoJogo() != null) {
-                        /*int opcao = JOptionPane.showConfirmDialog(null, "Deseja salvar?", "Deseja salvar?", JOptionPane.INFORMATION_MESSAGE);
-                         System.out.println(opcao);
-                         if (opcao == 0) {
-                         GUIControl.getInstanceOf().salvarJogo(asd);
-                         System.exit(0);
-                         } else if (opcao == 1) {
-                         System.exit(0);
-                         }
-                         }*/
+                        if (ControlXadrez.getInstanceOf().getJogo().isEmAndamento()) {
+                                
+                                JTextField nomeSave = new JTextField();
+                                
+                                int option = 3;
+                                Object[] message = {
+                                        "Deseja salvar o jogo?",
+                                        "Nome do save:", nomeSave,
+                                        
+                                };
 
-                        String input = JOptionPane.showInputDialog(null, "Deseja salvar?", "Deseja salvar?", JOptionPane.INFORMATION_MESSAGE);
-                        GUIControl.getInstanceOf().salvarJogo(input);
+                                //option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
+                                option = JOptionPane.showConfirmDialog(null, message, "Save", JOptionPane.INFORMATION_MESSAGE);
+                                if (option == 0 || nomeSave.getText().contentEquals("")){
+                                         GUIControl.getInstanceOf().salvarJogo(nomeSave.getText());
+                                }
+                                
+
+                        }
                 }
         }
 

@@ -168,24 +168,25 @@ public class GUIControl {
         }
 
         public void moverPeca(Posicao posInicial, Posicao posFinal) {
+                if (controlXadrez.getJogo().isEmAndamento()) {
+                        try {
+                                if (getTipoJogo() == TipoJogo.singleplayer) {
+                                        ControlXadrez.getInstanceOf().realizarJogadaSingleplayer(posInicial, posFinal);
+                                } else {
+                                        ControlXadrez.getInstanceOf().realizarJogadaMultiplayer(posInicial, posFinal);
+                                }
 
-                try {
-                        if (getTipoJogo() == TipoJogo.singleplayer) {
-                                ControlXadrez.getInstanceOf().realizarJogadaSingleplayer(posInicial, posFinal);
-                        } else {
-                                ControlXadrez.getInstanceOf().realizarJogadaMultiplayer(posInicial, posFinal);
+                                restoreAllOriginalTileColors();
+                        } catch (PecaAlheiaException | MovimentoInvalidoException | CaminhoBloqueadoException |
+                                CasaVaziaException | CapturaInvalidaPecaInexistenteException | CapturaInvalidaPecaPropriaException ex) {
+                                //Logger.getLogger(TextBar.class.getName()).log(Level.SEVERE, null, ex);
+                                MessagePane.addMessage(ex.getMessage() + "\n");
+                                setPosicaoBuffer(null);
                         }
 
-                        restoreAllOriginalTileColors();
-                } catch (PecaAlheiaException | MovimentoInvalidoException | CaminhoBloqueadoException |
-                        CasaVaziaException | CapturaInvalidaPecaInexistenteException | CapturaInvalidaPecaPropriaException ex) {
-                        //Logger.getLogger(TextBar.class.getName()).log(Level.SEVERE, null, ex);
-                        MessagePane.addMessage(ex.getMessage() + "\n");
-                        setPosicaoBuffer(null);
+                        this.populateGUITable();
+                        updateStatusBar();
                 }
-
-                this.populateGUITable();
-                updateStatusBar();
 
         }
 
@@ -242,7 +243,7 @@ public class GUIControl {
                                  */
 
                                 if (tabuleiro.getCasas(j, i) != null) {
-                                       addPecaOnPosition(new Posicao(j, i), tabuleiro.getCasas(j, i));
+                                        addPecaOnPosition(new Posicao(j, i), tabuleiro.getCasas(j, i));
                                 }
                         }
                 }
@@ -258,10 +259,10 @@ public class GUIControl {
                 getMessagePane().clear();
                 populateGUITable();
                 updateStatusBar();
-                
+
         }
-        
-        public void updateStatusBar(){
+
+        public void updateStatusBar() {
                 StatusBar.setVez(controlXadrez.getJogo().getVez());
                 StatusBar.setPontuacao(controlXadrez.getJogo().getBranco());
                 StatusBar.setPontuacao(controlXadrez.getJogo().getPreto());
@@ -365,43 +366,29 @@ public class GUIControl {
         public void setTipoJogo(TipoJogo tipoJogo) {
                 this.tipoJogo = tipoJogo;
         }
-        
+
         public void carregarJogo(Checkpoint jogoCarregado) {
                 //ControlXadrez.getInstanceOf().iniciarJogoSingleplayer(jogoCarregado.getJogo().getBranco().getNome());
                 //setTipoJogo(TipoJogo.singleplayer);
                 //ControlXadrez.getInstanceOf().setJogo(jogoCarregado.getJogo());
                 //startGameFacade();
                 //startGameSingleplayer("asd");
-                
+
                 try {
                         Tabuleiro tab = jogoCarregado.getJogo().getTabuleiro();
                         controlXadrez.carregarJogo(jogoCarregado);
-                        String tabuleiroString = "";
-                        for (int i = 0; i < 8; i++) {
-                                for (int j = 0; j < 8; j++) {
-                                        if (tab.getCasas(j, i) == null) {
-                                                tabuleiroString += "x";
-                                        } else {
-                                                tabuleiroString += tab.getCasas(j, i).toString();
-                                        }
-                                }
-                                tabuleiroString += "\n";
-
-                        }
+                        
 
                         populateGUITable();
                         enviarMensagem("Jogo carregado com sucesso");
-                        System.out.println(tabuleiroString);
-                        
 
-                         if (jogoCarregado.getJogo().getPreto().getNome().contentEquals("ZEUS")) {
-                         setTipoJogo(TipoJogo.singleplayer);
-                         } else {
-                         setTipoJogo(TipoJogo.multiplayer);
-                         }
 
-                         
-                         
+                        if (jogoCarregado.getJogo().getPreto().getNome().contentEquals("ZEUS")) {
+                                setTipoJogo(TipoJogo.singleplayer);
+                        } else {
+                                setTipoJogo(TipoJogo.multiplayer);
+                        }
+
                 } catch (JogoInexistenteExcpetion ex) {
                         enviarMensagem(ex.toString());
                 }
