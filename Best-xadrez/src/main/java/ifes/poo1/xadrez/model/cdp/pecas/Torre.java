@@ -3,20 +3,24 @@ package ifes.poo1.xadrez.model.cdp.pecas;
 import ifes.poo1.xadrez.model.cdp.constantes.Cores;
 import ifes.poo1.xadrez.model.cdp.constantes.NomePecas;
 import ifes.poo1.xadrez.model.cdp.jogo.Posicao;
+import ifes.poo1.xadrez.model.cdp.pecas.estrategia.EstrategiaMovimentacaoCaptura;
+import ifes.poo1.xadrez.model.cdp.pecas.estrategia.EstrategiaMovimentacaoCapturaTorre;
 
 /**
  * Classe da Peça Torre.
  *
- * @param Cores.branco ou Cores.preto - cor da peça.
  */
 public class Torre extends PecaAbstrata {
+    private final EstrategiaMovimentacaoCaptura estrategiaMovimentacaoCaptura;
 
     public Torre() {
         super(NomePecas.Torre, 5, null);
+        estrategiaMovimentacaoCaptura = new EstrategiaMovimentacaoCapturaTorre();
     }
 
     public Torre(Cores cor) {
         super(NomePecas.Torre, 5, cor);
+        estrategiaMovimentacaoCaptura = new EstrategiaMovimentacaoCapturaTorre();
     }
 
     @Override
@@ -26,26 +30,28 @@ public class Torre extends PecaAbstrata {
 
     @Override
     public boolean mover(Posicao posicaoFinal) {
-
-        if ((posicaoFinal.getLinha() - getPosicao().getLinha() == 0) || (posicaoFinal.getColuna() - getPosicao().getColuna() == 0)) {
+        if(estrategiaMovimentacaoCaptura.movimentar(getPosicao(), posicaoFinal)){
             this.actMovimentou();
             return true;
         }
-
         return false;
+//
+//        if ((posicaoFinal.getLinha() - getPosicao().getLinha() == 0) || (posicaoFinal.getColuna() - getPosicao().getColuna() == 0)) {
+//            this.actMovimentou();
+//            return true;
+//        }
+//
+//        return false;
 
     }
 
     @Override
     public boolean capturar(Posicao posicaoFinal) {
-
-        if ((posicaoFinal.getLinha() - getPosicao().getLinha() == 0) || (posicaoFinal.getColuna() - getPosicao().getColuna() == 0)) {
+        if(estrategiaMovimentacaoCaptura.capturar(getPosicao(), posicaoFinal)){
             this.actMovimentou();
             return true;
         }
-
         return false;
-
     }
 
 }
