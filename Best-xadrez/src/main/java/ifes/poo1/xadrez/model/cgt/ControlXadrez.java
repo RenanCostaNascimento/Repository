@@ -97,7 +97,6 @@ public class ControlXadrez {
      * @throws ifes.poo1.xadrez.util.exception.CasaVaziaException
      */
     public void controlarComandoRecebido(Jogada jogada) throws PecaAlheiaException, MovimentoInvalidoException, CaminhoBloqueadoException, CasaVaziaException, CapturaInvalidaPecaInexistenteException, CapturaInvalidaPecaPropriaException {
-//        Jogada jogada = controladorTela.determinarJogadaUsuario(jogo.getVez());
         switch (jogada.getTipoJogada()) {
             case MOVIMENTO:
                 controlarMovimentoPeca(jogada);
@@ -109,25 +108,18 @@ public class ControlXadrez {
                 controlarPromocaoPeca();
                 controlarXeque();
                 break;
-            case EMPATE:
-                empatarPartidaOld();
-                break;
             case DESISTENCIA:
                 desistirPartida();
                 break;
             case PONTUACAO:
                 exibirPontuacaoJogador();
-//                controlarComandoRecebido();
                 break;
             case ROQUE_MAIOR:
-//                controlarRoqueMaior();
                 break;
             case ROQUE_MENOR:
-//                controlarRoqueMenor();
                 break;
             case SALVAR:
                 controlarSalvarPartida();
-//                controlarComandoRecebido();
                 break;
             case SAIR:
                 controlarSairPartida();
@@ -135,7 +127,6 @@ public class ControlXadrez {
                 break;
             case INEXISTENTE:
                 controladorTela.exibirMensagem("Que porra eh essa?!");
-//                controlarComandoRecebido();
         }
     }
 
@@ -823,15 +814,6 @@ public class ControlXadrez {
     }
 
     /**
-     * Avisa aos jogadores que um pedido de desistencia foi realizado.
-     *
-     */
-    private void desistirPartidaOld() {
-        controladorTela.exibirMensagem(jogo.getVez().getNome() + ", vai arregar?");
-        controlarDesistenciaPartida(controladorTela.empatarDesistirPartida());
-    }
-
-    /**
      * Determina o que irá acontecer após o pedido de desistencia, dependendo da
      * opção que os jogadores decidirem.
      *
@@ -859,18 +841,6 @@ public class ControlXadrez {
 //                controlarComandoRecebido();
                 break;
         }
-    }
-
-    /**
-     * Avisa aos jogadores que um pedido de empate foi realizado.
-     *
-     */
-    private void empatarPartidaOld() {
-        controladorTela.exibirMensagem("o jogador " + jogo.getVez().getNome() + " deseja empatar a partida.");
-        mudarVezJogador();
-        controladorTela.exibirMensagem("Voce tambem deseja empatar a partida, " + jogo.getVez().getNome() + "?");
-        mudarVezJogador();
-        controlarEmpatePartida(controladorTela.empatarDesistirPartida());
     }
 
     public void empatarPartida() {
@@ -1402,15 +1372,6 @@ public class ControlXadrez {
 //        controlarJogoMultiplayer();
     }
 
-    /**
-     * Controla o andamento de uma partida multiplayer.
-     *
-     */
-//    private void controlarJogoMultiplayer() {
-//        while (jogo.isEmAndamento()) {
-//            realizarJogadaMultiplayer();
-//        }
-//    }
     /**
      * Uma típica jogada de um jogo multiplayer.
      *
